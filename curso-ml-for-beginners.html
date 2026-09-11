@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -407,8 +407,10 @@ input[type="range"]::-moz-range-thumb {
   line-height: 1;
   cursor: pointer;
   transition: all 0.15s ease;
-  -webkit--webkit-user-select: none;`r`n  user-select: none;
-  -webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .slider-step-btn:hover {
   background: var(--dc-green-soft);
@@ -437,8 +439,10 @@ input[type="range"]::-moz-range-thumb {
   padding: 12px 0 22px 0;
   cursor: pointer;
   touch-action: none;
-  -webkit--webkit-user-select: none;`r`n  user-select: none;
-  -webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .custom-slider-track {
   position: relative;
@@ -522,8 +526,10 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.15s ease;
-  -webkit--webkit-user-select: none;`r`n  user-select: none;
-  -webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .custom-slider-tick:hover {
   color: var(--dc-text);
@@ -547,7 +553,9 @@ input[type="range"]::-moz-range-thumb {
 .interactive-chip {
   background: var(--dc-surface); border: 1px solid var(--dc-border); padding: 7px 12px;
   border-radius: 20px; cursor: pointer; font-size: 12.5px; color: var(--dc-text);
-  -webkit--webkit-user-select: none;`r`n  user-select: none; -webkit-user-select: none;`r`n  user-select: none; transition: all 0.15s;
+  -webkit-user-select: none;
+  user-select: none; -webkit-user-select: none;
+  user-select: none; transition: all 0.15s;
 }
 .interactive-chip:hover { border-color: var(--dc-green); color: var(--dc-green); }
 .interactive-chip.selected {
@@ -574,7 +582,8 @@ input[type="range"]::-moz-range-thumb {
   font-size: 13px;
   color: var(--dc-text-muted);
   pointer-events: none;
-  -webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
   transition: color 0.15s;
 }
 .interactive-chip:hover .chip-grip {
@@ -725,8 +734,10 @@ input[type="range"]::-moz-range-thumb {
   font-size: 13.5px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  -webkit--webkit-user-select: none;`r`n  user-select: none;
-  -webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
   box-sizing: border-box;
   width: 100%;
 }
@@ -872,7 +883,9 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Sequence Sorter */
-.sort-container { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; -webkit--webkit-user-select: none;`r`n  user-select: none; -webkit-user-select: none;`r`n  user-select: none; }
+.sort-container { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; -webkit-user-select: none;
+  user-select: none; -webkit-user-select: none;
+  user-select: none; }
 .sort-slot {
   background: var(--dc-surface); border: 1px solid var(--dc-border); border-radius: var(--radius);
   padding: 10px 14px; display: flex; align-items: center; gap: 12px; font-size: 13px;
@@ -3191,7 +3204,8 @@ function renderSortLab(arena, ex) {
               <span class="sort-grip" title="Arrastra para reordenar">⠿</span>
               <span class="sort-num">#${idx + 1}</span>
               <span class="sort-text" style="flex:1;font-weight:500;line-height:1.4;">${it.text}</span>
-              <span class="sort-handle-hint" style="font-size:11px;color:var(--dc-text-muted);display:flex;align-items:center;gap:4px;-webkit-user-select: none;`r`n  user-select: none;">
+              <span class="sort-handle-hint" style="font-size:11px;color:var(--dc-text-muted);display:flex;align-items:center;gap:4px;-webkit-user-select: none;
+  user-select: none;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
                 Arrastrar
               </span>
