@@ -1,0 +1,4580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ML Studio — Laboratorio Práctico e Interactivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/site.css">
+
+<script>
+  (function() {
+    try {
+      var t = localStorage.getItem('ml_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  })();
+</script>
+
+<style>
+:root {
+  --studio-bg: #090d16;
+  --studio-bg-dark: #05080f;
+  --studio-surface: #0f172a;
+  --studio-surface-2: #1e293b;
+  --studio-surface-hover: #26354a;
+  --studio-border: #223249;
+  --studio-border-light: rgba(255, 255, 255, 0.1);
+  --accent-indigo: #6366f1;
+  --accent-indigo-hover: #4f46e5;
+  --accent-indigo-soft: rgba(99, 102, 241, 0.15);
+  --accent-cyan: #38bdf8;
+  --accent-cyan-soft: rgba(56, 189, 248, 0.12);
+  --accent-emerald: #10b981;
+  --accent-emerald-hover: #059669;
+  --accent-emerald-soft: rgba(16, 185, 129, 0.15);
+  --accent-amber: #f59e0b;
+  --accent-amber-soft: rgba(245, 158, 11, 0.15);
+  --accent-red: #ef4444;
+  --accent-red-soft: rgba(239, 68, 68, 0.15);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --telemetry-bg: #060910;
+  --telemetry-header: #0b111c;
+  --telemetry-color: #a4b1cd;
+  --canvas-wrapper-bg: #040810;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Aliases for legacy lab renderers */
+  --bg-surface-2: var(--studio-surface-2);
+  --bg-surface-hover: var(--studio-surface-hover);
+  --border: var(--studio-border);
+  --dc-green: var(--accent-emerald);
+  --dc-green-soft: var(--accent-emerald-soft);
+  --dc-red: var(--accent-red);
+  --dc-red-soft: var(--accent-red-soft);
+  --dc-yellow: var(--accent-amber);
+  --dc-surface: var(--studio-surface-2);
+  --dc-navy: var(--studio-surface);
+  --dc-border: var(--studio-border);
+  --dc-text-dim: var(--text-dim);
+}
+
+[data-theme="light"] {
+  --studio-bg: #f8fafc;
+  --studio-bg-dark: #ffffff;
+  --studio-surface: #ffffff;
+  --studio-surface-2: #f1f5f9;
+  --studio-surface-hover: #e2e8f0;
+  --studio-border: #cbd5e1;
+  --studio-border-light: rgba(0, 0, 0, 0.08);
+  --accent-indigo: #4f46e5;
+  --accent-indigo-hover: #4338ca;
+  --accent-indigo-soft: #e0e7ff;
+  --accent-cyan: #0284c7;
+  --accent-cyan-soft: rgba(2, 132, 199, 0.1);
+  --accent-emerald: #059669;
+  --accent-emerald-hover: #047857;
+  --accent-emerald-soft: rgba(5, 150, 105, 0.12);
+  --accent-amber: #d97706;
+  --accent-amber-soft: rgba(217, 119, 6, 0.12);
+  --accent-red: #dc2626;
+  --accent-red-soft: rgba(220, 38, 38, 0.12);
+  --text-main: #0f172a;
+  --text-muted: #334155;
+  --text-dim: #64748b;
+  --telemetry-bg: #f8fafc;
+  --telemetry-header: #e2e8f0;
+  --telemetry-color: #0f172a;
+  --canvas-wrapper-bg: #0b1120;
+
+  /* Aliases for legacy lab renderers in light mode */
+  --bg-surface-2: #f1f5f9;
+  --bg-surface-hover: #e2e8f0;
+  --border: #cbd5e1;
+  --dc-green: #059669;
+  --dc-green-soft: rgba(5, 150, 105, 0.12);
+  --dc-red: #dc2626;
+  --dc-red-soft: rgba(220, 38, 38, 0.12);
+  --dc-yellow: #d97706;
+  --dc-surface: #f1f5f9;
+  --dc-navy: #ffffff;
+  --dc-border: #cbd5e1;
+  --dc-text-dim: #64748b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  width: 100%;
+  background: var(--studio-bg);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+code, pre { font-family: var(--font-mono); }
+
+/* TOP NAVBAR (Studio Engineering Header) */
+.navbar {
+  height: 58px;
+  background: var(--studio-bg-dark);
+  border-bottom: 1px solid var(--studio-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-indigo);
+  border: 1px solid var(--accent-indigo);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.3);
+  transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.back-btn:hover {
+  color: #ffffff;
+  background: var(--accent-indigo-hover);
+  border-color: var(--accent-indigo-hover);
+  box-shadow: 0 5px 14px rgba(99, 102, 241, 0.45);
+  transform: translateY(-1px);
+}
+.back-btn:focus-visible {
+  outline: 3px solid rgba(56, 189, 248, 0.7);
+  outline-offset: 2px;
+}
+.back-btn span:first-child {
+  display: inline;
+}
+
+.studio-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+}
+
+.brand-icon {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 900;
+}
+
+.lesson-picker-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: all 0.15s;
+}
+.lesson-picker-btn:hover {
+  border-color: var(--accent-indigo);
+  background: var(--studio-surface-2);
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-theory-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  color: #a5b4fc;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.btn-theory-link:hover {
+  background: var(--accent-indigo-soft);
+  border-color: var(--accent-indigo);
+  color: #fff;
+}
+
+.xp-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-emerald);
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  color: var(--text-main);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+/* SETTINGS DROPDOWN & MODULE (Reference UI) */
+.settings-dropdown-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  z-index: 1001;
+}
+
+.settings-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.35);
+  flex-shrink: 0;
+}
+.settings-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(99, 102, 241, 0.5);
+}
+.settings-btn:active {
+  transform: translateY(0);
+}
+
+
+.settings-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 275px;
+  background: #182234;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+  z-index: 1002;
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  animation: dropdownFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.settings-dropdown.open {
+  display: flex;
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+[data-theme="light"] .settings-dropdown {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+}
+
+.settings-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.settings-lang-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.settings-lang-select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #223249;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 6px 28px 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  font-family: var(--font-sans);
+  transition: border-color 0.15s, background 0.15s;
+}
+.settings-lang-select:hover {
+  border-color: var(--accent-indigo);
+}
+.settings-lang-select:focus {
+  border-color: var(--accent-indigo);
+  box-shadow: 0 0 0 2px var(--accent-indigo-soft);
+}
+[data-theme="light"] .settings-lang-select {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+.settings-lang-select option {
+  background: #182234;
+  color: #f8fafc;
+}
+[data-theme="light"] .settings-lang-select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.settings-lang-arrow {
+  position: absolute;
+  right: 10px;
+  font-size: 9px;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+/* NAVBAR LANGUAGE TOGGLE BUTTON */
+.nav-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+.nav-lang-btn:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--accent-indigo);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.nav-lang-btn .lang-flag {
+  font-size: 14px;
+  line-height: 1;
+}
+.nav-lang-btn .lang-code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* SETTINGS SEGMENTED LANGUAGE CONTROL */
+.settings-lang-segmented {
+  display: inline-flex;
+  background: #182234;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 3px;
+}
+[data-theme="light"] .settings-lang-segmented {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+.lang-seg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.lang-seg-btn:hover:not(.active) {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+[data-theme="light"] .lang-seg-btn:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.05);
+}
+.lang-seg-btn.active {
+  background: var(--accent-indigo);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.4);
+}
+
+/* Centered iOS-Style Theme Switch */
+.settings-theme-switch {
+  width: 48px;
+  height: 26px;
+  background: #2c3e5a;
+  border: 1px solid #415574;
+  border-radius: 13px;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  outline: none;
+  transition: background 0.25s, border-color 0.25s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+}
+[data-theme="light"] .settings-theme-switch {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.theme-switch-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s;
+  pointer-events: none;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+
+[data-theme="dark"] .theme-switch-thumb {
+  transform: translateX(0px);
+}
+[data-theme="light"] .theme-switch-thumb {
+  transform: translateX(22px);
+}
+
+.theme-toggle-label {
+  margin-left: 24px;
+  white-space: nowrap;
+}
+
+[data-theme="light"] .theme-toggle-label {
+  margin-left: 28px;
+}
+
+.theme-toggle-icon {
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.settings-divider {
+  height: 1px;
+  background: var(--studio-border);
+  margin: 2px 0;
+}
+
+.settings-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13.5px;
+  transition: background 0.15s, color 0.15s;
+  margin: 0 -4px;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+.settings-menu-item:hover {
+  background: var(--studio-surface-hover);
+  color: var(--accent-cyan);
+}
+.settings-item-icon {
+  font-size: 17px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.settings-item-text {
+  flex: 1;
+}
+.settings-item-arrow {
+  font-size: 18px;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.home-btn {
+  background: none;
+  border: 1px solid var(--studio-border);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.home-btn:hover {
+  color: var(--text-main);
+  border-color: var(--text-muted);
+}
+
+/* WORKBENCH (Split-Screen Studio Layout) */
+.workbench {
+  height: calc(100vh - 58px);
+  display: grid;
+  grid-template-columns: 42% 58%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* LEFT PANE: Lab Specification & Checklist */
+.left-pane {
+  background: var(--studio-bg);
+  border-right: 1px solid var(--studio-border);
+  overflow-y: auto;
+  padding: 24px 28px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.breadcrumb {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.breadcrumb .sep { color: var(--text-dim); }
+
+.lab-title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text-main);
+}
+
+/* Lab Specification Box */
+.spec-card {
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+}
+
+.spec-header {
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.spec-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--accent-indigo-soft);
+  color: #a5b4fc;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.spec-goal {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-main);
+  opacity: 0.92;
+  margin-bottom: 16px;
+}
+
+.checklist-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.instructions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.instruction-num {
+  width: 22px;
+  height: 22px;
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Diagnostic Hint Accordion */
+.hint-card {
+  margin-top: 8px;
+}
+
+.hint-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--accent-amber);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  transition: opacity 0.15s ease;
+}
+.hint-toggle-btn:hover {
+  text-decoration: none;
+  opacity: 0.85;
+}
+.hint-cost-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  transition: all 0.2s ease;
+}
+.hint-cost-pill.unlocked {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.35);
+}
+[data-theme="light"] .hint-cost-pill {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fcd34d;
+}
+[data-theme="light"] .hint-cost-pill.unlocked {
+  background: #d1fae5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.hint-content {
+  display: none;
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-left: 3px solid var(--accent-amber);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-main);
+  opacity: 0.92;
+}
+.hint-content.open { display: block; }
+
+/* Theory Shortcut Card */
+.theory-shortcut-card {
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.shortcut-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* RIGHT PANE: Interactive Arena & ML Diagnostics Console */
+.right-pane {
+  background: var(--studio-bg-dark);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.workspace-header {
+  height: 44px;
+  background: var(--studio-surface);
+  border-bottom: 1px solid var(--studio-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.workspace-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  box-shadow: 0 0 8px var(--accent-emerald);
+}
+
+.workspace-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Simulator Arena */
+.interactive-arena-card {
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  position: relative;
+}
+
+/* ML Observability Console */
+.telemetry-card {
+  background: var(--telemetry-bg);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+}
+
+.telemetry-header {
+  background: var(--telemetry-header);
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--studio-border);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: 0.5px;
+}
+
+.telemetry-body {
+  padding: 12px 14px;
+  line-height: 1.6;
+  color: var(--telemetry-color);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.telemetry-line {
+  margin-bottom: 5px;
+  word-break: break-word;
+}
+.telemetry-line.success { color: var(--accent-emerald); }
+.telemetry-line.warning { color: var(--accent-amber); }
+.telemetry-line.error { color: var(--accent-red); }
+.telemetry-line.info { color: var(--accent-cyan); }
+.telemetry-prompt { color: var(--accent-indigo); font-weight: 700; margin-right: 6px; }
+
+/* BOTTOM ACTION TOOLBAR */
+.studio-footer {
+  height: 62px;
+  background: var(--studio-bg-dark);
+  border-top: 1px solid var(--studio-border);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.footer-left { display: flex; gap: 10px; }
+.footer-right { display: flex; gap: 12px; align-items: center; }
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--studio-border);
+  color: var(--text-muted);
+}
+.btn-ghost:hover {
+  color: var(--text-main);
+  border-color: var(--text-muted);
+}
+
+.btn-run {
+  background: var(--studio-surface-2);
+  border-color: var(--studio-border);
+  color: var(--accent-cyan);
+}
+.btn-run:hover {
+  background: var(--studio-surface-hover);
+  border-color: var(--accent-cyan);
+}
+
+.btn-submit {
+  background: var(--accent-emerald);
+  color: #042416;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+}
+.btn-submit:hover {
+  background: var(--accent-emerald-hover);
+  transform: translateY(-1px);
+}
+
+/* LAB CONTROLS & CHIPS STYLING */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.interactive-chip {
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  color: var(--text-main);
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  cursor: pointer;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+  transition: all 0.15s;
+}
+.interactive-chip:hover {
+  border-color: var(--accent-indigo);
+  background: var(--studio-surface-hover);
+}
+.interactive-chip.selected {
+  border-color: #818cf8;
+  background: rgba(99, 102, 241, 0.22);
+  color: #f8fafc;
+  font-weight: 600;
+}
+.interactive-chip[draggable="true"] {
+  cursor: grab;
+}
+.interactive-chip[draggable="true"]:active {
+  cursor: grabbing;
+}
+.interactive-chip.dragging {
+  cursor: grabbing;
+  opacity: 0.45;
+  border-style: dashed;
+  border-color: var(--accent-cyan);
+  transform: scale(0.98);
+}
+.chip-grip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  font-size: 13px;
+  color: var(--text-dim);
+  pointer-events: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+  transition: color 0.15s;
+}
+.interactive-chip:hover .chip-grip {
+  color: var(--accent-cyan);
+}
+
+#unassigned-chips {
+  min-height: 44px;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed transparent;
+  transition: all 0.2s ease;
+}
+#unassigned-chips.drag-over {
+  border-color: var(--accent-indigo);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.category-col {
+  background: var(--studio-bg-dark);
+  border: 1px dashed var(--studio-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  min-height: 100px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.category-col:hover { border-color: var(--accent-indigo); }
+.category-col.drag-over {
+  border-color: var(--accent-cyan) !important;
+  background: rgba(56, 189, 248, 0.1) !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
+  transform: translateY(-2px);
+}
+.category-col-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Interactive Filter: Quiz-style cards */
+.filter-lab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.filter-lab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--studio-surface);
+  border: 1.5px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-header-rule {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.filter-rule-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--accent-indigo-soft);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--accent-indigo);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.filter-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid var(--studio-border);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+}
+
+.filter-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.filter-option-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 18px;
+  background: var(--studio-surface-2);
+  border: 1.5px solid var(--studio-border);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-user-select: none;`r`n  user-select: none;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.filter-option-card:hover:not(.correct):not(.wrong) {
+  background: var(--studio-surface-hover);
+  border-color: var(--accent-indigo);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.filter-option-card:hover:not(.correct):not(.wrong) .filter-card-id {
+  background: var(--accent-indigo);
+  color: #ffffff;
+  border-color: var(--accent-indigo);
+}
+
+/* SELECTED STATE */
+.filter-option-card.selected:not(.correct):not(.wrong) {
+  border-color: var(--accent-indigo) !important;
+  background: rgba(99, 102, 241, 0.12) !important;
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.25);
+}
+
+.filter-option-card.selected:not(.correct):not(.wrong) .filter-card-id {
+  background: var(--accent-indigo);
+  color: #ffffff;
+  border-color: var(--accent-indigo);
+}
+
+/* CARD ID BADGE (like .quiz-option-letter) */
+.filter-card-id {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid var(--studio-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+/* CARD CONTENT INFO */
+.filter-card-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.filter-card-var {
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--text-main);
+  letter-spacing: 0.2px;
+}
+
+.filter-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.filter-pill-pkg {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--studio-border);
+  color: var(--text-muted);
+}
+
+.filter-pill-price {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--accent-emerald);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* CHECKBOX INDICATOR (like .quiz-option-indicator) */
+.filter-card-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1.5px solid var(--studio-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.filter-option-card.selected .filter-card-indicator {
+  border-color: var(--accent-indigo) !important;
+  background: var(--accent-indigo) !important;
+  color: #ffffff !important;
+}
+
+.filter-option-card.selected .filter-card-indicator::after {
+  content: "✓";
+}
+
+/* CORRECT STATE */
+.filter-option-card.correct {
+  background: rgba(16, 185, 129, 0.14) !important;
+  border-color: var(--accent-emerald) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
+}
+
+.filter-option-card.correct .filter-card-id {
+  background: var(--accent-emerald) !important;
+  color: #000000 !important;
+  border-color: var(--accent-emerald) !important;
+  font-weight: 900;
+}
+
+.filter-option-card.correct .filter-card-indicator {
+  border-color: var(--accent-emerald) !important;
+  background: var(--accent-emerald) !important;
+  color: #000000 !important;
+}
+.filter-option-card.correct .filter-card-indicator::after {
+  content: "✓";
+  font-weight: 900;
+}
+
+/* WRONG STATE */
+.filter-option-card.wrong {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.25);
+  animation: chipShake 0.4s ease;
+}
+
+.filter-option-card.wrong .filter-card-id {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+.filter-option-card.wrong .filter-card-indicator {
+  border-color: #ef4444 !important;
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+.filter-option-card.wrong .filter-card-indicator::after {
+  content: "✕";
+  font-weight: 900;
+}
+
+.sort-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+.sort-slot {
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13.5px;
+  cursor: grab;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+}
+.sort-slot:hover {
+  border-color: var(--accent-indigo);
+  background: var(--studio-surface-hover);
+}
+.sort-slot:active, .sort-slot.dragging {
+  cursor: grabbing;
+  opacity: 0.45;
+  border: 1.5px dashed var(--accent-cyan);
+}
+.sort-slot.drag-over {
+  border-color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+}
+.sort-grip {
+  font-size: 18px;
+  color: var(--text-dim);
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.sort-slot:hover .sort-grip {
+  color: var(--accent-cyan);
+}
+.sort-num {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+.control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.control-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+/* Enhanced Range Sliders & Draggable Controls */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: 4px;
+  outline: none;
+  cursor: grab;
+  touch-action: none;
+  margin: 8px 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+input[type="range"]:active {
+  cursor: grabbing;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-indigo, #6366f1);
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(99, 102, 241, 0.35);
+  cursor: grab;
+  transition: transform 0.12s ease, box-shadow 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(99, 102, 241, 0.45);
+}
+input[type="range"]:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.25);
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.7), 0 0 0 5px rgba(99, 102, 241, 0.35);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-indigo, #6366f1);
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+}
+
+[data-theme="light"] input[type="range"] {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+[data-theme="light"] input[type="range"]::-webkit-slider-thumb {
+  background: #4f46e5;
+  border-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(79, 70, 229, 0.3);
+}
+
+/* Stepper Buttons for Sliders */
+.slider-step-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+.slider-step-btn:hover {
+  background: var(--accent-indigo-soft);
+  border-color: var(--accent-indigo);
+  color: var(--accent-indigo);
+  transform: scale(1.08);
+}
+.slider-step-btn:active {
+  transform: scale(0.95);
+}
+[data-theme="light"] .slider-step-btn {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+[data-theme="light"] .slider-step-btn:hover {
+  background: #e0e7ff;
+  border-color: #6366f1;
+  color: #4f46e5;
+}
+
+/* Custom Interactive Draggable Track & Thumb */
+.custom-slider-container {
+  position: relative;
+  width: 100%;
+  padding: 12px 0 22px 0;
+  cursor: pointer;
+  touch-action: none;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+.custom-slider-track {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.custom-slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #6366f1, #4f46e5);
+  border-radius: 3px;
+  pointer-events: none;
+}
+[data-theme="light"] .custom-slider-track {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+.custom-slider-thumb {
+  position: absolute;
+  top: 16px;
+  left: 0%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  margin-top: -12px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 3px solid #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(99, 102, 241, 0.4);
+  cursor: grab;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+.custom-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(99, 102, 241, 0.45);
+}
+.custom-slider-thumb.dragging,
+.custom-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.25);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.6), 0 0 0 6px rgba(99, 102, 241, 0.3);
+}
+.custom-slider-thumb-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* Custom Slider Step Ticks */
+.custom-slider-ticks {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  pointer-events: auto;
+}
+.custom-slider-tick {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit--webkit-user-select: none;`r`n  user-select: none;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+.custom-slider-tick:hover {
+  color: var(--text-main);
+  background: var(--studio-surface-hover);
+}
+.custom-slider-tick.active {
+  color: #ffffff;
+  background: var(--accent-indigo);
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.4);
+}
+[data-theme="light"] .custom-slider-tick.active {
+  background: #4f46e5;
+  color: #ffffff;
+}
+[data-theme="light"] .custom-slider-tick {
+  color: #64748b;
+}
+
+.canvas-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--canvas-wrapper-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--studio-border);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+canvas { display: block; max-width: 100%; height: auto; }
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr;
+  gap: 6px;
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.matrix-cell {
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border);
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.matrix-val {
+  font-size: 18px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--text-main);
+}
+.matrix-cell.tp { border-color: var(--accent-emerald); }
+.matrix-cell.fn { border-color: var(--accent-amber); }
+.matrix-cell.fp { border-color: var(--accent-amber); }
+.matrix-cell.tn { border-color: var(--accent-emerald); }
+
+/* HUD SUCCESS MODAL */
+.hud-toast {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--accent-emerald);
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  max-width: 380px;
+  display: none;
+  z-index: 150;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.hud-toast.show {
+  display: block;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* CURRICULUM DRAWER MODAL */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+.modal-backdrop.open { display: flex; }
+
+.modal-card {
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-lg);
+  max-width: 640px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+  padding: 16px 22px;
+  background: var(--studio-bg-dark);
+  border-bottom: 1px solid var(--studio-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.modal-close-btn {
+  padding: 4px 8px;
+}
+.modal-body {
+  padding: 16px 22px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.drawer-unit-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #818cf8;
+  margin-bottom: 8px;
+}
+.drawer-lesson-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--studio-surface-2);
+  margin-bottom: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+.drawer-lesson-row:hover { background: var(--studio-surface-hover); }
+.drawer-lesson-row.active {
+  border: 1px solid var(--accent-indigo);
+  background: var(--accent-indigo-soft);
+}
+
+/* LAB BUTTONS & UTILITIES (Universal compatibility across labs) */
+.dc-btn {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  -webkit-user-select: none;`r`n  user-select: none;
+}
+.dc-btn-ghost {
+  background: var(--studio-surface-2);
+  border-color: var(--studio-border);
+  color: var(--text-main);
+}
+.dc-btn-ghost:hover {
+  border-color: var(--accent-indigo);
+  background: var(--studio-surface-hover);
+}
+.dc-btn-secondary {
+  background: var(--accent-indigo-soft);
+  border-color: var(--accent-indigo);
+  color: var(--accent-indigo);
+}
+.dc-btn-secondary:hover {
+  background: var(--accent-indigo);
+  color: #ffffff;
+}
+.dc-btn-submit {
+  background: var(--accent-emerald);
+  border-color: var(--accent-emerald);
+  color: #ffffff;
+  font-weight: 700;
+}
+.dc-btn-submit:hover {
+  background: var(--accent-emerald-hover);
+}
+
+.progress-bar-bg {
+  background: var(--studio-surface-2);
+  border: 1px solid var(--studio-border-light);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* ===============================================================
+   COMPREHENSIVE LIGHT THEME RULES FOR PRACTICA / STUDIO
+   =============================================================== */
+[data-theme="light"] .spec-card,
+[data-theme="light"] .theory-shortcut-card,
+[data-theme="light"] .interactive-arena-card {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .spec-tag {
+  background: #e0e7ff;
+  color: #3730a3;
+  font-weight: 700;
+}
+
+[data-theme="light"] .instruction-num {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0284c7;
+}
+
+[data-theme="light"] .hint-content {
+  background: #fffbeb;
+  border-color: #fde68a;
+  border-left: 3px solid #d97706;
+  color: #78350f;
+}
+
+[data-theme="light"] .btn-theory-link {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #4338ca;
+}
+[data-theme="light"] .btn-theory-link:hover {
+  background: #e0e7ff;
+  border-color: #6366f1;
+  color: #1e1b4b;
+}
+
+[data-theme="light"] .xp-badge {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+/* Chips & Categories (Classification Bins, Recommender, Tokenizer, Sentiment) */
+[data-theme="light"] .interactive-chip {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+[data-theme="light"] .interactive-chip:hover {
+  border-color: #6366f1;
+  background: #f8fafc;
+  color: #1e1b4b;
+}
+[data-theme="light"] .interactive-chip.selected {
+  background: #e0e7ff !important;
+  border-color: #6366f1 !important;
+  color: #1e1b4b !important;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(99, 102, 241, 0.18);
+}
+[data-theme="light"] .chip-grip {
+  color: #64748b;
+}
+[data-theme="light"] .interactive-chip:hover .chip-grip,
+[data-theme="light"] .interactive-chip.selected .chip-grip {
+  color: #4338ca;
+}
+
+[data-theme="light"] .category-col {
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+}
+[data-theme="light"] .category-col:hover {
+  border-color: #4f46e5;
+  background: #ffffff;
+}
+[data-theme="light"] .category-col.drag-over {
+  border-color: #0284c7 !important;
+  background: #f0f9ff !important;
+  box-shadow: 0 0 14px rgba(2, 132, 199, 0.25);
+}
+[data-theme="light"] .category-col-title {
+  color: #0369a1;
+  font-weight: 800;
+  border-bottom: 1px solid #e2e8f0;
+}
+[data-theme="light"] #unassigned-chips {
+  background: #f8fafc;
+  border: 1px dashed #e2e8f0;
+}
+[data-theme="light"] #unassigned-chips.drag-over {
+  border-color: #4f46e5;
+  background: #eef2ff;
+}
+
+/* Sequence Sorter */
+[data-theme="light"] .sort-slot {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+[data-theme="light"] .sort-slot:hover {
+  background: #f8fafc;
+  border-color: #6366f1;
+}
+[data-theme="light"] .sort-slot.drag-over {
+  border-color: #0284c7;
+  background: #f0f9ff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+}
+[data-theme="light"] .sort-num {
+  color: #0284c7;
+}
+[data-theme="light"] .sort-grip {
+  color: #94a3b8;
+}
+[data-theme="light"] .sort-slot:hover .sort-grip {
+  color: #0284c7;
+}
+
+/* Lab Controls, Inputs, Tables & Buttons */
+[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="number"],
+[data-theme="light"] .lab-input {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] input[type="text"]:focus,
+[data-theme="light"] input[type="number"]:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.15);
+}
+
+[data-theme="light"] .matrix-cell {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+[data-theme="light"] .matrix-val {
+  color: #0f172a;
+}
+[data-theme="light"] .progress-bar-bg {
+  background: #e2e8f0;
+}
+
+[data-theme="light"] table tr {
+  border-bottom-color: #e2e8f0 !important;
+}
+[data-theme="light"] table th {
+  color: #0369a1 !important;
+}
+[data-theme="light"] table td {
+  color: #0f172a !important;
+}
+
+/* Interactive Filter Light Theme Overrides */
+[data-theme="light"] .filter-lab-header {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .filter-header-rule {
+  color: #475569;
+}
+
+[data-theme="light"] .filter-rule-badge {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4338ca;
+}
+
+[data-theme="light"] .filter-counter-badge {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+[data-theme="light"] .filter-option-card {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .filter-option-card:hover:not(.correct):not(.wrong) {
+  background: #f8fafc;
+  border-color: #4f46e5;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
+}
+
+[data-theme="light"] .filter-option-card.selected:not(.correct):not(.wrong) {
+  border-color: #4f46e5 !important;
+  background: #f5f3ff !important;
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.15);
+}
+
+[data-theme="light"] .filter-card-id {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+[data-theme="light"] .filter-card-var {
+  color: #0f172a;
+}
+
+[data-theme="light"] .filter-pill-pkg {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #334155;
+  font-weight: 600;
+}
+
+[data-theme="light"] .filter-pill-price {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+[data-theme="light"] .filter-card-indicator {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+[data-theme="light"] .filter-option-card.selected .filter-card-indicator {
+  border-color: #4f46e5 !important;
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .filter-option-card.correct {
+  color: #065f46 !important;
+  background: #ecfdf5 !important;
+  border-color: #10b981 !important;
+}
+
+[data-theme="light"] .filter-option-card.wrong {
+  color: #991b1b !important;
+  background: #fef2f2 !important;
+  border-color: #ef4444 !important;
+}
+
+[data-theme="light"] .dc-btn-ghost {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+[data-theme="light"] .dc-btn-ghost:hover {
+  background: #f1f5f9;
+  border-color: #6366f1;
+}
+[data-theme="light"] .dc-btn-secondary {
+  background: #e0e7ff;
+  border-color: #6366f1;
+  color: #312e81;
+}
+[data-theme="light"] .dc-btn-secondary:hover {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+[data-theme="light"] .hud-toast {
+  background: #ffffff;
+  border: 1px solid #059669;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  color: #0f172a;
+}
+
+[data-theme="light"] .drawer-unit-title {
+  color: #4338ca;
+}
+[data-theme="light"] .drawer-lesson-row {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+[data-theme="light"] .drawer-lesson-row:hover {
+  background: #f1f5f9;
+}
+[data-theme="light"] .drawer-lesson-row.active {
+  background: #e0e7ff;
+  border-color: #6366f1;
+  color: #1e1b4b;
+  font-weight: 700;
+}
+
+/* CORRECT / WRONG EVALUATION VISUALS */
+.interactive-chip.correct {
+  border-color: var(--accent-emerald) !important;
+  background: rgba(16, 185, 129, 0.18) !important;
+  color: #a7f3d0 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3) !important;
+}
+.interactive-chip.wrong {
+  border-color: var(--accent-red) !important;
+  background: rgba(239, 68, 68, 0.18) !important;
+  color: #fca5a5 !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3) !important;
+  animation: chipShake 0.4s ease;
+}
+
+[data-theme="light"] .interactive-chip.correct {
+  border-color: #059669 !important;
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25) !important;
+}
+[data-theme="light"] .interactive-chip.wrong {
+  border-color: #dc2626 !important;
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25) !important;
+}
+
+.chip-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 900;
+  margin-left: 8px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.chip-status-badge.correct {
+  background: var(--accent-emerald);
+  color: #042416;
+}
+.chip-status-badge.wrong {
+  background: var(--accent-red);
+  color: #ffffff;
+}
+[data-theme="light"] .chip-status-badge.correct {
+  background: #059669;
+  color: #ffffff;
+}
+[data-theme="light"] .chip-status-badge.wrong {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.lab-feedback-card {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 14px;
+  animation: slideUp 0.25s ease;
+}
+.lab-feedback-card.correct {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid var(--accent-emerald);
+  color: #a7f3d0;
+}
+.lab-feedback-card.wrong {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid var(--accent-red);
+  color: #fca5a5;
+}
+[data-theme="light"] .lab-feedback-card.correct {
+  background: #ecfdf5;
+  border-color: #059669;
+  color: #065f46;
+}
+[data-theme="light"] .lab-feedback-card.wrong {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #991b1b;
+}
+
+@keyframes chipShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .workbench { display: flex; flex-direction: column; height: auto; overflow: visible; }
+  .left-pane, .right-pane { height: auto; overflow: visible; }
+  body { overflow: auto; }
+  .settings-dropdown { right: -6px; width: 270px; }
+}
+
+@media (max-width: 680px) {
+  .navbar { padding: 0 12px; height: 56px; }
+  .nav-center { display: none; }
+  .xp-badge { font-size: 11px; padding: 4px 8px; white-space: nowrap; flex-shrink: 0; }
+  .home-btn { display: none; }
+  .btn-theory-link { padding: 5px 10px; font-size: 12px; }
+}
+
+@media (max-width: 420px) {
+  .navbar { padding: 0 8px; }
+  .studio-brand span { display: none; }
+  .back-btn { gap: 6px; padding: 7px 10px; font-size: 12px; }
+  .btn-theory-link span { font-size: 11px; }
+  .xp-badge { font-size: 10px; padding: 3px 5px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAVBAR -->
+<header class="navbar">
+  <div class="nav-left">
+    <a href="index.html" class="back-btn" aria-label="Volver al inicio">
+      <span aria-hidden="true">←</span>
+      <span data-i18n="nav_back_dashboard">Volver al inicio</span>
+    </a>
+    <a href="index.html" class="studio-brand">
+      <div class="brand-icon">⚡</div>
+      <span>ML Studio // Lab</span>
+    </a>
+    <button class="lesson-picker-btn" id="open-chapters-btn">
+      <span id="nav-lesson-num">Lección 1</span>
+      <span class="lesson-picker-chevron">▼</span>
+    </button>
+  </div>
+
+  <div class="nav-center">
+    <span class="nav-desktop-title" id="nav-desktop-title">Qué es el Machine Learning</span>
+  </div>
+
+  <div class="nav-right">
+    <div class="xp-badge" id="nav-xp-counter">⚡ 0 XP</div>
+
+    <!-- SETTINGS MODULE (Reference UI) -->
+    <div class="settings-dropdown-wrapper">
+      <button class="settings-btn" id="open-settings-btn" aria-label="Configuración" title="Configuración" data-i18n-title="settings_title" data-i18n-aria="settings_title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+
+      <!-- DROPDOWN MENU -->
+      <div class="settings-dropdown" id="settings-dropdown">
+        <!-- Row 1: Idioma -->
+        <div class="settings-row">
+          <span class="settings-label" data-i18n="settings_lang">Idioma</span>
+          <div class="settings-lang-segmented" id="settings-lang-segmented">
+            <button type="button" class="lang-seg-btn active" data-lang="es">🇪🇸 ES</button>
+            <button type="button" class="lang-seg-btn" data-lang="en">🇺🇸 EN</button>
+          </div>
+        </div>
+
+        <!-- Row 2: Tema -->
+        <div class="settings-row">
+          <span class="settings-label" data-i18n="settings_theme">Tema</span>
+          <button class="settings-theme-switch theme-toggle-btn" id="settings-theme-switch" aria-label="Cambiar tema" title="Alternar entre modo claro y oscuro">
+            <span class="theme-switch-thumb">
+              <span class="theme-toggle-icon">🌙</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <!-- Row 3: Contacto y soporte -->
+        <a href="index.html#temario" class="settings-menu-item">
+          <span class="settings-item-icon">💬</span>
+          <span class="settings-item-text" data-i18n="settings_contact">Contacto y soporte</span>
+          <span class="settings-item-arrow">›</span>
+        </a>
+      </div>
+    </div>
+
+    <a href="teoria.html" class="btn-theory-link" id="top-theory-btn">
+      <span data-i18n="nav_view_theory">📖 Ver Teoría</span>
+    </a>
+    <a href="index.html" class="home-btn" data-i18n="nav_home">🏠 Inicio</a>
+  </div>
+</header>
+
+<!-- WORKBENCH (Split-Screen) -->
+<main class="workbench">
+
+  <!-- LEFT PANE: Specification & Instructions -->
+  <section class="left-pane" id="left-pane">
+    <div class="breadcrumb" id="pane-breadcrumb">
+      <span>Unidad 1</span>
+      <span class="sep">/</span>
+      <span>Lección 1 de 27</span>
+    </div>
+
+    <h1 class="lab-title" id="pane-lab-title">Laboratorio Interactivo</h1>
+
+    <!-- Lab Spec Card -->
+    <div class="spec-card">
+      <div class="spec-header">
+        <span data-i18n="practice_spec_title">Especificación de Laboratorio</span>
+        <span class="spec-tag" id="lab-type-tag">Modelo ML</span>
+      </div>
+      <p class="spec-goal" id="pane-goal-desc">
+        Interactúa con el simulador en vivo ajustando los parámetros para validar la solución.
+      </p>
+
+      <div class="checklist-title" data-i18n="practice_instructions_title">Checklist de Validación:</div>
+      <div class="instructions-list" id="pane-instructions-list"></div>
+
+      <!-- Hint Accordion -->
+      <div class="hint-card">
+        <button class="hint-toggle-btn" id="hint-toggle-btn" type="button">
+          <span>💡</span>
+          <span data-i18n="practice_hint_title">Pista Técnica</span>
+          <span class="hint-cost-pill" id="hint-cost-pill">-15 XP</span>
+        </button>
+        <div class="hint-content" id="hint-content-box"></div>
+      </div>
+    </div>
+
+    <!-- Shortcut to Theory -->
+    <div class="theory-shortcut-card">
+      <div class="shortcut-text">
+        <strong data-i18n="practice_theory_shortcut_title">¿Dudas con la matemática o el concepto?</strong>
+        <div data-i18n="practice_theory_shortcut_desc">Revisa la formulación teórica completa de esta lección.</div>
+      </div>
+      <a href="teoria.html" class="btn btn-ghost shortcut-theory-link" id="shortcut-theory-link">
+        <span data-i18n="nav_view_theory">Abrir Teoría ➔</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- RIGHT PANE: Interactive Arena & Diagnostics Console -->
+  <section class="right-pane" id="right-pane">
+    <div class="workspace-header">
+      <div class="workspace-title">
+        <span class="status-dot"></span>
+        <span id="workspace-type-title" data-i18n="practice_workspace_title">Laboratorio Interactivo</span>
+      </div>
+      <div class="workspace-xp-badge" data-i18n="practice_workspace_reward">Recompensa: +100 XP</div>
+    </div>
+
+    <div class="workspace-content">
+      <!-- Arena Simulator -->
+      <div class="interactive-arena-card" id="interactive-arena"></div>
+
+      <!-- Telemetry / Diagnostics Console -->
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span data-i18n="practice_telemetry_title">● Motor de Telemetría & Asistente IA</span>
+          <span class="telemetry-online">ONLINE</span>
+        </div>
+        <div class="telemetry-body" id="terminal-body">
+          <div class="telemetry-line info"><span class="telemetry-prompt">&gt;</span><span data-i18n="practice_telemetry_ready">Listo para evaluar. Modifica los parámetros y presiona 'Probar Solución' o 'Validar y Enviar'.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Action Toolbar -->
+    <footer class="studio-footer">
+      <div class="footer-left">
+        <button class="btn btn-ghost" id="reset-exercise-btn" data-i18n="practice_btn_reset" title="Restablecer controles">↺ Reset Parámetros</button>
+      </div>
+      <div class="footer-right">
+        <button class="btn btn-run" id="run-code-btn" data-i18n="practice_btn_run">🔍 Probar Solución (Run)</button>
+        <button class="btn btn-submit" id="submit-answer-btn" data-i18n="practice_btn_submit">Validar y Enviar (+100 XP) ➔</button>
+      </div>
+    </footer>
+  </section>
+
+</main>
+
+<!-- HUD SUCCESS TOAST -->
+<div class="hud-toast" id="success-toast">
+  <div class="toast-header">
+    <span class="toast-emoji">🎉</span>
+    <div>
+      <div class="toast-title" data-i18n="practice_toast_title">¡Solución Validada!</div>
+      <div class="toast-xp-text" id="toast-xp-text">+100 XP ganados</div>
+    </div>
+  </div>
+  <p class="toast-message" id="toast-msg-text" data-i18n="practice_toast_default_msg">El modelo superó la verificación algorítmica.</p>
+  <button class="btn btn-submit toast-next-btn" id="toast-next-btn">
+    <span data-i18n="practice_hud_next">Siguiente Laboratorio ➔</span>
+  </button>
+</div>
+
+<!-- CHAPTERS DRAWER MODAL -->
+<div class="modal-backdrop" id="chapters-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title" data-i18n="lab_modal_title">Laboratorios Prácticos (27 Lecciones)</h3>
+      <button class="btn btn-ghost modal-close-btn" id="close-chapters-modal-btn">✕</button>
+    </div>
+    <div class="modal-body" id="chapters-modal-body"></div>
+  </div>
+</div>
+
+
+<!-- SCRIPTS COMPARTIDOS -->
+<script src="i18n.js"></script>
+<script src="storage.js"></script>
+<script src="course-data-en.js"></script>
+<script src="course-data.js"></script>
+
+<script>
+let currentIdx = 0;
+let currentExerciseState = {};
+
+function parseQueryLesson() {
+  const params = new URLSearchParams(window.location.search);
+  const lNum = parseInt(params.get('lesson'));
+  if (lNum && lNum >= 1 && lNum <= FLAT.length) {
+    const foundIdx = FLAT.findIndex(f => f.lesson.n === lNum);
+    if (foundIdx >= 0 && StorageManager.canAccessLessonNumber(lNum)) return foundIdx;
+  }
+  const lastActive = StorageManager.getLastActiveLesson();
+  if (lastActive && StorageManager.canAccessLessonNumber(lastActive)) {
+    const foundIdx = FLAT.findIndex(f => f.lesson.n === lastActive);
+    if (foundIdx >= 0) return foundIdx;
+  }
+  const maxUnlocked = StorageManager.getMaxUnlockedLesson();
+  const maxIdx = FLAT.findIndex(f => f.lesson.n === maxUnlocked);
+  if (maxIdx >= 0) return maxIdx;
+  return 0;
+}
+
+function updateNavUI() {
+  const xp = StorageManager.getXP();
+  document.getElementById('nav-xp-counter').textContent = `⚡ ${xp.toLocaleString()} XP`;
+}
+
+function writeTerminal(msg, type = "line") {
+  const body = document.getElementById('terminal-body');
+  const line = document.createElement('div');
+  line.className = `telemetry-line ${type}`;
+  line.innerHTML = `<span class="telemetry-prompt">&gt;</span>${msg}`;
+  body.appendChild(line);
+  body.scrollTop = body.scrollHeight;
+}
+
+function loadLesson(idx) {
+  if (idx < 0 || idx >= FLAT.length) idx = 0;
+  currentIdx = idx;
+
+  const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+  const rawUnit = FLAT[currentIdx].unit;
+  const rawLesson = FLAT[currentIdx].lesson;
+  const unit = (typeof getLocalizedUnit === 'function') ? getLocalizedUnit(rawUnit, isEn ? 'en' : 'es') : rawUnit;
+  const lesson = (typeof getLocalizedLesson === 'function') ? getLocalizedLesson(rawLesson, isEn ? 'en' : 'es') : rawLesson;
+
+  StorageManager.setLastActiveLesson(lesson.n);
+
+  const lessonLabel = (window.I18nManager && window.I18nManager.t('nav_lesson_prefix')) || (isEn ? 'Lesson' : 'Lección');
+  const ofLabel = isEn ? 'of' : 'de';
+
+  // Top Nav updates
+  document.getElementById('nav-lesson-num').textContent = `${lessonLabel} ${lesson.n}`;
+  document.getElementById('top-theory-btn').href = `teoria.html?lesson=${lesson.n}`;
+  document.getElementById('shortcut-theory-link').href = `teoria.html?lesson=${lesson.n}`;
+
+  // Breadcrumbs & Title
+  document.getElementById('pane-breadcrumb').innerHTML = `
+    <span>${unit.title}</span>
+    <span class="sep">/</span>
+    <span>${lessonLabel} ${lesson.n} ${ofLabel} ${FLAT.length}</span>
+  `;
+  document.getElementById('pane-lab-title').textContent = lesson.exercise.title || lesson.title;
+  document.getElementById('lab-type-tag').textContent = lesson.exercise.type;
+  document.getElementById('workspace-type-title').textContent = lesson.exercise.title || (isEn ? "Interactive Lab" : "Laboratorio Interactivo");
+
+  // Goal & Instructions
+  document.getElementById('pane-goal-desc').textContent = lesson.p1;
+  document.getElementById('pane-instructions-list').innerHTML = lesson.instructions.map((ins, i) => `
+    <div class="instruction-item">
+      <span class="instruction-num">${i + 1}</span>
+      <span>${ins}</span>
+    </div>
+  `).join('');
+
+  // Hint
+  const hintCost = (typeof getLessonHintCost === 'function') ? getLessonHintCost(lesson) : 15;
+  const isHintUnlocked = StorageManager.isHintUnlocked(lesson.n);
+  const hintPill = document.getElementById('hint-cost-pill');
+  const hintBox = document.getElementById('hint-content-box');
+
+  hintBox.textContent = lesson.hint;
+  hintBox.classList.remove('open');
+
+  if (hintPill) {
+    if (isHintUnlocked) {
+      hintPill.classList.add('unlocked');
+      hintPill.textContent = (window.I18nManager && window.I18nManager.t('hint_unlocked_pill')) || '✓ Desbloqueada';
+    } else {
+      hintPill.classList.remove('unlocked');
+      hintPill.textContent = (window.I18nManager && window.I18nManager.t('hint_cost_pill', { cost: hintCost })) || `-${hintCost} XP`;
+    }
+  }
+
+  // Check if theory is completed for this lesson
+  const canAccess = StorageManager.canAccessPractice(lesson.n);
+  const runBtn = document.getElementById('run-code-btn');
+  const submitBtn = document.getElementById('submit-answer-btn');
+
+  if (!canAccess) {
+    const arena = document.getElementById('interactive-arena');
+    const lockTitle = isEn ? 'Lab Locked' : 'Laboratorio Bloqueado';
+    const lockDesc = isEn 
+      ? `To experiment in this simulator and earn <strong>+100 XP</strong>, you must first complete and pass the conceptual check in theory for <strong>Lesson ${lesson.n}: ${lesson.title}</strong>.`
+      : `Para experimentar en este simulador y ganar los <strong>+100 XP</strong>, primero debes completar y aprobar la comprobación conceptual en la teoría de la <strong>Lección ${lesson.n}: ${lesson.title}</strong>.`;
+    const lockBtn = isEn
+      ? `📖 Go to Lesson ${lesson.n} Theory (Unlock) ➔`
+      : `📖 Ir a la Teoría de la Lección ${lesson.n} (Desbloquear) ➔`;
+
+    arena.innerHTML = `
+      <div style="text-align:center;padding:48px 20px;">
+        <div style="font-size:48px;margin-bottom:14px;">🔒</div>
+        <h2 style="font-size:20px;font-weight:800;color:var(--text-main,#fff);margin-bottom:10px;">${lockTitle}</h2>
+        <p style="font-size:14px;color:var(--text-muted);max-width:460px;margin:0 auto 22px;line-height:1.6;">
+          ${lockDesc}
+        </p>
+        <a href="teoria.html?lesson=${lesson.n}" class="btn btn-submit" style="font-size:13.5px;padding:10px 22px;">
+          <span>${lockBtn}</span>
+        </a>
+      </div>
+    `;
+
+    runBtn.disabled = true;
+    runBtn.style.opacity = '0.4';
+    runBtn.style.cursor = 'not-allowed';
+
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.4';
+    submitBtn.style.cursor = 'not-allowed';
+
+    const blockedMsg = isEn 
+      ? `[ACCESS LOCKED] To interact with this lab you must first complete the theory for Lesson ${lesson.n} and answer its quiz.`
+      : `[ACCESO BLOQUEADO] Para interactuar con este laboratorio debes completar primero la teoría de la Lección ${lesson.n} y responder su quiz.`;
+    writeTerminal(blockedMsg, "warning");
+  } else {
+    runBtn.disabled = false;
+    runBtn.style.opacity = '1';
+    runBtn.style.cursor = 'pointer';
+
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
+
+    // Render Interactive Lab
+    renderLab(lesson);
+
+    // Terminal reset
+    const readyMsg = isEn
+      ? `Simulation environment loaded for Lesson ${lesson.n}: ${lesson.title}. Ready to test.`
+      : `Entorno de simulación cargado para Lección ${lesson.n}: ${lesson.title}. Listo para probar.`;
+    writeTerminal(readyMsg, "info");
+  }
+
+  updateNavUI();
+}
+
+// ===============================================================
+// 18 RENDERIZADORES DE LABORATORIOS INTERACTIVOS
+// ===============================================================
+function renderLab(lesson) {
+  const arena = document.getElementById('interactive-arena');
+  arena.innerHTML = '';
+  const ex = lesson.exercise;
+  currentExerciseState = StorageManager.getExerciseState(lesson.n) || {};
+
+  switch(ex.type) {
+    case "classification_bins": renderBinsLab(arena, ex); break;
+    case "sequence_sort": renderSortLab(arena, ex); break;
+    case "fairness_audit": renderFairnessLab(arena, ex); break;
+    case "interactive_filter": renderFilterLab(arena, ex); break;
+    case "canvas_poly_regression": renderPolyLab(arena, ex); break;
+    case "sigmoid_threshold": renderSigmoidLab(arena, ex); break;
+    case "interactive_knn": renderKnnLab(arena, ex); break;
+    case "confusion_matrix_slider": renderConfusionLab(arena, ex); break;
+    case "recipe_recommender": renderRecommenderLab(arena, ex); break;
+    case "canvas_kmeans": renderKmeansLab(arena, ex); break;
+    case "interactive_tokenizer": renderTokenizerLab(arena, ex); break;
+    case "sentiment_lexicon": renderSentimentLab(arena, ex); break;
+    case "interactive_tfidf": renderTfidfLab(arena, ex); break;
+    case "interactive_stationarity": renderStationarityLab(arena, ex); break;
+    case "arima_simulator": renderArimaLab(arena, ex); break;
+    case "bellman_calculator": renderBellmanLab(arena, ex); break;
+    case "gridworld_qlearning": renderGridworldLab(arena, ex); break;
+    case "rai_audit_panel": renderRaiAuditLab(arena, ex); break;
+    default: renderBinsLab(arena, ex);
+  }
+}
+
+// 1. Classification Bins
+function renderBinsLab(arena, ex) {
+  const promptText = (window.I18nManager && window.I18nManager.t('sim_bins_prompt')) || "Arrastra cada concepto a su categoría (o selecciónalo y haz clic en el destino):";
+  const removeHint = (window.I18nManager && window.I18nManager.t('sim_bins_remove_hint')) || "Arrastra a otra categoría o haz clic para remover";
+
+  arena.innerHTML = `
+    <div style="font-size:12px;color:var(--dc-text-dim);margin-bottom:8px;">${promptText}</div>
+    <div class="chip-group" id="unassigned-chips">
+      ${ex.items.map(item => `
+        <div class="interactive-chip" draggable="true" data-id="${item.id}" id="chip-${item.id}">
+          <span class="chip-grip" title="Arrastrar">⠿</span>${item.text}
+        </div>
+      `).join('')}
+    </div>
+    <div class="category-grid">
+      ${ex.categories.map(cat => `
+        <div class="category-col" data-cat="${cat.id}">
+          <div class="category-col-title">${cat.title}</div>
+          <div class="category-items" id="cat-items-${cat.id}"></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  let selectedChipId = null;
+  let draggedChipId = null;
+  let isDragging = false;
+  let touchDraggedChipId = null;
+  let touchStartPos = null;
+  let touchMoved = false;
+
+  function clearDragOver() {
+    arena.querySelectorAll('.category-col').forEach(c => c.classList.remove('drag-over'));
+    const unassignedEl = arena.querySelector('#unassigned-chips');
+    if (unassignedEl) unassignedEl.classList.remove('drag-over');
+  }
+
+  function assignChip(chipId, catId) {
+    if (!chipId || !catId) return;
+    const fb = arena.querySelector('#lab-eval-feedback');
+    if (fb) fb.remove();
+    currentExerciseState[chipId] = catId;
+    selectedChipId = null;
+    if (typeof writeTerminal === 'function') {
+      const it = ex.items.find(x => x.id === chipId);
+      const cat = ex.categories.find(c => c.id === catId);
+      const itemTitle = it ? it.text : chipId;
+      const catTitle = cat ? cat.title : catId;
+      writeTerminal(`[ASIGNADO] "${itemTitle}" → ${catTitle}`, 'log');
+    }
+    refresh();
+  }
+
+  function unassignChip(chipId) {
+    if (!chipId || !currentExerciseState[chipId]) return;
+    const fb = arena.querySelector('#lab-eval-feedback');
+    if (fb) fb.remove();
+    delete currentExerciseState[chipId];
+    selectedChipId = null;
+    if (typeof writeTerminal === 'function') {
+      const it = ex.items.find(x => x.id === chipId);
+      writeTerminal(`[REMOVIDO] "${it ? it.text : chipId}" devuelto a la bandeja`, 'log');
+    }
+    refresh();
+  }
+
+  function setupDraggableChip(el, chipId, isAssigned) {
+    el.setAttribute('draggable', 'true');
+
+    // Desktop HTML5 Drag & Drop
+    el.addEventListener('dragstart', (e) => {
+      draggedChipId = chipId;
+      isDragging = true;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', chipId);
+      el.classList.add('dragging');
+    });
+
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      clearDragOver();
+      setTimeout(() => {
+        isDragging = false;
+        draggedChipId = null;
+      }, 50);
+    });
+
+    // Touch Support (Mobile & Tablet)
+    el.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      touchStartPos = { x: t.clientX, y: t.clientY };
+      touchDraggedChipId = chipId;
+      touchMoved = false;
+    }, { passive: true });
+
+    el.addEventListener('touchmove', (e) => {
+      if (!touchDraggedChipId) return;
+      const t = e.touches[0];
+      const dx = t.clientX - touchStartPos.x;
+      const dy = t.clientY - touchStartPos.y;
+      if (!touchMoved && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+        touchMoved = true;
+        el.classList.add('dragging');
+      }
+      if (touchMoved) {
+        e.preventDefault();
+        const target = document.elementFromPoint(t.clientX, t.clientY);
+        const col = target ? target.closest('.category-col') : null;
+        const unassignedBox = target ? target.closest('#unassigned-chips') : null;
+
+        clearDragOver();
+        if (col) {
+          col.classList.add('drag-over');
+        } else if (unassignedBox) {
+          unassignedBox.classList.add('drag-over');
+        }
+      }
+    }, { passive: false });
+
+    el.addEventListener('touchend', (e) => {
+      if (!touchDraggedChipId) return;
+      el.classList.remove('dragging');
+      clearDragOver();
+
+      if (touchMoved) {
+        const t = e.changedTouches[0];
+        const target = document.elementFromPoint(t.clientX, t.clientY);
+        const col = target ? target.closest('.category-col') : null;
+        const unassignedBox = target ? target.closest('#unassigned-chips') : null;
+
+        if (col) {
+          assignChip(touchDraggedChipId, col.dataset.cat);
+        } else if (unassignedBox && isAssigned) {
+          unassignChip(touchDraggedChipId);
+        }
+      }
+      touchDraggedChipId = null;
+      touchStartPos = null;
+      touchMoved = false;
+    });
+  }
+
+  function refresh() {
+    ex.categories.forEach(cat => {
+      document.getElementById(`cat-items-${cat.id}`).innerHTML = '';
+    });
+    ex.items.forEach(item => {
+      const assigned = currentExerciseState[item.id];
+      const chip = document.getElementById(`chip-${item.id}`);
+      if (assigned) {
+        chip.style.display = 'none';
+        const d = document.createElement('div');
+        d.className = 'interactive-chip selected';
+        d.style.fontSize = '11.5px';
+        d.style.padding = '4px 8px';
+        d.title = removeHint;
+        d.dataset.id = item.id;
+        d.innerHTML = `<span class="chip-grip" title="${removeHint}">⠿</span>${item.text}`;
+        
+        setupDraggableChip(d, item.id, true);
+
+        d.addEventListener('click', () => {
+          if (isDragging) return;
+          unassignChip(item.id);
+        });
+        document.getElementById(`cat-items-${assigned}`).appendChild(d);
+      } else {
+        chip.style.display = 'inline-block';
+        chip.classList.toggle('selected', selectedChipId === item.id);
+      }
+    });
+  }
+
+  // Bind unassigned chips
+  ex.items.forEach(item => {
+    const chip = document.getElementById(`chip-${item.id}`);
+    setupDraggableChip(chip, item.id, false);
+
+    chip.addEventListener('click', () => {
+      if (isDragging) return;
+      selectedChipId = (selectedChipId === item.id) ? null : item.id;
+      refresh();
+    });
+  });
+
+  // Setup category drop zones and click destinations
+  arena.querySelectorAll('.category-col').forEach(col => {
+    col.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      col.classList.add('drag-over');
+    });
+
+    col.addEventListener('dragleave', (e) => {
+      if (!col.contains(e.relatedTarget)) {
+        col.classList.remove('drag-over');
+      }
+    });
+
+    col.addEventListener('drop', (e) => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const chipId = e.dataTransfer.getData('text/plain') || draggedChipId;
+      if (chipId) {
+        assignChip(chipId, col.dataset.cat);
+      }
+    });
+
+    col.addEventListener('click', () => {
+      if (isDragging) return;
+      if (selectedChipId) {
+        assignChip(selectedChipId, col.dataset.cat);
+      }
+    });
+  });
+
+  // Setup unassigned area drop zone for dragging items back
+  const unassignedPool = arena.querySelector('#unassigned-chips');
+  if (unassignedPool) {
+    unassignedPool.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      unassignedPool.classList.add('drag-over');
+    });
+
+    unassignedPool.addEventListener('dragleave', (e) => {
+      if (!unassignedPool.contains(e.relatedTarget)) {
+        unassignedPool.classList.remove('drag-over');
+      }
+    });
+
+    unassignedPool.addEventListener('drop', (e) => {
+      e.preventDefault();
+      unassignedPool.classList.remove('drag-over');
+      const chipId = e.dataTransfer.getData('text/plain') || draggedChipId;
+      if (chipId && currentExerciseState[chipId]) {
+        unassignChip(chipId);
+      }
+    });
+  }
+
+  refresh();
+}
+
+// 2. Sequence Sort
+function renderSortLab(arena, ex) {
+  if (!currentExerciseState.order) {
+    currentExerciseState.order = [...ex.items.map(x => x.id)];
+  }
+
+  function update() {
+    const sortPrompt = (window.I18nManager && window.I18nManager.t('sim_sort_prompt')) || "Arrastra y suelta las tarjetas para ordenarlas correctamente de arriba (#1) hacia abajo.";
+    const gripHint = (window.I18nManager && window.I18nManager.t('sim_sort_grip_hint')) || "Arrastra para reordenar";
+    const handleText = (window.I18nManager && window.I18nManager.t('sim_sort_handle_text')) || "Arrastrar";
+
+    arena.innerHTML = `
+      <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text-muted);background:rgba(56,189,248,0.06);border:1px solid rgba(56,189,248,0.15);padding:8px 12px;border-radius:var(--radius-sm);">
+        <span style="font-size:16px;color:var(--accent-cyan);">⠿</span>
+        <span>${sortPrompt}</span>
+      </div>
+      <div class="sort-container" id="sort-container">
+        ${currentExerciseState.order.map((id, idx) => {
+          const it = ex.items.find(x => x.id === id);
+          return `
+            <div class="sort-slot" draggable="true" data-index="${idx}" data-id="${id}">
+              <span class="sort-grip" title="${gripHint}">⠿</span>
+              <span class="sort-num">#${idx + 1}</span>
+              <span class="sort-text" style="flex:1;font-weight:500;line-height:1.4;">${it.text}</span>
+              <span class="sort-handle-hint" style="font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:4px;-webkit-user-select: none;`r`n  user-select: none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
+                ${handleText}
+              </span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    const container = arena.querySelector('#sort-container');
+    const slots = container.querySelectorAll('.sort-slot');
+    let draggedIndex = null;
+    let touchDraggedEl = null;
+
+    slots.forEach(slot => {
+      // HTML5 Drag & Drop (Desktop)
+      slot.addEventListener('dragstart', (e) => {
+        draggedIndex = parseInt(slot.dataset.index);
+        slot.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(draggedIndex));
+      });
+
+      slot.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (draggedIndex !== null && parseInt(slot.dataset.index) !== draggedIndex) {
+          slot.classList.add('drag-over');
+        }
+      });
+
+      slot.addEventListener('dragleave', () => {
+        slot.classList.remove('drag-over');
+      });
+
+      slot.addEventListener('drop', (e) => {
+        e.preventDefault();
+        slot.classList.remove('drag-over');
+        const targetIdx = parseInt(slot.dataset.index);
+        const srcIdx = draggedIndex !== null ? draggedIndex : parseInt(e.dataTransfer.getData('text/plain'));
+        if (!isNaN(srcIdx) && !isNaN(targetIdx) && srcIdx !== targetIdx) {
+          const moved = currentExerciseState.order.splice(srcIdx, 1)[0];
+          currentExerciseState.order.splice(targetIdx, 0, moved);
+          if (typeof writeTerminal === 'function') {
+            writeTerminal(`[REORDEN] Elemento movido de posición #${srcIdx + 1} a #${targetIdx + 1}`, 'log');
+          }
+          update();
+        }
+      });
+
+      slot.addEventListener('dragend', () => {
+        draggedIndex = null;
+        slots.forEach(s => {
+          s.classList.remove('dragging');
+          s.classList.remove('drag-over');
+        });
+      });
+
+      // Touch events (Mobile & Tablet support)
+      slot.addEventListener('touchstart', (e) => {
+        touchDraggedEl = slot;
+        slot.classList.add('dragging');
+      }, { passive: true });
+
+      slot.addEventListener('touchmove', (e) => {
+        if (!touchDraggedEl) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const targetSlot = target ? target.closest('.sort-slot') : null;
+        slots.forEach(s => s.classList.remove('drag-over'));
+        if (targetSlot && targetSlot !== touchDraggedEl) {
+          targetSlot.classList.add('drag-over');
+        }
+      }, { passive: false });
+
+      slot.addEventListener('touchend', (e) => {
+        if (!touchDraggedEl) return;
+        const touch = e.changedTouches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const targetSlot = target ? target.closest('.sort-slot') : null;
+        const srcIdx = parseInt(touchDraggedEl.dataset.index);
+        touchDraggedEl.classList.remove('dragging');
+        slots.forEach(s => s.classList.remove('drag-over'));
+
+        if (targetSlot && !isNaN(srcIdx)) {
+          const targetIdx = parseInt(targetSlot.dataset.index);
+          if (!isNaN(targetIdx) && srcIdx !== targetIdx) {
+            const moved = currentExerciseState.order.splice(srcIdx, 1)[0];
+            currentExerciseState.order.splice(targetIdx, 0, moved);
+            if (typeof writeTerminal === 'function') {
+              writeTerminal(`[REORDEN] Elemento movido de posición #${srcIdx + 1} a #${targetIdx + 1}`, 'log');
+            }
+            update();
+          }
+        }
+        touchDraggedEl = null;
+      });
+    });
+  }
+
+  update();
+}
+
+// 3. Fairness Lab
+function renderFairnessLab(arena, ex) {
+  if (currentExerciseState.thresholdB === undefined) currentExerciseState.thresholdB = 0.50;
+
+  const grpA = (window.I18nManager && window.I18nManager.t('sim_fairness_group_a')) || "Grupo A (Población Base): Umbral = 0.50 | FNR = 12%";
+  const thLabel = (window.I18nManager && window.I18nManager.t('sim_fairness_th_label')) || "Umbral Grupo B";
+
+  arena.innerHTML = `
+    <div style="font-size:13px;line-height:1.6;margin-bottom:12px;">
+      <div>${grpA}</div>
+      <div id="fairness-grp-b"></div>
+      <div style="margin-top:6px;font-weight:700;" id="fairness-disp-row"></div>
+    </div>
+    <div class="controls-grid">
+      <div class="control-item">
+        <div class="control-label">
+          <span>${thLabel}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="fairness-dec-btn" title="Disminuir umbral">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="fairness-th-val">${currentExerciseState.thresholdB.toFixed(2)}</span>
+            <button type="button" class="slider-step-btn" id="fairness-inc-btn" title="Aumentar umbral">+</button>
+          </div>
+        </div>
+        <input type="range" id="fairness-range" min="0.30" max="0.70" step="0.01" value="${currentExerciseState.thresholdB}" />
+      </div>
+    </div>
+  `;
+
+  function update() {
+    const thB = currentExerciseState.thresholdB;
+    const fnrB = Math.max(0.04, Math.min(0.35, 0.12 + (thB - 0.45) * 1.5));
+    const disp = Math.abs(0.12 - fnrB) * 100;
+    const grpB = (window.I18nManager && window.I18nManager.t('sim_fairness_group_b', { th: thB.toFixed(2), fnr: (fnrB*100).toFixed(1) })) || `Grupo B (Subgrupo Protegido): Umbral = ${thB.toFixed(2)} | FNR = ${(fnrB*100).toFixed(1)}%`;
+    const disparityLabel = (window.I18nManager && window.I18nManager.t('sim_fairness_disparity', { disp: disp.toFixed(1) })) || `Disparidad FNR: ${disp.toFixed(1)}%`;
+    const fairTag = disp < 3 ? ((window.I18nManager && window.I18nManager.t('sim_fairness_fair')) || '✓ (En margen equitativo)') : ((window.I18nManager && window.I18nManager.t('sim_fairness_unfair')) || '✗ (Desbalanceado)');
+
+    const grpBEl = document.getElementById('fairness-grp-b');
+    if (grpBEl) grpBEl.textContent = grpB;
+    const dispRow = document.getElementById('fairness-disp-row');
+    if (dispRow) {
+      dispRow.style.color = disp < 3 ? 'var(--dc-green)' : 'var(--dc-red)';
+      dispRow.textContent = `${disparityLabel} ${fairTag}`;
+    }
+    const thValEl = document.getElementById('fairness-th-val');
+    if (thValEl) thValEl.textContent = thB.toFixed(2);
+  }
+
+  const rangeEl = document.getElementById('fairness-range');
+  rangeEl.addEventListener('input', (e) => {
+    currentExerciseState.thresholdB = parseFloat(e.target.value);
+    update();
+  });
+
+  document.getElementById('fairness-dec-btn').addEventListener('click', () => {
+    const newVal = Math.max(0.30, parseFloat((currentExerciseState.thresholdB - 0.01).toFixed(2)));
+    currentExerciseState.thresholdB = newVal;
+    rangeEl.value = newVal;
+    update();
+  });
+  document.getElementById('fairness-inc-btn').addEventListener('click', () => {
+    const newVal = Math.min(0.70, parseFloat((currentExerciseState.thresholdB + 0.01).toFixed(2)));
+    currentExerciseState.thresholdB = newVal;
+    rangeEl.value = newVal;
+    update();
+  });
+
+  update();
+}
+
+// 4. Interactive Filter
+function renderFilterLab(arena, ex) {
+  if (!currentExerciseState.selected) currentExerciseState.selected = [];
+
+  const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+  const ruleLabel = isEn ? 'Required Criteria:' : 'Criterio requerido:';
+  const pkgVal = '1 1/9 bushel';
+  const varVal = 'PUMPKIN PIE';
+
+  const updateCounter = () => {
+    const counterEl = arena.querySelector('#filter-counter-text');
+    if (counterEl) {
+      const count = currentExerciseState.selected.length;
+      counterEl.textContent = isEn ? `${count} selected` : `${count} seleccionado${count === 1 ? '' : 's'}`;
+    }
+  };
+
+  arena.innerHTML = `
+    <div class="filter-lab-container">
+      <div class="filter-lab-header">
+        <div class="filter-header-rule">
+          <span style="font-size:15px;">🎯</span>
+          <span>${ruleLabel}</span>
+          <span class="filter-rule-badge">📦 ${pkgVal}</span>
+          <span style="font-size:11px;opacity:0.6;">&</span>
+          <span class="filter-rule-badge">🎃 ${varVal}</span>
+        </div>
+        <span class="filter-counter-badge" id="filter-counter-text">0 seleccionados</span>
+      </div>
+
+      <div class="filter-cards-list" id="filter-cards-list">
+        ${ex.dataset.map(r => {
+          const isSelected = currentExerciseState.selected.includes(r.id);
+          return `
+            <div class="filter-option-card ${isSelected ? 'selected' : ''}" data-id="${r.id}" role="button" tabindex="0">
+              <span class="filter-card-id">#${r.id}</span>
+              <div class="filter-card-content">
+                <span class="filter-card-var">${r.var}</span>
+                <div class="filter-card-meta">
+                  <span class="filter-pill filter-pill-pkg">📦 ${r.pkg}</span>
+                  <span class="filter-pill filter-pill-price">$${r.price.toFixed(2)}</span>
+                </div>
+              </div>
+              <span class="filter-card-indicator"></span>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+
+  updateCounter();
+
+  arena.querySelectorAll('.filter-option-card').forEach(card => {
+    const toggleCard = () => {
+      const id = parseInt(card.dataset.id);
+      const isSelected = currentExerciseState.selected.includes(id);
+
+      if (isSelected) {
+        currentExerciseState.selected = currentExerciseState.selected.filter(x => x !== id);
+        card.classList.remove('selected');
+      } else {
+        currentExerciseState.selected.push(id);
+        card.classList.add('selected');
+      }
+
+      // Reset any previous evaluation highlights
+      arena.querySelectorAll('.filter-option-card').forEach(c => c.classList.remove('correct', 'wrong'));
+      const fb = arena.querySelector('#lab-eval-feedback');
+      if (fb) fb.remove();
+
+      updateCounter();
+    };
+
+    card.addEventListener('click', toggleCard);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleCard();
+      }
+    });
+  });
+}
+
+// Generic smooth draggable slider helper with ticks & touch/pointer support
+function setupCustomSlider(sliderWrap, options) {
+  const min = options.min || 1;
+  const max = options.max || 6;
+  const step = options.step || 1;
+  let currentVal = options.value !== undefined ? options.value : min;
+
+  const thumb = sliderWrap.querySelector('.custom-slider-thumb');
+  const fill = sliderWrap.querySelector('.custom-slider-fill');
+  const ticks = sliderWrap.querySelectorAll('.custom-slider-tick');
+  const hiddenInput = sliderWrap.querySelector('input[type="range"]');
+
+  function getPercent(val) {
+    return ((val - min) / (max - min)) * 100;
+  }
+
+  function setVisualPosition(pct, isDragging = false) {
+    const clampedPct = Math.max(0, Math.min(100, pct));
+    thumb.style.left = `${clampedPct}%`;
+    fill.style.width = `${clampedPct}%`;
+    if (!isDragging) {
+      thumb.style.transition = 'left 0.15s cubic-bezier(0.16, 1, 0.3, 1)';
+      fill.style.transition = 'width 0.15s cubic-bezier(0.16, 1, 0.3, 1)';
+    } else {
+      thumb.style.transition = 'none';
+      fill.style.transition = 'none';
+    }
+  }
+
+  function updateValue(val, notify = true) {
+    currentVal = Math.max(min, Math.min(max, val));
+    setVisualPosition(getPercent(currentVal), false);
+    thumb.setAttribute('aria-valuenow', currentVal);
+
+    ticks.forEach(t => {
+      const v = parseFloat(t.dataset.val);
+      t.classList.toggle('active', v === currentVal);
+    });
+
+    if (hiddenInput) hiddenInput.value = currentVal;
+
+    if (notify && typeof options.onChange === 'function') {
+      options.onChange(currentVal);
+    }
+  }
+
+  let isDragging = false;
+
+  function handlePointerMove(e) {
+    if (!isDragging) return;
+    const rect = sliderWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+
+    setVisualPosition(pct, true);
+
+    const rawVal = min + (pct / 100) * (max - min);
+    const steppedVal = Math.round((rawVal - min) / step) * step + min;
+    const roundedVal = Math.max(min, Math.min(max, steppedVal));
+
+    if (roundedVal !== currentVal) {
+      currentVal = roundedVal;
+      thumb.setAttribute('aria-valuenow', currentVal);
+      ticks.forEach(t => {
+        t.classList.toggle('active', parseFloat(t.dataset.val) === currentVal);
+      });
+      if (hiddenInput) hiddenInput.value = currentVal;
+      if (typeof options.onChange === 'function') {
+        options.onChange(currentVal);
+      }
+    }
+  }
+
+  function handlePointerUp(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    thumb.classList.remove('dragging');
+    try { sliderWrap.releasePointerCapture(e.pointerId); } catch(err) {}
+    setVisualPosition(getPercent(currentVal), false);
+  }
+
+  sliderWrap.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    thumb.classList.add('dragging');
+    try { sliderWrap.setPointerCapture(e.pointerId); } catch(err) {}
+    handlePointerMove(e);
+  });
+
+  sliderWrap.addEventListener('pointermove', handlePointerMove);
+  sliderWrap.addEventListener('pointerup', handlePointerUp);
+  sliderWrap.addEventListener('pointercancel', handlePointerUp);
+
+  thumb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      updateValue(currentVal + step, true);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      updateValue(currentVal - step, true);
+    }
+  });
+
+  ticks.forEach(t => {
+    t.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const val = parseFloat(t.dataset.val);
+      updateValue(val, true);
+    });
+  });
+
+  updateValue(currentVal, false);
+
+  return {
+    setValue(val, notify = true) {
+      updateValue(val, notify);
+    },
+    getValue() {
+      return currentVal;
+    }
+  };
+}
+
+// 5. Canvas Polynomial
+function renderPolyLab(arena, ex) {
+  if (currentExerciseState.degree === undefined) currentExerciseState.degree = 1;
+  const polyLabel = (window.I18nManager && window.I18nManager.t('sim_poly_degree_label')) || "Grado Polinomio (d)";
+
+  arena.innerHTML = `
+    <div class="canvas-wrapper">
+      <canvas id="poly-canvas" width="580" height="240"></canvas>
+    </div>
+    <div class="controls-grid">
+      <div class="control-item">
+        <div class="control-label">
+          <span>${polyLabel}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="poly-dec-btn" title="Disminuir (d - 1)">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="deg-label">d = ${currentExerciseState.degree}</span>
+            <button type="button" class="slider-step-btn" id="poly-inc-btn" title="Aumentar (d + 1)">+</button>
+          </div>
+        </div>
+        <div class="custom-slider-container" id="poly-slider-wrap">
+          <div class="custom-slider-track">
+            <div class="custom-slider-fill" id="poly-slider-fill"></div>
+          </div>
+          <div class="custom-slider-thumb" id="poly-slider-thumb" tabindex="0" role="slider" aria-valuemin="1" aria-valuemax="6" aria-valuenow="${currentExerciseState.degree}">
+            <span class="custom-slider-thumb-dot"></span>
+          </div>
+          <div class="custom-slider-ticks">
+            <span class="custom-slider-tick" data-val="1">1</span>
+            <span class="custom-slider-tick" data-val="2">2</span>
+            <span class="custom-slider-tick" data-val="3">3</span>
+            <span class="custom-slider-tick" data-val="4">4</span>
+            <span class="custom-slider-tick" data-val="5">5</span>
+            <span class="custom-slider-tick" data-val="6">6</span>
+          </div>
+          <input type="range" id="poly-slider" min="1" max="6" step="1" value="${currentExerciseState.degree}" style="display:none;" />
+        </div>
+      </div>
+    </div>
+  `;
+
+  const canvas = document.getElementById('poly-canvas');
+  const ctx = canvas.getContext('2d');
+  const pts = [
+    {x: 40, y: 190}, {x: 80, y: 170}, {x: 130, y: 140}, {x: 180, y: 110},
+    {x: 230, y: 90}, {x: 290, y: 80}, {x: 350, y: 90}, {x: 410, y: 120},
+    {x: 470, y: 170}, {x: 520, y: 220}, {x: 560, y: 250}
+  ];
+
+  function draw() {
+    const deg = currentExerciseState.degree;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Grid axes
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.beginPath();
+    ctx.moveTo(20, 220); ctx.lineTo(560, 220);
+    ctx.moveTo(20, 20); ctx.lineTo(20, 220);
+    ctx.stroke();
+
+    // Points
+    pts.forEach(p => {
+      ctx.fillStyle = "#ffb86c";
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4.5, 0, Math.PI*2); ctx.fill();
+    });
+
+    // Polynomial Curve
+    ctx.strokeStyle = (deg >= 5) ? "#ff5c5c" : ((deg >= 2) ? "#03ef62" : "#00f0ff");
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = 20; px <= 560; px += 2) {
+      const normX = (px - 290) / 100;
+      let py = 0;
+      if (deg === 1) py = 140 + normX * 25;
+      else if (deg === 2) py = 85 + normX * normX * 30;
+      else if (deg === 3) py = 85 + normX * normX * 28 + Math.pow(normX, 3) * 3;
+      else if (deg === 4) py = 80 + normX * normX * 32 - Math.pow(normX, 4) * 2;
+      else py = 80 + normX * normX * 30 + Math.sin(normX * 5) * 45 * (deg - 3);
+
+      if (px === 20) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+  }
+
+  const sliderWrap = document.getElementById('poly-slider-wrap');
+  const slider = setupCustomSlider(sliderWrap, {
+    min: 1,
+    max: 6,
+    step: 1,
+    value: currentExerciseState.degree,
+    onChange: (val) => {
+      currentExerciseState.degree = val;
+      document.getElementById('deg-label').textContent = `d = ${val}`;
+      draw();
+    }
+  });
+
+  document.getElementById('poly-dec-btn').addEventListener('click', () => {
+    slider.setValue(currentExerciseState.degree - 1);
+  });
+  document.getElementById('poly-inc-btn').addEventListener('click', () => {
+    slider.setValue(currentExerciseState.degree + 1);
+  });
+
+  draw();
+}
+
+// 6. Sigmoid Lab
+function renderSigmoidLab(arena, ex) {
+  if (currentExerciseState.weight === undefined) {
+    currentExerciseState.weight = 0.8;
+    currentExerciseState.bias = -1.0;
+  }
+  const sigW = (window.I18nManager && window.I18nManager.t('sim_sig_weight')) || "Peso (w)";
+  const sigB = (window.I18nManager && window.I18nManager.t('sim_sig_bias')) || "Sesgo (b)";
+
+  arena.innerHTML = `
+    <div class="canvas-wrapper">
+      <canvas id="sig-canvas" width="580" height="200"></canvas>
+    </div>
+    <div class="controls-grid">
+      <div class="control-item">
+        <div class="control-label">
+          <span>${sigW}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="sig-w-dec-btn" title="Disminuir w">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="w-lbl">${currentExerciseState.weight.toFixed(1)}</span>
+            <button type="button" class="slider-step-btn" id="sig-w-inc-btn" title="Aumentar w">+</button>
+          </div>
+        </div>
+        <input type="range" id="sig-w" min="-1.0" max="3.0" step="0.1" value="${currentExerciseState.weight}" />
+      </div>
+      <div class="control-item">
+        <div class="control-label">
+          <span>${sigB}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="sig-b-dec-btn" title="Disminuir b">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="b-lbl">${currentExerciseState.bias.toFixed(1)}</span>
+            <button type="button" class="slider-step-btn" id="sig-b-inc-btn" title="Aumentar b">+</button>
+          </div>
+        </div>
+        <input type="range" id="sig-b" min="-6.0" max="2.0" step="0.2" value="${currentExerciseState.bias}" />
+      </div>
+    </div>
+  `;
+
+  const canvas = document.getElementById('sig-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const w = currentExerciseState.weight !== undefined ? currentExerciseState.weight : 0.8;
+    const b = currentExerciseState.bias !== undefined ? currentExerciseState.bias : -1.0;
+    const isCalibrated = (w >= 1.15 && b <= -1.95 && b >= -5.05);
+
+    // Background threshold line (P = 0.5)
+    ctx.strokeStyle = "rgba(255,255,255,0.18)";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(20, 100); ctx.lineTo(560, 100); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
+    ctx.font = "11px monospace";
+    ctx.fillText("P = 0.5 (Umbral 50%)", 24, 94);
+    ctx.fillText("Clase 0 (Prob < 50%)", 24, 185);
+    ctx.fillText("Clase 1 (Prob > 50%)", 430, 25);
+
+    // Decision boundary marker (x0 = -b/w)
+    if (w > 0) {
+      const x0 = -b / w;
+      const px0 = 290 + x0 * 40;
+      if (px0 >= 20 && px0 <= 560) {
+        ctx.strokeStyle = isCalibrated ? "rgba(3, 239, 98, 0.5)" : "rgba(255, 184, 108, 0.4)";
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath(); ctx.moveTo(px0, 20); ctx.lineTo(px0, 180); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = isCalibrated ? "#03ef62" : "#ffb86c";
+        ctx.fillText(`Frontera: x=${x0.toFixed(1)}`, Math.max(24, Math.min(450, px0 - 35)), 115);
+      }
+    }
+
+    // Sigmoid Curve
+    ctx.strokeStyle = isCalibrated ? "#03ef62" : (w <= 0 ? "#ff5c5c" : "#00f0ff");
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = 20; px <= 560; px += 2) {
+      const xVal = (px - 290) / 40;
+      const z = w * xVal + b;
+      const p = 1 / (1 + Math.exp(-z));
+      const py = 180 - p * 160;
+      if (px === 20) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // Calibration badge
+    ctx.fillStyle = isCalibrated ? "rgba(3, 239, 98, 0.15)" : "rgba(255, 255, 255, 0.06)";
+    ctx.strokeStyle = isCalibrated ? "#03ef62" : "rgba(255, 255, 255, 0.2)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(430, 160, 130, 26, 4); else ctx.rect(430, 160, 130, 26);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = isCalibrated ? "#03ef62" : "rgba(255, 255, 255, 0.6)";
+    ctx.font = "bold 11px sans-serif";
+    ctx.fillText(isCalibrated ? "✓ Calibrada" : "● No calibrada", 442, 177);
+  }
+
+  const sigWInput = document.getElementById('sig-w');
+  const sigBInput = document.getElementById('sig-b');
+
+  sigWInput.addEventListener('input', (e) => {
+    currentExerciseState.weight = parseFloat(e.target.value);
+    document.getElementById('w-lbl').textContent = currentExerciseState.weight.toFixed(1);
+    draw();
+  });
+  sigBInput.addEventListener('input', (e) => {
+    currentExerciseState.bias = parseFloat(e.target.value);
+    document.getElementById('b-lbl').textContent = currentExerciseState.bias.toFixed(1);
+    draw();
+  });
+
+  document.getElementById('sig-w-dec-btn').addEventListener('click', () => {
+    currentExerciseState.weight = parseFloat(Math.max(-1.0, currentExerciseState.weight - 0.1).toFixed(1));
+    sigWInput.value = currentExerciseState.weight;
+    document.getElementById('w-lbl').textContent = currentExerciseState.weight.toFixed(1);
+    draw();
+  });
+  document.getElementById('sig-w-inc-btn').addEventListener('click', () => {
+    currentExerciseState.weight = parseFloat(Math.min(3.0, currentExerciseState.weight + 0.1).toFixed(1));
+    sigWInput.value = currentExerciseState.weight;
+    document.getElementById('w-lbl').textContent = currentExerciseState.weight.toFixed(1);
+    draw();
+  });
+
+  document.getElementById('sig-b-dec-btn').addEventListener('click', () => {
+    currentExerciseState.bias = parseFloat(Math.max(-6.0, currentExerciseState.bias - 0.2).toFixed(1));
+    sigBInput.value = currentExerciseState.bias;
+    document.getElementById('b-lbl').textContent = currentExerciseState.bias.toFixed(1);
+    draw();
+  });
+  document.getElementById('sig-b-inc-btn').addEventListener('click', () => {
+    currentExerciseState.bias = parseFloat(Math.min(2.0, currentExerciseState.bias + 0.2).toFixed(1));
+    sigBInput.value = currentExerciseState.bias;
+    document.getElementById('b-lbl').textContent = currentExerciseState.bias.toFixed(1);
+    draw();
+  });
+
+  draw();
+}
+
+// 7. k-NN Lab
+function renderKnnLab(arena, ex) {
+  if (currentExerciseState.k === undefined) currentExerciseState.k = 3;
+  const knnLabel = (window.I18nManager && window.I18nManager.t('sim_knn_label')) || "Hiperparámetro k";
+
+  arena.innerHTML = `
+    <div class="canvas-wrapper">
+      <canvas id="knn-canvas" width="580" height="200"></canvas>
+    </div>
+    <div class="controls-grid">
+      <div class="control-item">
+        <div class="control-label">
+          <span>${knnLabel}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="knn-dec-btn" title="Disminuir k">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="knn-lbl">k = ${currentExerciseState.k}</span>
+            <button type="button" class="slider-step-btn" id="knn-inc-btn" title="Aumentar k">+</button>
+          </div>
+        </div>
+        <input type="range" id="knn-slider" min="1" max="7" step="2" value="${currentExerciseState.k}" />
+      </div>
+    </div>
+  `;
+
+  const canvas = document.getElementById('knn-canvas');
+  const ctx = canvas.getContext('2d');
+  const ptsA = [{x: 80, y: 60}, {x: 120, y: 100}, {x: 140, y: 50}];
+  const ptsB = [{x: 400, y: 140}, {x: 450, y: 110}, {x: 480, y: 160}];
+  let query = {x: 260, y: 110};
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#00f0ff";
+    ptsA.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI*2); ctx.fill(); });
+    ctx.fillStyle = "#ffb86c";
+    ptsB.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI*2); ctx.fill(); });
+
+    // Query Point
+    ctx.fillStyle = "#03ef62";
+    ctx.beginPath(); ctx.arc(query.x, query.y, 9, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+  }
+
+  canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    query.x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    query.y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    draw();
+  });
+
+  const knnInput = document.getElementById('knn-slider');
+  knnInput.addEventListener('input', (e) => {
+    currentExerciseState.k = parseInt(e.target.value);
+    document.getElementById('knn-lbl').textContent = `k = ${currentExerciseState.k}`;
+  });
+
+  document.getElementById('knn-dec-btn').addEventListener('click', () => {
+    currentExerciseState.k = Math.max(1, currentExerciseState.k - 2);
+    knnInput.value = currentExerciseState.k;
+    document.getElementById('knn-lbl').textContent = `k = ${currentExerciseState.k}`;
+  });
+  document.getElementById('knn-inc-btn').addEventListener('click', () => {
+    currentExerciseState.k = Math.min(7, currentExerciseState.k + 2);
+    knnInput.value = currentExerciseState.k;
+    document.getElementById('knn-lbl').textContent = `k = ${currentExerciseState.k}`;
+  });
+
+  draw();
+}
+
+// 8. Confusion Matrix Lab
+// 8. Confusion Matrix Lab
+function renderConfusionLab(arena, ex) {
+  if (currentExerciseState.threshold === undefined) currentExerciseState.threshold = 0.50;
+
+  const realPred = (window.I18nManager && window.I18nManager.t('sim_cm_real_pred')) || "Real / Pred";
+  const predPos = (window.I18nManager && window.I18nManager.t('sim_cm_pred_pos')) || "Pred. (+)";
+  const predNeg = (window.I18nManager && window.I18nManager.t('sim_cm_pred_neg')) || "Pred. (-)";
+  const actPos = (window.I18nManager && window.I18nManager.t('sim_cm_actual_pos')) || "Enfermo (+)";
+  const actNeg = (window.I18nManager && window.I18nManager.t('sim_cm_actual_neg')) || "Sano (-)";
+  const cmTh = (window.I18nManager && window.I18nManager.t('sim_cm_threshold')) || "Umbral de Corte";
+
+  arena.innerHTML = `
+    <div class="matrix-grid">
+      <div style="font-weight:700;padding-top:16px;">${realPred}</div>
+      <div style="font-weight:700;color:var(--dc-green);">${predPos}</div>
+      <div style="font-weight:700;color:var(--dc-green);">${predNeg}</div>
+
+      <div style="font-weight:700;text-align:right;padding-right:8px;">${actPos}</div>
+      <div class="matrix-cell tp"><span style="font-size:10px;">TP</span><span class="matrix-val" id="cm-tp">0</span></div>
+      <div class="matrix-cell fn"><span style="font-size:10px;">FN</span><span class="matrix-val" id="cm-fn">0</span></div>
+
+      <div style="font-weight:700;text-align:right;padding-right:8px;">${actNeg}</div>
+      <div class="matrix-cell fp"><span style="font-size:10px;">FP</span><span class="matrix-val" id="cm-fp">0</span></div>
+      <div class="matrix-cell tn"><span style="font-size:10px;">TN</span><span class="matrix-val" id="cm-tn">0</span></div>
+    </div>
+
+    <div class="controls-grid">
+      <div class="control-item">
+        <div class="control-label">
+          <span>${cmTh}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="cm-dec-btn" title="Disminuir umbral">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="cm-th-val">${currentExerciseState.threshold.toFixed(2)}</span>
+            <button type="button" class="slider-step-btn" id="cm-inc-btn" title="Aumentar umbral">+</button>
+          </div>
+        </div>
+        <input type="range" id="cm-slider" min="0.10" max="0.90" step="0.05" value="${currentExerciseState.threshold}" />
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-around;margin-top:14px;background:var(--dc-surface);padding:8px;border-radius:4px;font-family:var(--font-mono);font-size:12px;">
+      <span>Prec: <strong id="cm-prec">0%</strong></span>
+      <span>Recall: <strong id="cm-recall">0%</strong></span>
+      <span>F1: <strong id="cm-f1">0.000</strong></span>
+    </div>
+  `;
+
+  function update() {
+    const th = currentExerciseState.threshold;
+    const tp = Math.round(10 * Math.max(0, 1 - th * 1.1));
+    const fn = 10 - tp;
+    const fp = Math.round(90 * Math.max(0, (1 - th) * 0.4));
+    const tn = 90 - fp;
+
+    const prec = (tp + fp > 0) ? (tp / (tp + fp)) : 0;
+    const recall = tp / 10;
+    const f1 = (prec + recall > 0) ? (2 * prec * recall / (prec + recall)) : 0;
+
+    const tpEl = document.getElementById('cm-tp');
+    if (tpEl) tpEl.textContent = tp;
+    const fnEl = document.getElementById('cm-fn');
+    if (fnEl) fnEl.textContent = fn;
+    const fpEl = document.getElementById('cm-fp');
+    if (fpEl) fpEl.textContent = fp;
+    const tnEl = document.getElementById('cm-tn');
+    if (tnEl) tnEl.textContent = tn;
+
+    const thVal = document.getElementById('cm-th-val');
+    if (thVal) thVal.textContent = th.toFixed(2);
+
+    const precEl = document.getElementById('cm-prec');
+    if (precEl) precEl.textContent = `${(prec * 100).toFixed(0)}%`;
+    const recEl = document.getElementById('cm-recall');
+    if (recEl) {
+      recEl.textContent = `${(recall * 100).toFixed(0)}%`;
+      recEl.style.color = recall >= 0.8 ? 'var(--dc-green)' : 'var(--dc-red)';
+    }
+    const f1El = document.getElementById('cm-f1');
+    if (f1El) f1El.textContent = f1.toFixed(3);
+  }
+
+  const slider = document.getElementById('cm-slider');
+  slider.addEventListener('input', (e) => {
+    currentExerciseState.threshold = parseFloat(e.target.value);
+    update();
+  });
+
+  document.getElementById('cm-dec-btn').addEventListener('click', () => {
+    const newVal = Math.max(0.10, parseFloat((currentExerciseState.threshold - 0.05).toFixed(2)));
+    currentExerciseState.threshold = newVal;
+    slider.value = newVal;
+    update();
+  });
+  document.getElementById('cm-inc-btn').addEventListener('click', () => {
+    const newVal = Math.min(0.90, parseFloat((currentExerciseState.threshold + 0.05).toFixed(2)));
+    currentExerciseState.threshold = newVal;
+    slider.value = newVal;
+    update();
+  });
+
+  update();
+}
+
+// 9. Recommender Lab
+function renderRecommenderLab(arena, ex) {
+  if (!currentExerciseState.active) currentExerciseState.active = [];
+
+  function update() {
+    let zMex = 0, zJap = 0, zThai = 0;
+    currentExerciseState.active.forEach(id => {
+      const ing = ex.ingredients.find(x => x.id === id);
+      if (ing) {
+        zMex += ing.bias.mex; zJap += ing.bias.jap; zThai += ing.bias.thai;
+      }
+    });
+
+    const em = Math.exp(zMex), ej = Math.exp(zJap), et = Math.exp(zThai);
+    const sum = em + ej + et;
+    const pM = (em / sum) * 100, pJ = (ej / sum) * 100, pT = (et / sum) * 100;
+
+    const recSel = (window.I18nManager && window.I18nManager.t('sim_recommender_selected')) || "Ingredientes seleccionados:";
+    const recMex = (window.I18nManager && window.I18nManager.t('sim_recommender_mex')) || "🇲🇽 Mexicana";
+    const recJap = (window.I18nManager && window.I18nManager.t('sim_recommender_jap')) || "🇯🇵 Japonesa";
+
+    arena.innerHTML = `
+      <div style="font-size:12px;color:var(--dc-text-dim);margin-bottom:6px;">${recSel}</div>
+      <div class="chip-group">
+        ${ex.ingredients.map(ing => `
+          <div class="interactive-chip ${currentExerciseState.active.includes(ing.id) ? 'selected' : ''}" data-id="${ing.id}">
+            ${ing.name}
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;font-size:12px;">
+        <div style="display:flex;justify-content:space-between;"><span>${recMex}</span><span>${pM.toFixed(1)}%</span></div>
+        <div class="progress-bar-bg" style="width:100%;"><div style="height:100%;background:var(--dc-green);width:${pM}%;"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;"><span>${recJap}</span><span>${pJ.toFixed(1)}%</span></div>
+        <div class="progress-bar-bg" style="width:100%;"><div style="height:100%;background:var(--dc-yellow);width:${pJ}%;"></div></div>
+      </div>
+    `;
+
+    arena.querySelectorAll('.interactive-chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const id = c.dataset.id;
+        if (currentExerciseState.active.includes(id)) {
+          currentExerciseState.active = currentExerciseState.active.filter(x => x !== id);
+        } else {
+          currentExerciseState.active.push(id);
+        }
+        update();
+      });
+    });
+  }
+
+  update();
+}
+
+// 10. K-Means Lab
+function renderKmeansLab(arena, ex) {
+  if (currentExerciseState.step === undefined) { currentExerciseState.step = 0; currentExerciseState.converged = false; }
+  const kmBtn = (window.I18nManager && window.I18nManager.t('sim_kmeans_step_btn')) || "Paso K-Means (Iterar)";
+  const kmStatus = (window.I18nManager && window.I18nManager.t('sim_kmeans_status', { step: currentExerciseState.step })) || `Paso: ${currentExerciseState.step}`;
+
+  arena.innerHTML = `
+    <div class="canvas-wrapper">
+      <canvas id="kmeans-canvas" width="580" height="200"></canvas>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;margin-top:10px;">
+      <button class="dc-btn dc-btn-secondary" id="km-step-btn">${kmBtn}</button>
+      <span style="font-family:var(--font-mono);font-size:12px;color:var(--dc-text-dim);" id="km-status">${kmStatus}</span>
+    </div>
+  `;
+
+  const canvas = document.getElementById('kmeans-canvas');
+  const ctx = canvas.getContext('2d');
+  const pts = [
+    {x: 80, y: 60}, {x: 100, y: 90}, {x: 110, y: 70}, {x: 90, y: 100},
+    {x: 480, y: 70}, {x: 500, y: 90}, {x: 470, y: 110}, {x: 510, y: 80},
+    {x: 280, y: 160}, {x: 300, y: 140}, {x: 320, y: 170}, {x: 290, y: 150}
+  ];
+  let centroids = [
+    {x: 140, y: 140, color: "#00f0ff"},
+    {x: 300, y: 80, color: "#ffb86c"},
+    {x: 440, y: 150, color: "#03ef62"}
+  ];
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pts.forEach(p => {
+      let minDist = Infinity, cCol = "#888";
+      centroids.forEach(c => {
+        const d = Math.hypot(p.x - c.x, p.y - c.y);
+        if (d < minDist) { minDist = d; cCol = c.color; }
+      });
+      ctx.fillStyle = currentExerciseState.step > 0 ? cCol : "#aaa";
+      ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI*2); ctx.fill();
+    });
+
+    centroids.forEach((c, i) => {
+      ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(c.x, c.y, 9, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+    });
+  }
+
+  document.getElementById('km-step-btn').addEventListener('click', () => {
+    currentExerciseState.step++;
+    if (currentExerciseState.step === 1) {
+      centroids[0] = {x: 95, y: 80, color: "#00f0ff"};
+      centroids[1] = {x: 490, y: 87, color: "#ffb86c"};
+      centroids[2] = {x: 297, y: 155, color: "#03ef62"};
+      currentExerciseState.converged = true;
+    }
+    const convText = (window.I18nManager && window.I18nManager.t('sim_kmeans_converged', { step: currentExerciseState.step })) || `Paso: ${currentExerciseState.step} (Convergencia)`;
+    document.getElementById('km-status').textContent = convText;
+    draw();
+  });
+  draw();
+}
+
+// 11. Tokenizer Lab
+function renderTokenizerLab(arena, ex) {
+  const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+  if (currentExerciseState.text === undefined) {
+    currentExerciseState.text = isEn 
+      ? "The Grand Hotel was WONDERFUL! Clean beds and excellent breakfast."
+      : "¡El Hotel Gran Vía fue MARAVILLOSO! Camas limpias y desayuno excelente.";
+    currentExerciseState.lowercase = true;
+    currentExerciseState.removeStopwords = true;
+  }
+
+  function proc() {
+    let txt = currentExerciseState.text;
+    if (currentExerciseState.lowercase) txt = txt.toLowerCase();
+    txt = txt.replace(/[¡!.,;:]/g, "");
+    let tokens = txt.split(/\s+/).filter(x => x.length > 0);
+    const stops = isEn 
+      ? ["the", "a", "an", "of", "in", "and", "was"]
+      : ["el", "la", "los", "las", "un", "una", "de", "en", "y", "fue"];
+    if (currentExerciseState.removeStopwords) tokens = tokens.filter(t => !stops.includes(t));
+    currentExerciseState.tokens = tokens;
+
+    const lblInput = (window.I18nManager && window.I18nManager.t('sim_tok_input_label')) || "Entrada de texto:";
+    const lblLow = (window.I18nManager && window.I18nManager.t('sim_tok_lowercase')) || "Minúsculas";
+    const lblStop = (window.I18nManager && window.I18nManager.t('sim_tok_stopwords')) || "Filtrar Stopwords";
+    const lblRes = (window.I18nManager && window.I18nManager.t('sim_tok_results')) || "Tokens Resultantes";
+
+    arena.innerHTML = `
+      <label style="font-size:12px;color:var(--dc-text-dim);">${lblInput}</label>
+      <input type="text" id="tok-input" value="${currentExerciseState.text}" style="width:100%;background:var(--dc-navy);border:1px solid var(--dc-border);padding:8px;border-radius:4px;color:var(--text-main);margin:6px 0 12px;font-size:13px;" />
+      <div style="display:flex;gap:16px;font-size:12px;margin-bottom:12px;">
+        <label><input type="checkbox" id="tok-low" ${currentExerciseState.lowercase?'checked':''}/> ${lblLow}</label>
+        <label><input type="checkbox" id="tok-stp" ${currentExerciseState.removeStopwords?'checked':''}/> ${lblStop}</label>
+      </div>
+      <div style="font-size:12px;color:var(--dc-green);font-weight:700;">${lblRes} (${tokens.length}):</div>
+      <div class="chip-group">
+        ${tokens.map(t => `<div class="interactive-chip selected" style="font-family:var(--font-mono);font-size:12px;">${t}</div>`).join('')}
+      </div>
+    `;
+
+    document.getElementById('tok-input').addEventListener('input', (e) => { currentExerciseState.text = e.target.value; proc(); });
+    document.getElementById('tok-low').addEventListener('change', (e) => { currentExerciseState.lowercase = e.target.checked; proc(); });
+    document.getElementById('tok-stp').addEventListener('change', (e) => { currentExerciseState.removeStopwords = e.target.checked; proc(); });
+  }
+  proc();
+}
+
+// 12. Sentiment Lab
+function renderSentimentLab(arena, ex) {
+  const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+  if (currentExerciseState.words === undefined) {
+    currentExerciseState.words = isEn ? ["room", "spacious", "service", "slow"] : ["habitacion", "amplia", "servicio", "lento"];
+  }
+  const lex = isEn ? {
+    "excellent": 2.5, "spacious": 1.2, "wonderful": 2.8, "terrible": -2.8, "dirty": -2.2, "slow": -1.5
+  } : {
+    "excelente": 2.5, "amplia": 1.2, "maravilloso": 2.8, "pesimo": -2.8, "sucia": -2.2, "lento": -1.5
+  };
+
+  const hintText = (window.I18nManager && window.I18nManager.t('sim_sent_hint')) || "Alterna palabras para alterar la polaridad:";
+  const polarityText = (window.I18nManager && window.I18nManager.t('sim_sent_polarity')) || "Polaridad Acumulada:";
+
+  function update() {
+    let sc = 0;
+    currentExerciseState.words.forEach(w => { if (lex[w]) sc += lex[w]; });
+    currentExerciseState.score = sc;
+
+    arena.innerHTML = `
+      <div style="font-size:12px;color:var(--dc-text-dim);margin-bottom:8px;">${hintText}</div>
+      <div class="chip-group">
+        ${Object.keys(lex).map(w => `
+          <div class="interactive-chip ${currentExerciseState.words.includes(w)?'selected':''}" data-w="${w}">
+            ${w} (${lex[w]>0?'+':''}${lex[w]})
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:14px;background:var(--dc-surface);padding:10px;border-radius:4px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;">${polarityText}</span>
+        <span style="font-family:var(--font-mono);font-size:16px;font-weight:700;color:${sc>0?'var(--dc-green)':'var(--dc-red)'};">${sc>0?'+':''}${sc.toFixed(2)}</span>
+      </div>
+    `;
+
+    arena.querySelectorAll('.interactive-chip').forEach(ch => {
+      ch.addEventListener('click', () => {
+        const w = ch.dataset.w;
+        if (currentExerciseState.words.includes(w)) currentExerciseState.words = currentExerciseState.words.filter(x => x !== w);
+        else currentExerciseState.words.push(w);
+        update();
+      });
+    });
+  }
+  update();
+}
+
+// 13. TF-IDF Lab
+function renderTfidfLab(arena, ex) {
+  currentExerciseState.rareTfidf = 6.4;
+  currentExerciseState.commonTfidf = 0.04;
+  const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+  const thTerm = (window.I18nManager && window.I18nManager.t('sim_tfidf_term')) || "Término";
+  const thDf = (window.I18nManager && window.I18nManager.t('sim_tfidf_df')) || "DF (en 100)";
+  const thFinal = (window.I18nManager && window.I18nManager.t('sim_tfidf_final')) || "TF-IDF Final";
+  const lblNull = (window.I18nManager && window.I18nManager.t('sim_tfidf_null')) || "Nulo";
+  const lblHigh = (window.I18nManager && window.I18nManager.t('sim_tfidf_high')) || "Alto";
+  const term2 = isEn ? "'cockroaches'" : "'cucarachas'";
+
+  arena.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;text-align:left;">
+      <thead>
+        <tr style="border-bottom:1px solid var(--dc-border);color:var(--dc-green);">
+          <th style="padding:6px;">${thTerm}</th><th>TF</th><th>${thDf}</th><th>IDF</th><th>${thFinal}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+          <td style="padding:6px;font-family:var(--font-mono);">'hotel'</td><td>2</td><td>98 docs</td><td>0.02</td>
+          <td style="color:var(--dc-red);font-weight:700;">0.04 (${lblNull})</td>
+        </tr>
+        <tr>
+          <td style="padding:6px;font-family:var(--font-mono);">${term2}</td><td>2</td><td>3 docs</td><td>3.20</td>
+          <td style="color:var(--dc-green);font-weight:700;">6.40 (${lblHigh})</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+}
+
+// 14. Stationarity Lab
+function renderStationarityLab(arena, ex) {
+  if (currentExerciseState.diffOrder === undefined) currentExerciseState.diffOrder = 0;
+  const btnOrig = (window.I18nManager && window.I18nManager.t('sim_stat_orig')) || "Original (d = 0)";
+  const btnDiff = (window.I18nManager && window.I18nManager.t('sim_stat_diff')) || "Diferenciada (d = 1)";
+
+  function draw() {
+    arena.innerHTML = `
+      <div class="canvas-wrapper">
+        <canvas id="stat-canvas" width="580" height="180"></canvas>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="dc-btn ${currentExerciseState.diffOrder===0?'dc-btn-submit':'dc-btn-ghost'}" id="diff-0">${btnOrig}</button>
+        <button class="dc-btn ${currentExerciseState.diffOrder===1?'dc-btn-submit':'dc-btn-ghost'}" id="diff-1">${btnDiff}</button>
+      </div>
+    `;
+
+    const canvas = document.getElementById('stat-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "rgba(255,255,255,0.1)";
+    ctx.beginPath(); ctx.moveTo(20, 90); ctx.lineTo(560, 90); ctx.stroke();
+
+    ctx.strokeStyle = currentExerciseState.diffOrder === 1 ? "var(--dc-green)" : "var(--dc-yellow)";
+    ctx.lineWidth = 2; ctx.beginPath();
+    for (let t = 0; t <= 50; t++) {
+      const px = 20 + t * 10.5;
+      let py = (currentExerciseState.diffOrder === 0) ? (150 - t * 2.5 + Math.sin(t*0.8)*14) : (90 + Math.sin(t*0.8)*20);
+      if (t === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    document.getElementById('diff-0').addEventListener('click', () => { currentExerciseState.diffOrder = 0; draw(); });
+    document.getElementById('diff-1').addEventListener('click', () => { currentExerciseState.diffOrder = 1; draw(); });
+  }
+  draw();
+}
+
+// 15. ARIMA Lab
+function renderArimaLab(arena, ex) {
+  if (currentExerciseState.p === undefined) { currentExerciseState.p = 1; currentExerciseState.d = 0; }
+  const lblAr = (window.I18nManager && window.I18nManager.t('sim_arima_ar')) || "Orden AR (p)";
+  const lblDiff = (window.I18nManager && window.I18nManager.t('sim_arima_diff')) || "Orden Diff (d)";
+
+  arena.innerHTML = `
+    <div class="canvas-wrapper">
+      <canvas id="arima-canvas" width="580" height="180"></canvas>
+    </div>
+    <div class="controls-grid">
+      <div class="control-item">
+        <div class="control-label">
+          <span>${lblAr}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="ar-p-dec-btn" title="Disminuir p">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="ar-p-val">p = ${currentExerciseState.p}</span>
+            <button type="button" class="slider-step-btn" id="ar-p-inc-btn" title="Aumentar p">+</button>
+          </div>
+        </div>
+        <input type="range" id="ar-p" min="0" max="3" step="1" value="${currentExerciseState.p}" />
+      </div>
+      <div class="control-item">
+        <div class="control-label">
+          <span>${lblDiff}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button type="button" class="slider-step-btn" id="ar-d-dec-btn" title="Disminuir d">−</button>
+            <span style="color:var(--dc-green);font-family:var(--font-mono);font-size:14px;font-weight:700;min-width:44px;text-align:center;" id="ar-d-val">d = ${currentExerciseState.d}</span>
+            <button type="button" class="slider-step-btn" id="ar-d-inc-btn" title="Aumentar d">+</button>
+          </div>
+        </div>
+        <input type="range" id="ar-d" min="0" max="1" step="1" value="${currentExerciseState.d}" />
+      </div>
+    </div>
+  `;
+
+  const canvas = document.getElementById('arima-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function update() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#666"; ctx.lineWidth = 1.5; ctx.beginPath();
+    for (let t = 0; t <= 28; t++) {
+      const px = 20 + t * 10;
+      const py = 140 - t * 2 + Math.sin(t) * 12;
+      if (t === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    ctx.strokeStyle = (currentExerciseState.d === 1 && currentExerciseState.p >= 2) ? "var(--dc-green)" : "var(--dc-yellow)";
+    ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(300, 84);
+    for (let t = 29; t <= 54; t++) {
+      const px = 20 + t * 10;
+      let py = (currentExerciseState.d === 0) ? (84 + (t - 28) * 1.5) : (84 - (t - 28) * 1.8 + Math.sin(t*0.9)*12);
+      ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    const pVal = document.getElementById('ar-p-val');
+    if (pVal) pVal.textContent = `p = ${currentExerciseState.p}`;
+    const dVal = document.getElementById('ar-d-val');
+    if (dVal) dVal.textContent = `d = ${currentExerciseState.d}`;
+  }
+
+  const pSlider = document.getElementById('ar-p');
+  pSlider.addEventListener('input', (e) => {
+    currentExerciseState.p = parseInt(e.target.value);
+    update();
+  });
+
+  const dSlider = document.getElementById('ar-d');
+  dSlider.addEventListener('input', (e) => {
+    currentExerciseState.d = parseInt(e.target.value);
+    update();
+  });
+
+  document.getElementById('ar-p-dec-btn').addEventListener('click', () => {
+    currentExerciseState.p = Math.max(0, currentExerciseState.p - 1);
+    pSlider.value = currentExerciseState.p;
+    update();
+  });
+  document.getElementById('ar-p-inc-btn').addEventListener('click', () => {
+    currentExerciseState.p = Math.min(3, currentExerciseState.p + 1);
+    pSlider.value = currentExerciseState.p;
+    update();
+  });
+
+  document.getElementById('ar-d-dec-btn').addEventListener('click', () => {
+    currentExerciseState.d = Math.max(0, currentExerciseState.d - 1);
+    dSlider.value = currentExerciseState.d;
+    update();
+  });
+  document.getElementById('ar-d-inc-btn').addEventListener('click', () => {
+    currentExerciseState.d = Math.min(1, currentExerciseState.d + 1);
+    dSlider.value = currentExerciseState.d;
+    update();
+  });
+
+  update();
+}
+
+// 16. Bellman Lab
+function renderBellmanLab(arena, ex) {
+  const fml = (window.I18nManager && window.I18nManager.t('sim_bellman_formula')) || "Q_nuevo = Q_viejo + α · [ r + γ · max(Q') - Q_viejo ]";
+  const vals = (window.I18nManager && window.I18nManager.t('sim_bellman_values')) || "Valores: Q_viejo=0, α=0.5, r=10, γ=0.9, max(Q')=20";
+  const resLbl = (window.I18nManager && window.I18nManager.t('sim_bellman_result')) || "Resultado Q_nuevo:";
+
+  arena.innerHTML = `
+    <div style="background:var(--dc-surface);padding:12px;border-radius:4px;font-size:13px;line-height:1.6;margin-bottom:12px;">
+      <div><code>${fml}</code></div>
+      <div style="color:var(--dc-text-dim);margin-top:4px;">${vals}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <label style="font-size:13px;">${resLbl}</label>
+      <input type="number" id="bellman-in" value="${currentExerciseState.answer || ''}" placeholder="14" style="width:100px;background:var(--dc-navy);border:1px solid var(--dc-border);padding:6px;border-radius:4px;color:var(--text-main);font-family:var(--font-mono);font-size:14px;" />
+    </div>
+  `;
+  document.getElementById('bellman-in').addEventListener('input', (e) => { currentExerciseState.answer = e.target.value; });
+}
+
+// 17. Gridworld Lab
+function renderGridworldLab(arena, ex) {
+  if (currentExerciseState.pos === undefined) currentExerciseState.pos = { r: 0, c: 0 };
+  const trainBtn = (window.I18nManager && window.I18nManager.t('sim_gw_train')) || "Auto-Entrenar (100 Ep)";
+
+  function renderGrid() {
+    arena.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(4, 52px);gap:6px;justify-content:center;margin:10px auto;">
+        ${[0,1,2,3].map(r => [0,1,2,3].map(c => {
+          const isP = (currentExerciseState.pos.r === r && currentExerciseState.pos.c === c);
+          let ic = '', bg = 'var(--dc-surface)';
+          if (r===1 && c===2) ic = '🍎';
+          if (r===2 && c===2) { ic = '🐺'; bg = 'var(--dc-red-soft)'; }
+          if (r===3 && c===3) { ic = '🏡'; bg = 'var(--dc-green-soft)'; }
+          if (isP) ic = '👦';
+          return `<div style="width:52px;height:52px;background:${bg};border:1px solid var(--dc-border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:22px;">${ic}</div>`;
+        }).join('')).join('')}
+      </div>
+      <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
+        <button class="dc-btn dc-btn-ghost" id="gw-u" style="padding:6px 12px;">▲</button>
+        <button class="dc-btn dc-btn-ghost" id="gw-d" style="padding:6px 12px;">▼</button>
+        <button class="dc-btn dc-btn-ghost" id="gw-l" style="padding:6px 12px;">◄</button>
+        <button class="dc-btn dc-btn-ghost" id="gw-r" style="padding:6px 12px;">►</button>
+        <button class="dc-btn dc-btn-secondary" id="gw-auto" style="margin-left:10px;">${trainBtn}</button>
+      </div>
+    `;
+
+    function move(dr, dc) {
+      const nr = Math.max(0, Math.min(3, currentExerciseState.pos.r + dr));
+      const nc = Math.max(0, Math.min(3, currentExerciseState.pos.c + dc));
+      currentExerciseState.pos = { r: nr, c: nc };
+      if (nr===3 && nc===3) currentExerciseState.reachedGoal = true;
+      renderGrid();
+    }
+    document.getElementById('gw-u').addEventListener('click', () => move(-1,0));
+    document.getElementById('gw-d').addEventListener('click', () => move(1,0));
+    document.getElementById('gw-l').addEventListener('click', () => move(0,-1));
+    document.getElementById('gw-r').addEventListener('click', () => move(0,1));
+    document.getElementById('gw-auto').addEventListener('click', () => {
+      currentExerciseState.episodes = 100;
+      currentExerciseState.pos = { r: 3, c: 3 };
+      currentExerciseState.reachedGoal = true;
+      renderGrid();
+    });
+  }
+  renderGrid();
+}
+
+// 18. RAI Audit Lab
+function renderRaiAuditLab(arena, ex) {
+  if (currentExerciseState.reweighted === undefined) currentExerciseState.reweighted = false;
+  const thSub = (window.I18nManager && window.I18nManager.t('sim_rai_th_subgroup')) || "Subgrupo";
+  const thRate = (window.I18nManager && window.I18nManager.t('sim_rai_th_rate')) || "Tasa Selección";
+  const thParity = (window.I18nManager && window.I18nManager.t('sim_rai_th_parity')) || "Paridad";
+  const thStatus = (window.I18nManager && window.I18nManager.t('sim_rai_th_status')) || "Estado";
+  const grpA = (window.I18nManager && window.I18nManager.t('sim_rai_group_a')) || "Subgrupo A (Mayoría)";
+  const grpB = (window.I18nManager && window.I18nManager.t('sim_rai_group_b')) || "Subgrupo B (Protegido)";
+  const stCompliant = (window.I18nManager && window.I18nManager.t('sim_rai_status_compliant')) || "✓ Conforme";
+  const stFair = (window.I18nManager && window.I18nManager.t('sim_rai_status_fair')) || "✓ Cumplida (>0.80)";
+  const stUnfair = (window.I18nManager && window.I18nManager.t('sim_rai_status_unfair')) || "✗ Disparidad (<0.80)";
+  const btnDis = (window.I18nManager && window.I18nManager.t('sim_rai_btn_disable')) || "Desactivar Re-ponderación";
+  const btnEn = (window.I18nManager && window.I18nManager.t('sim_rai_btn_enable')) || "Aplicar Re-ponderación de Muestras (Reweighting)";
+
+  function update() {
+    const rw = currentExerciseState.reweighted;
+    const rA = rw ? 74 : 78;
+    const rB = rw ? 71 : 32;
+    const ratio = (rB / rA).toFixed(2);
+
+    arena.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;text-align:left;margin-bottom:12px;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--dc-border);color:var(--dc-green);">
+            <th style="padding:6px;">${thSub}</th><th>${thRate}</th><th>${thParity}</th><th>${thStatus}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+            <td style="padding:6px;">${grpA}</td><td>${rA}%</td><td>1.00</td><td style="color:var(--dc-green);">${stCompliant}</td>
+          </tr>
+          <tr>
+            <td style="padding:6px;">${grpB}</td><td>${rB}%</td><td style="font-family:var(--font-mono);">${ratio}</td>
+            <td style="color:${rw?'var(--dc-green)':'var(--dc-red)'};font-weight:700;">${rw?stFair:stUnfair}</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="dc-btn ${rw?'dc-btn-ghost':'dc-btn-submit'}" id="rai-toggle">
+        ${rw?btnDis:btnEn}
+      </button>
+    `;
+
+    document.getElementById('rai-toggle').addEventListener('click', () => {
+      currentExerciseState.reweighted = !currentExerciseState.reweighted;
+      update();
+    });
+  }
+  update();
+}
+
+// ===============================================================
+// FEEDBACK VISUAL DE EVALUACIÓN (PRESENTAR CUÁLES ESTÁN MALAS/BUENAS)
+// ===============================================================
+function showExerciseValidation(lesson, res) {
+  const ex = lesson.exercise;
+  const arena = document.getElementById('interactive-arena');
+  if (!arena || !ex) return;
+
+  if (ex.type === 'classification_bins') {
+    let errorCount = 0;
+    let errorItems = [];
+
+    ex.items.forEach(item => {
+      const assignedCat = currentExerciseState[item.id];
+      const chipEl = arena.querySelector(`.category-col .interactive-chip[data-id="${item.id}"]`);
+      if (!chipEl) return;
+
+      chipEl.classList.remove('correct', 'wrong');
+      const oldBadge = chipEl.querySelector('.chip-status-badge');
+      if (oldBadge) oldBadge.remove();
+
+      if (assignedCat) {
+        if (assignedCat === item.target) {
+          chipEl.classList.add('correct');
+          const b = document.createElement('span');
+          b.className = 'chip-status-badge correct';
+          b.textContent = '✓';
+          b.title = 'Correcto';
+          chipEl.appendChild(b);
+        } else {
+          errorCount++;
+          errorItems.push(item);
+          chipEl.classList.add('wrong');
+          const b = document.createElement('span');
+          b.className = 'chip-status-badge wrong';
+          b.textContent = '✗';
+          b.title = 'Incorrecto: no pertenece a esta categoría';
+          chipEl.appendChild(b);
+        }
+      }
+    });
+
+    let fb = arena.querySelector('#lab-eval-feedback');
+    if (!fb) {
+      fb = document.createElement('div');
+      fb.id = 'lab-eval-feedback';
+      arena.appendChild(fb);
+    }
+
+    const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+    if (res.pass) {
+      fb.className = 'lab-feedback-card correct';
+      fb.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;">
+          <span style="font-size:16px;">✓</span>
+          <span>${isEn ? 'All concepts are in the correct category!' : '¡Todos los conceptos están en la categoría correcta!'}</span>
+        </div>
+      `;
+    } else if (errorItems.length > 0) {
+      fb.className = 'lab-feedback-card wrong';
+      const itemsList = errorItems.map(it => `"${it.text}"`).join('<br>• ');
+      fb.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:8px;">
+          <span style="font-size:16px;line-height:1;margin-top:2px;">✗</span>
+          <div>
+            <div style="font-weight:700;">${isEn ? `${errorItems.length} concept(s) incorrectly placed:` : `${errorItems.length} concepto(s) en la categoría incorrecta:`}</div>
+            <div style="font-size:12px;margin:6px 0;line-height:1.5;">• ${itemsList}</div>
+            <div style="font-size:11.5px;opacity:0.85;">${isEn ? 'The concepts highlighted with ✗ in red need to be moved to the other category.' : 'Los conceptos resaltados con ✗ en rojo deben moverse a la otra categoría.'}</div>
+          </div>
+        </div>
+      `;
+      if (typeof writeTerminal === 'function') {
+        errorItems.forEach(it => {
+          const currentCat = ex.categories.find(c => c.id === currentExerciseState[it.id]);
+          writeTerminal(`[INCORRECTO] "${it.text}" no pertenece a "${currentCat ? currentCat.title : 'esta categoría'}".`, "error");
+        });
+      }
+    }
+  } else if (ex.type === 'sequence_sort' && ex.correctOrder) {
+    const currentOrder = currentExerciseState.order || [];
+    currentOrder.forEach((id, idx) => {
+      const slot = arena.querySelector(`.sort-slot[data-id="${id}"]`);
+      if (!slot) return;
+      slot.classList.remove('correct', 'wrong');
+      const oldBadge = slot.querySelector('.chip-status-badge');
+      if (oldBadge) oldBadge.remove();
+
+      const isCorrect = (ex.correctOrder[idx] === id);
+      const b = document.createElement('span');
+      b.className = `chip-status-badge ${isCorrect ? 'correct' : 'wrong'}`;
+      b.textContent = isCorrect ? '✓' : '✗';
+      slot.appendChild(b);
+      slot.classList.add(isCorrect ? 'correct' : 'wrong');
+    });
+  } else if (ex.type === 'interactive_filter') {
+    const selected = currentExerciseState.selected || [];
+    let errorDetails = [];
+
+    ex.dataset.forEach(row => {
+      const card = arena.querySelector(`.filter-option-card[data-id="${row.id}"]`);
+      if (!card) return;
+      card.classList.remove('correct', 'wrong');
+
+      const isSelected = selected.includes(row.id);
+      if (row.valid) {
+        if (isSelected) {
+          card.classList.add('correct');
+        } else {
+          card.classList.add('wrong');
+          const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+          errorDetails.push(isEn ? `Missing: #${row.id} (${row.var} - ${row.pkg}) meets criteria` : `Falta seleccionar: #${row.id} (${row.var} - ${row.pkg}) cumple con el criterio`);
+        }
+      } else {
+        if (isSelected) {
+          card.classList.add('wrong');
+          const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+          errorDetails.push(isEn ? `Invalid: #${row.id} (${row.var} - ${row.pkg}) does not meet criteria` : `Filtro erróneo: #${row.id} (${row.var} - ${row.pkg}) no cumple con el criterio`);
+        }
+      }
+    });
+
+    let fb = arena.querySelector('#lab-eval-feedback');
+    if (!fb) {
+      fb = document.createElement('div');
+      fb.id = 'lab-eval-feedback';
+      arena.appendChild(fb);
+    }
+
+    const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+    if (res.pass) {
+      fb.className = 'lab-feedback-card correct';
+      fb.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;">
+          <span style="font-size:16px;">✓</span>
+          <span>${isEn ? 'Dataset correctly normalized! Consistent records isolated.' : '¡Dataset homogeneizado con éxito! Registros consistentes aislados.'}</span>
+        </div>
+      `;
+    } else {
+      fb.className = 'lab-feedback-card wrong';
+      const listHtml = errorDetails.map(d => `• ${d}`).join('<br>');
+      fb.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:8px;">
+          <span style="font-size:16px;line-height:1;margin-top:2px;">✗</span>
+          <div>
+            <div style="font-weight:700;">${isEn ? 'Filter discrepancy detected:' : 'Discrepancia de filtrado detectada:'}</div>
+            <div style="font-size:12px;margin:6px 0;line-height:1.5;">${listHtml}</div>
+            <div style="font-size:11.5px;opacity:0.85;">${isEn ? 'Select only records with packaging "1 1/9 bushel" and variety "PUMPKIN PIE".' : 'Selecciona únicamente registros con empaque "1 1/9 bushel" y variedad "PUMPKIN PIE".'}</div>
+          </div>
+        </div>
+      `;
+    }
+  }
+}
+
+// ===============================================================
+// ACCIONES DEL WORKBENCH (RUN, SUBMIT, RESET)
+// ===============================================================
+// SETUP ACTIONS & MODALS
+// ===============================================================
+function setupStudioActions() {
+  // Hint toggle (Desbloqueo directo con deducción de XP, sin modal emergente)
+  const hintToggleBtn = document.getElementById('hint-toggle-btn');
+  if (hintToggleBtn) {
+    hintToggleBtn.addEventListener('click', () => {
+      const rawLesson = FLAT[currentIdx].lesson;
+      const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+      const lesson = (typeof getLocalizedLesson === 'function') ? getLocalizedLesson(rawLesson, isEn ? 'en' : 'es') : rawLesson;
+      const isUnlocked = StorageManager.isHintUnlocked(lesson.n);
+      const hintBox = document.getElementById('hint-content-box');
+
+      if (isUnlocked) {
+        if (hintBox) hintBox.classList.toggle('open');
+        return;
+      }
+
+      // Desbloqueo directo debitando XP
+      const cost = (typeof getLessonHintCost === 'function') ? getLessonHintCost(lesson) : 15;
+      const currentXP = StorageManager.getXP();
+
+      if (currentXP < cost) {
+        const msg = isEn 
+          ? `[INSUFFICIENT XP] You need ${cost} XP to unlock this hint (current balance: ${currentXP} XP). Complete theory quizzes to earn +50 XP.`
+          : `[XP INSUFICIENTE] Necesitas ${cost} XP para desbloquear esta pista (saldo actual: ${currentXP} XP). Completa la teoría para ganar +50 XP.`;
+        writeTerminal(msg, "error");
+        alert(isEn ? `Necesitas ${cost} XP para desbloquear esta pista técnica.` : `Necesitas ${cost} XP para desbloquear esta pista técnica.`);
+        return;
+      }
+
+      const res = StorageManager.unlockHint(lesson.n, cost);
+      if (res.success) {
+        updateNavUI();
+
+        const hintPill = document.getElementById('hint-cost-pill');
+        if (hintPill) {
+          hintPill.classList.add('unlocked');
+          hintPill.textContent = (window.I18nManager && window.I18nManager.t('hint_unlocked_pill')) || '✓ Desbloqueada';
+        }
+
+        if (hintBox) hintBox.classList.add('open');
+
+        const msg = isEn 
+          ? `[HINT UNLOCKED] Technical hint unlocked for Lesson ${lesson.n} (-${cost} XP). Remaining: ${res.remainingXP} XP.`
+          : `[PISTA DESBLOQUEADA] Pista técnica desbloqueada para la Lección ${lesson.n} (-${cost} XP). Saldo restante: ${res.remainingXP} XP.`;
+        writeTerminal(msg, "warning");
+      }
+    });
+  }
+
+  // Run Code / Test Solution
+  document.getElementById('run-code-btn').addEventListener('click', () => {
+    const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+    const rawLesson = FLAT[currentIdx].lesson;
+    const lesson = (typeof getLocalizedLesson === 'function') ? getLocalizedLesson(rawLesson, isEn ? 'en' : 'es') : rawLesson;
+    if (!StorageManager.canAccessPractice(lesson.n)) {
+      const alertLocked = (window.I18nManager && window.I18nManager.t('practice_alert_locked')) || "Primero debes completar la teoría de esta lección para desbloquear el laboratorio.";
+      alert(alertLocked);
+      return;
+    }
+    const res = lesson.exercise.evaluator(currentExerciseState);
+    const msg = res.pass ? (lesson.exercise.passMsg || res.msg) : (lesson.exercise.failMsg || res.msg);
+    if (res.pass) {
+      writeTerminal(`[EVAL-PASS] ${msg}`, "success");
+    } else {
+      writeTerminal(`[EVAL-CHECK] ${msg}`, "warning");
+    }
+    showExerciseValidation(lesson, res);
+  });
+
+  // Submit Answer
+  document.getElementById('submit-answer-btn').addEventListener('click', () => {
+    const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+    const rawLesson = FLAT[currentIdx].lesson;
+    const lesson = (typeof getLocalizedLesson === 'function') ? getLocalizedLesson(rawLesson, isEn ? 'en' : 'es') : rawLesson;
+    if (!StorageManager.canAccessPractice(lesson.n)) {
+      const alertLocked = (window.I18nManager && window.I18nManager.t('practice_alert_locked')) || "Primero debes completar la teoría de esta lección para desbloquear el laboratorio.";
+      alert(alertLocked);
+      return;
+    }
+    const res = lesson.exercise.evaluator(currentExerciseState);
+    const msg = res.pass ? (lesson.exercise.passMsg || res.msg) : (lesson.exercise.failMsg || res.msg);
+    showExerciseValidation(lesson, res);
+
+    if (res.pass) {
+      writeTerminal(`[SUBMIT SUCCESS] ${msg}`, "success");
+      StorageManager.setExercisePassed(lesson.n, currentExerciseState);
+      updateNavUI();
+
+      // Show HUD Toast
+      const toastXp = (window.I18nManager && window.I18nManager.t('practice_toast_xp')) || "+100 XP registrados";
+      document.getElementById('toast-xp-text').textContent = toastXp;
+      document.getElementById('toast-msg-text').textContent = msg;
+      document.getElementById('success-toast').classList.add('show');
+    } else {
+      writeTerminal(`[SUBMIT FAILED] ${msg}`, "error");
+      alert(msg);
+    }
+  });
+
+  // Reset Exercise
+  document.getElementById('reset-exercise-btn').addEventListener('click', () => {
+    currentExerciseState = {};
+    const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+    const rawLesson = FLAT[currentIdx].lesson;
+    const lesson = (typeof getLocalizedLesson === 'function') ? getLocalizedLesson(rawLesson, isEn ? 'en' : 'es') : rawLesson;
+    renderLab(lesson);
+    const resetMsg = (window.I18nManager && window.I18nManager.t('practice_reset_msg')) || "Parámetros del laboratorio reiniciados al valor base.";
+    writeTerminal(resetMsg, "info");
+  });
+
+  // Toast Next Button
+  document.getElementById('toast-next-btn').addEventListener('click', () => {
+    document.getElementById('success-toast').classList.remove('show');
+    if (currentIdx < FLAT.length - 1) {
+      const nextLesson = FLAT[currentIdx + 1].lesson;
+      const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+      if (!StorageManager.canAccessLessonNumber(nextLesson.n)) {
+        alert(isEn ? 'Complete the current laboratory to unlock the next lesson.' : 'Debes completar el laboratorio actual para desbloquear la siguiente lección.');
+        return;
+      }
+      // Si la teoría de la siguiente lección aún no está completada, llevarlo a la teoría
+      if (!StorageManager.canAccessPractice(nextLesson.n)) {
+        window.location.href = `teoria.html?lesson=${nextLesson.n}`;
+      } else {
+        loadLesson(currentIdx + 1);
+        window.history.pushState({}, '', `?lesson=${nextLesson.n}`);
+      }
+    }
+  });
+
+  // Chapters Drawer Modal
+  const modal = document.getElementById('chapters-modal');
+  const body = document.getElementById('chapters-modal-body');
+
+  function buildChapters() {
+    body.innerHTML = '';
+    const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+    const statusDone = (window.I18nManager && window.I18nManager.t('lab_status_passed')) || '✓ Aprobado';
+    const statusUnlocked = (window.I18nManager && window.I18nManager.t('lab_status_unlocked')) || '⚡ Desbloqueado';
+
+    UNITS.forEach((unit, uIdx) => {
+      const locUnit = (typeof getLocalizedUnit === 'function') ? getLocalizedUnit(unit, isEn ? 'en' : 'es') : unit;
+      const uDiv = document.createElement('div');
+      uDiv.innerHTML = `<div class="drawer-unit-title">${locUnit.title}</div>`;
+
+      unit.lessons.forEach(l => {
+        const locLesson = (typeof getLocalizedLesson === 'function') ? getLocalizedLesson(l, isEn ? 'en' : 'es') : l;
+        const flatI = FLAT.findIndex(f => f.lesson.n === l.n);
+        const isDone = StorageManager.isExercisePassed(l.n);
+        const isLessonUnlocked = StorageManager.canAccessLessonNumber(l.n);
+        const canAccess = StorageManager.canAccessPractice(l.n);
+        const isCur = (flatI === currentIdx);
+
+        let statusText = '';
+        let statusColor = 'var(--text-muted, #71717a)';
+        if (isDone) {
+          statusText = statusDone;
+          statusColor = 'var(--accent-emerald)';
+        } else if (canAccess) {
+          statusText = statusUnlocked;
+          statusColor = 'var(--accent-cyan)';
+        } else if (isLessonUnlocked) {
+          statusText = isEn ? '🔒 Requires Theory' : '🔒 Requiere Teoría';
+          statusColor = 'var(--accent-amber)';
+        } else {
+          statusText = isEn ? '🔒 Locked' : '🔒 Bloqueado';
+          statusColor = 'var(--text-muted, #71717a)';
+        }
+
+        const row = document.createElement('div');
+        row.className = `drawer-lesson-row ${isCur ? 'active' : ''}`;
+        if (!isLessonUnlocked) {
+          row.style.opacity = '0.45';
+          row.style.cursor = 'not-allowed';
+        }
+        row.innerHTML = `
+          <span style="min-width:0;word-break:break-word;flex:1;line-height:1.35;">${locLesson.n}. ${locLesson.title}</span>
+          <span style="font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;color:${statusColor};">
+            ${statusText}
+          </span>
+        `;
+        row.addEventListener('click', () => {
+          if (!isLessonUnlocked) {
+            alert(isEn ? 'Complete the laboratory of the previous lesson to unlock this lesson.' : 'Debes completar el laboratorio de la lección anterior para desbloquear esta lección.');
+            return;
+          }
+          loadLesson(flatI);
+          window.history.pushState({}, '', `?lesson=${l.n}`);
+          modal.classList.remove('open');
+        });
+        uDiv.appendChild(row);
+      });
+
+      body.appendChild(uDiv);
+    });
+  }
+
+  document.getElementById('open-chapters-btn').addEventListener('click', () => {
+    buildChapters();
+    modal.classList.add('open');
+  });
+  document.getElementById('close-chapters-modal-btn').addEventListener('click', () => {
+    modal.classList.remove('open');
+  });
+
+  // Settings Dropdown
+  const settingsBtn = document.getElementById('open-settings-btn');
+  const settingsDropdown = document.getElementById('settings-dropdown');
+  if (settingsBtn && settingsDropdown) {
+    settingsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      settingsDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!settingsDropdown.contains(e.target) && !settingsBtn.contains(e.target)) {
+        settingsDropdown.classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') settingsDropdown.classList.remove('open');
+    });
+  }
+
+  // Popstate
+  window.addEventListener('popstate', () => {
+    loadLesson(parseQueryLesson());
+  });
+}
+
+// Inicialización
+(function init() {
+  StorageManager.init();
+  setupStudioActions();
+  loadLesson(parseQueryLesson());
+  window.addEventListener('ml_language_changed', () => {
+    loadLesson(currentIdx);
+  });
+})();
+</script>
+</body>
+</html>
