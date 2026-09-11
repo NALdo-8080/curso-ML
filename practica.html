@@ -2447,9 +2447,11 @@ function parseQueryLesson() {
   const lNum = parseInt(params.get('lesson'));
   if (lNum && lNum >= 1 && lNum <= FLAT.length) {
     const foundIdx = FLAT.findIndex(f => f.lesson.n === lNum);
+    if (foundIdx >= 0) return foundIdx;
     if (foundIdx >= 0 && StorageManager.canAccessLessonNumber(lNum)) return foundIdx;
   }
   const lastActive = StorageManager.getLastActiveLesson();
+  if (lastActive) {
   if (lastActive && StorageManager.canAccessLessonNumber(lastActive)) {
     const foundIdx = FLAT.findIndex(f => f.lesson.n === lastActive);
     if (foundIdx >= 0) return foundIdx;
@@ -2894,6 +2896,7 @@ function renderSortLab(arena, ex) {
               <span class="sort-grip" title="${gripHint}">⠿</span>
               <span class="sort-num">#${idx + 1}</span>
               <span class="sort-text" style="flex:1;font-weight:500;line-height:1.4;">${it.text}</span>
+              <span class="sort-handle-hint" style="font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:4px;user-select:none;">
               <span class="sort-handle-hint" style="font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:4px;-webkit-user-select: none;
   user-select: none;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
@@ -4499,6 +4502,7 @@ function setupStudioActions() {
     const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
     const statusDone = (window.I18nManager && window.I18nManager.t('lab_status_passed')) || '✓ Aprobado';
     const statusUnlocked = (window.I18nManager && window.I18nManager.t('lab_status_unlocked')) || '⚡ Desbloqueado';
+    const statusLocked = (window.I18nManager && window.I18nManager.t('lab_status_locked')) || '🔒 Requiere Teoría';
 
     UNITS.forEach((unit, uIdx) => {
       const locUnit = (typeof getLocalizedUnit === 'function') ? getLocalizedUnit(unit, isEn ? 'en' : 'es') : unit;
@@ -4512,6 +4516,7 @@ function setupStudioActions() {
         const isLessonUnlocked = StorageManager.canAccessLessonNumber(l.n);
         const canAccess = StorageManager.canAccessPractice(l.n);
         const isCur = (flatI === currentIdx);
+        const statusText = isDone ? statusDone : (canAccess ? statusUnlocked : statusLocked);
 
         let statusText = '';
         let statusColor = 'var(--text-muted, #71717a)';
@@ -4537,6 +4542,7 @@ function setupStudioActions() {
         }
         row.innerHTML = `
           <span style="min-width:0;word-break:break-word;flex:1;line-height:1.35;">${locLesson.n}. ${locLesson.title}</span>
+          <span style="font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;color:${isDone ? 'var(--accent-emerald)' : (canAccess ? 'var(--accent-cyan)' : 'var(--accent-amber)')};">
           <span style="font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;color:${statusColor};">
             ${statusText}
           </span>

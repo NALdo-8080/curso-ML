@@ -1485,6 +1485,8 @@ function parseQueryLesson() {
     if (foundIdx >= 0) return foundIdx;
   }
 
+  const firstAccessible = FLAT.findIndex(f => StorageManager.canAccessLessonNumber(f.lesson.n));
+  return firstAccessible >= 0 ? firstAccessible : 0;
   const maxUnlocked = StorageManager.getMaxUnlockedLesson();
   const maxIdx = FLAT.findIndex(f => f.lesson.n === maxUnlocked);
   if (maxIdx >= 0) return maxIdx;
@@ -1550,6 +1552,7 @@ function renderSidebar() {
       item.href = isUnlocked ? `?lesson=${l.n}` : '#';
       item.style.opacity = isUnlocked ? '1' : '0.5';
       item.style.pointerEvents = isUnlocked ? 'auto' : 'none';
+      item.title = isUnlocked ? '' : (isEn ? 'Complete previous unit to unlock this lesson' : 'Completa la unidad anterior para desbloquear esta lección');
       item.title = isUnlocked ? '' : (isEn ? 'Complete the previous laboratory to unlock this lesson' : 'Completa el laboratorio de la lección anterior para desbloquear esta lección');
       item.innerHTML = `
         <span class="lesson-check-icon ${isDone ? 'done' : ''}">${isDone ? '✓' : ''}</span>
@@ -1623,6 +1626,7 @@ function loadLesson(idx) {
   const nextBtn = document.getElementById('next-lesson-btn');
   document.getElementById('pager-count-text').textContent = `${lessonLabel} ${lesson.n} ${ofLabel} ${FLAT.length}`;
   document.getElementById('prev-lesson-btn').disabled = (currentIdx === 0);
+  document.getElementById('next-lesson-btn').disabled = (currentIdx === FLAT.length - 1);
   nextBtn.disabled = (currentIdx === FLAT.length - 1 || !isNextUnlocked);
   if (!isNextUnlocked && currentIdx < FLAT.length - 1) {
     nextBtn.title = isEn ? 'Complete the laboratory of this lesson to unlock the next one' : 'Completa el laboratorio de esta lección para desbloquear la siguiente';

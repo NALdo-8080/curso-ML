@@ -1607,8 +1607,12 @@ function updateDashboard() {
   document.getElementById('dash-pct-label').textContent = `${pct}% ${isEn ? 'Completed' : 'Completado'}`;
   document.getElementById('dash-progress-fill').style.width = `${pct}%`;
 
+  // Update Hero CTA with the next available lesson respecting unit order
   // Update Hero CTA with the latest unlocked incomplete lesson
   let nextLesson = 1;
+  const firstAccessible = FLAT.find(f => StorageManager.canAccessLessonNumber(f.lesson.n));
+  if (firstAccessible) nextLesson = firstAccessible.lesson.n;
+  else nextLesson = 1;
   const nextIncomplete = FLAT.find(f => StorageManager.canAccessLessonNumber(f.lesson.n) && !StorageManager.isDone(f.lesson.n));
   if (nextIncomplete) {
     nextLesson = nextIncomplete.lesson.n;

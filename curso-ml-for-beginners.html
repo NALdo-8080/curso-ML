@@ -553,6 +553,7 @@ input[type="range"]::-moz-range-thumb {
 .interactive-chip {
   background: var(--dc-surface); border: 1px solid var(--dc-border); padding: 7px 12px;
   border-radius: 20px; cursor: pointer; font-size: 12.5px; color: var(--dc-text);
+  -webkit-user-select: none; user-select: none; transition: all 0.15s;
   -webkit-user-select: none;
   user-select: none; -webkit-user-select: none;
   user-select: none; transition: all 0.15s;
@@ -883,6 +884,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Sequence Sorter */
+.sort-container { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; -webkit-user-select: none; user-select: none; }
 .sort-container { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; -webkit-user-select: none;
   user-select: none; -webkit-user-select: none;
   user-select: none; }
@@ -1279,6 +1281,8 @@ const StorageManager = {
     return { success: true, alreadyUnlocked: true, cost: 0, remainingXP: this.getXP() };
   },
   animateXP() {
+    const el = document.getElementById('nav-xp-counter');
+    if (el) el.textContent = `${(this.cache.xp || 0).toLocaleString()} XP`;
     if (typeof document !== 'undefined') {
       const el = document.getElementById('nav-xp-counter');
       if (el) el.textContent = `${(this.cache.xp || 0).toLocaleString()} XP`;
@@ -1300,6 +1304,7 @@ const StorageManager = {
     }
     this.save();
   },
+  isExercisePassed(n) { return !!(this.cache.exercises && this.cache.exercises[n]); },
   getMaxUnlockedLesson() {
     if (!this.cache) this.init();
     let maxLesson = 1;
@@ -1334,6 +1339,8 @@ const StorageManager = {
   setExercisePassed(n, state) {
     if (!this.cache) this.init();
     if (!this.cache.exercises) this.cache.exercises = {};
+    const firstTime = !this.cache.exercises[n];
+    this.cache.exercises[n] = state || true;
     const firstTime = !this.isExercisePassed(n);
     const savedState = (state && typeof state === 'object') ? state : {};
     this.cache.exercises[n] = {
@@ -1349,6 +1356,7 @@ const StorageManager = {
     this.save();
   },
   getExerciseState(n) {
+    return this.cache.exercises ? this.cache.exercises[n] : null;
     if (!this.cache || !this.cache.exercises) return null;
     const ex = this.cache.exercises[n];
     if (!ex) return null;
@@ -3204,6 +3212,7 @@ function renderSortLab(arena, ex) {
               <span class="sort-grip" title="Arrastra para reordenar">⠿</span>
               <span class="sort-num">#${idx + 1}</span>
               <span class="sort-text" style="flex:1;font-weight:500;line-height:1.4;">${it.text}</span>
+              <span class="sort-handle-hint" style="font-size:11px;color:var(--dc-text-muted);display:flex;align-items:center;gap:4px;user-select:none;">
               <span class="sort-handle-hint" style="font-size:11px;color:var(--dc-text-muted);display:flex;align-items:center;gap:4px;-webkit-user-select: none;
   user-select: none;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 15l5 5 5-5M7 9l5-5 5 5"/></svg>
@@ -4731,6 +4740,8 @@ function setupModals() {
             const isUnlocked = StorageManager.canAccessLessonNumber(l.n);
             const flatI = FLAT.findIndex(f => f.lesson.n === l.n);
             return `
+              <div class="chapter-lesson-item ${isCur ? 'active' : ''}" data-flat="${flatI}">
+                <span class="chapter-check ${isDone ? 'done' : ''}">${isDone ? '✓' : ''}</span>
               <div class="chapter-lesson-item ${isCur ? 'active' : ''}" data-flat="${flatI}" style="${isUnlocked ? '' : 'opacity:0.45;cursor:not-allowed;'}" title="${isUnlocked ? '' : 'Completa el laboratorio anterior para desbloquear esta lección'}">
                 <span class="chapter-check ${isDone ? 'done' : ''}">${isDone ? '✓' : (isUnlocked ? '' : '🔒')}</span>
                 <span>${l.n}. ${l.title}</span>
@@ -4744,6 +4755,7 @@ function setupModals() {
 
     chaptersBody.querySelectorAll('.chapter-lesson-item').forEach(el => {
       el.addEventListener('click', () => {
+        currentIdx = parseInt(el.dataset.flat);
         const targetIdx = parseInt(el.dataset.flat);
         const targetLesson = FLAT[targetIdx].lesson;
         if (!StorageManager.canAccessLessonNumber(targetLesson.n)) {
@@ -4772,6 +4784,16 @@ function setupModals() {
   // Modal n8n
   const n8nModal = document.getElementById('n8n-modal');
   const n8nInput = document.getElementById('n8n-url-input');
+  document.getElementById('n8n-btn').addEventListener('click', () => {
+    n8nInput.value = StorageManager.getN8nUrl();
+    n8nModal.classList.add('open');
+  });
+  document.getElementById('close-n8n-btn').addEventListener('click', () => n8nModal.classList.remove('open'));
+  document.getElementById('save-n8n-btn').addEventListener('click', () => {
+    StorageManager.setN8nUrl(n8nInput.value.trim());
+    n8nModal.classList.remove('open');
+    alert("Webhook n8n guardado.");
+  });
   const n8nBtn = document.getElementById('n8n-btn');
   const closeN8nBtn = document.getElementById('close-n8n-btn');
   const saveN8nBtn = document.getElementById('save-n8n-btn');
