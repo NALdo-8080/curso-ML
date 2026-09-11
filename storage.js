@@ -113,7 +113,6 @@ const StorageManager = {
   },
   canAccessLessonNumber(n) {
     if (n === undefined || n === null) return false;
-    return n >= 1 && n <= 27;
     const num = parseInt(n, 10);
     if (isNaN(num) || num < 1 || num > 27) return false;
     if (num === 1) return true;
@@ -142,14 +141,12 @@ const StorageManager = {
   },
   getExerciseState(n) {
     if (!this.cache || !this.cache.exercises) return null;
-    return this.cache.exercises[n] ? this.cache.exercises[n].state : null;
     const ex = this.cache.exercises[n];
     if (!ex) return null;
     if (typeof ex === 'object' && ex.state !== undefined) return ex.state;
     return ex;
   },
   isExercisePassed(n) {
-    return !!(this.cache && this.cache.exercises && this.cache.exercises[n] && this.cache.exercises[n].passed);
     if (!this.cache || !this.cache.exercises) return false;
     const ex = this.cache.exercises[n];
     if (!ex) return false;
