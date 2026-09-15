@@ -2489,6 +2489,192 @@ canvas { display: block; max-width: 100%; height: auto; }
   .btn-theory-text-short { display: none; }
   .btn-theory-link { width: 36px; min-width: 36px; padding: 0; justify-content: center; }
 }
+
+/* Mode Switcher */
+.lab-mode-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--studio-surface-2);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--studio-border);
+  margin-bottom: 14px;
+}
+.mode-tab-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.mode-tab-btn.active {
+  background: var(--accent-indigo);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+}
+.mode-tab-btn:hover:not(.active) {
+  color: var(--text-main);
+  background: var(--studio-surface-hover);
+}
+
+/* Python Code Lab Container */
+.python-lab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.python-lab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.python-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.python-status-badge.ready {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-emerald);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.python-status-badge.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.python-editor-wrapper {
+  position: relative;
+  border: 1px solid var(--studio-border);
+  border-radius: var(--radius-sm);
+  background: #040810;
+  overflow: hidden;
+}
+[data-theme="light"] .python-editor-wrapper {
+  background: #1e293b;
+}
+.python-code-textarea {
+  width: 100%;
+  height: 220px;
+  background: transparent;
+  color: #e2e8f0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  border: none;
+  resize: vertical;
+  outline: none;
+  tab-size: 4;
+  box-sizing: border-box;
+}
+.python-lab-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.python-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.12s ease, filter 0.15s ease;
+}
+.python-action-btn.run {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+.python-action-btn.reset {
+  background: var(--studio-surface-2);
+  color: var(--text-muted);
+  border: 1px solid var(--studio-border);
+}
+.python-action-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+.python-console-box {
+  background: #020408;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  max-height: 120px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #93c5fd;
+  line-height: 1.4;
+}
+
+/* External Challenge Card in Left Pane */
+.lab-external-challenge-card {
+  margin-top: 14px;
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px dashed rgba(56, 189, 248, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.lec-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.lec-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+.lec-desc {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+.lec-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-decoration: none;
+}
+.lec-link:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -2616,6 +2802,9 @@ canvas { display: block; max-width: 100%; height: auto; }
         </button>
         <div class="hint-content" id="hint-content-box"></div>
       </div>
+
+      <!-- Real-World External Challenge Card -->
+      <div class="lab-external-challenge-card" id="lab-external-challenge-box" style="display:none;"></div>
     </div>
 
     <!-- Shortcut to Theory -->
@@ -2810,6 +2999,28 @@ function loadLesson(idx) {
     }
   }
 
+  // External Challenge Card in practice pane
+  const challengeBox = document.getElementById('lab-external-challenge-box');
+  if (challengeBox) {
+    const ep = unit.externalPractice;
+    if (ep) {
+      challengeBox.style.display = 'block';
+      const badgeText = (window.I18nManager && window.I18nManager.t('external_practice_badge')) || (isEn ? 'Hands-on Challenge' : 'Reto Práctico');
+      const btnText = (window.I18nManager && window.I18nManager.t('external_practice_btn', { provider: ep.provider })) || (isEn ? `Open on ${ep.provider} ↗` : `Abrir en ${ep.provider} ↗`);
+      challengeBox.innerHTML = `
+        <div class="lec-badge">🌐 ${ep.provider} · ${badgeText}</div>
+        <div class="lec-title">${ep.title}</div>
+        <div class="lec-desc">${ep.description}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:6px;">
+          <span style="font-size:11px;color:var(--accent-emerald);font-weight:600;">🎯 ${ep.recommendedMetric}</span>
+          <a href="${ep.url}" target="_blank" rel="noopener noreferrer" class="lec-link">${btnText}</a>
+        </div>
+      `;
+    } else {
+      challengeBox.style.display = 'none';
+    }
+  }
+
   // Check if theory is completed for this lesson
   const canAccess = StorageManager.canAccessPractice(lesson.n);
   const runBtn = document.getElementById('run-code-btn');
@@ -2873,6 +3084,282 @@ function loadLesson(idx) {
 }
 
 // ===============================================================
+// PYODIDE LAZY LOADING MANAGER & PYTHON LAB RENDERERS
+// ===============================================================
+const PyodideManager = {
+  instance: null,
+  isLoading: false,
+  ready: false,
+  error: null,
+  loadPromise: null,
+
+  async init(onStatus) {
+    if (this.ready && this.instance) return this.instance;
+    if (this.loadPromise) return this.loadPromise;
+
+    this.isLoading = true;
+    this.loadPromise = (async () => {
+      try {
+        const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+        const msgLoading = (window.I18nManager && window.I18nManager.t('pyodide_loading')) || (isEn ? "Loading browser Python engine (Pyodide)..." : "Cargando motor de Python (Pyodide)...");
+        const msgPackages = (window.I18nManager && window.I18nManager.t('pyodide_loading_packages')) || (isEn ? "Downloading scikit-learn and numpy..." : "Descargando scikit-learn y numpy...");
+        const msgReady = (window.I18nManager && window.I18nManager.t('pyodide_ready')) || (isEn ? "Python runtime ready to execute." : "Entorno Python listo para ejecutar.");
+
+        if (typeof onStatus === 'function') onStatus(msgLoading);
+        if (!window.loadPyodide) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";
+            script.onload = resolve;
+            script.onerror = () => reject(new Error(isEn ? "Could not download Pyodide from CDN." : "No se pudo descargar Pyodide desde el CDN."));
+            document.head.appendChild(script);
+          });
+        }
+
+        if (typeof onStatus === 'function') onStatus(msgPackages);
+        this.instance = await window.loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.2/full/"
+        });
+
+        await this.instance.loadPackage(["numpy", "scikit-learn"]);
+        this.ready = true;
+        this.isLoading = false;
+        if (typeof onStatus === 'function') onStatus(msgReady);
+        return this.instance;
+      } catch (err) {
+        this.isLoading = false;
+        this.error = err;
+        if (typeof onStatus === 'function') onStatus(`Python Error: ${err.message}`);
+        throw err;
+      }
+    })();
+
+    return this.loadPromise;
+  },
+
+  async runCode(code, onStdout) {
+    if (!this.ready) {
+      await this.init(onStdout);
+    }
+    const outputLines = [];
+    const stdoutHandler = (msg) => {
+      outputLines.push(msg);
+      if (typeof onStdout === 'function') onStdout(msg);
+    };
+
+    this.instance.setStdout({ batched: stdoutHandler });
+    this.instance.setStderr({ batched: (msg) => stdoutHandler(`[ERR] ${msg}`) });
+
+    try {
+      await this.instance.runPythonAsync(code);
+      const dict = this.instance.globals;
+      const vars = {};
+      ['mse', 'model', 'y_pred', 'r2'].forEach(k => {
+        if (dict.has(k)) {
+          const val = dict.get(k);
+          if (val && typeof val.toJs === 'function') {
+            try { vars[k] = val.toJs(); } catch(e) { vars[k] = val; }
+          } else {
+            vars[k] = val;
+          }
+        }
+      });
+      return { success: true, vars, stdout: outputLines.join('\n'), error: null };
+    } catch (err) {
+      return { success: false, vars: {}, stdout: outputLines.join('\n'), error: err.message || String(err) };
+    }
+  }
+};
+
+function renderHybridPythonLab(arena, lesson) {
+  const ex = lesson.exercise;
+  const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+  const interactiveTabLabel = (window.I18nManager && window.I18nManager.t('pyodide_mode_interactive')) || (isEn ? "Visual Simulator" : "Simulador Gráfico");
+  const pythonTabLabel = (window.I18nManager && window.I18nManager.t('pyodide_mode_python')) || (isEn ? "🐍 Python Code (Scikit-Learn)" : "🐍 Código Python (Scikit-Learn)");
+
+  arena.innerHTML = `
+    <div class="lab-mode-switcher">
+      <button type="button" class="mode-tab-btn active" id="btn-mode-interactive">
+        <span>📊</span> <span>${interactiveTabLabel}</span>
+      </button>
+      <button type="button" class="mode-tab-btn" id="btn-mode-python">
+        <span>🐍</span> <span>${pythonTabLabel}</span>
+      </button>
+    </div>
+    <div id="subarena-interactive"></div>
+    <div id="subarena-python" style="display:none;"></div>
+  `;
+
+  const subInteractive = arena.querySelector('#subarena-interactive');
+  const subPython = arena.querySelector('#subarena-python');
+  const btnInteractive = arena.querySelector('#btn-mode-interactive');
+  const btnPython = arena.querySelector('#btn-mode-python');
+
+  if (ex.type === "canvas_poly_regression") {
+    renderPolyLab(subInteractive, ex);
+  }
+
+  renderPythonRunnerLab(subPython, ex.pythonLab || {}, lesson);
+
+  btnInteractive.addEventListener('click', () => {
+    btnInteractive.classList.add('active');
+    btnPython.classList.remove('active');
+    subInteractive.style.display = 'block';
+    subPython.style.display = 'none';
+    currentExerciseState.mode = 'interactive';
+  });
+
+  btnPython.addEventListener('click', () => {
+    btnPython.classList.add('active');
+    btnInteractive.classList.remove('active');
+    subInteractive.style.display = 'none';
+    subPython.style.display = 'block';
+    currentExerciseState.mode = 'python';
+
+    const statusPill = subPython.querySelector('#py-status-pill');
+    if (!PyodideManager.ready && !PyodideManager.isLoading) {
+      if (statusPill) statusPill.textContent = isEn ? "⏳ Loading Python & Scikit-Learn..." : "⏳ Cargando Python & Scikit-Learn...";
+      PyodideManager.init((statusMsg) => {
+        writeTerminal(`[PYTHON] ${statusMsg}`, 'info');
+        if (PyodideManager.ready && statusPill) {
+          statusPill.textContent = isEn ? "● Python (WASM) Ready" : "● Python (WASM) Listo";
+          statusPill.classList.add('ready');
+        }
+      }).catch(err => {
+        if (statusPill) {
+          statusPill.textContent = isEn ? "✗ Load Error" : "✗ Error de carga";
+          statusPill.classList.add('error');
+        }
+        writeTerminal(`[PYTHON ERROR] ${err.message}`, 'error');
+      });
+    }
+  });
+
+  if (currentExerciseState && currentExerciseState.mode === 'python') {
+    btnPython.click();
+  }
+}
+
+function renderPythonRunnerLab(container, pyLab, lesson) {
+  const isEn = window.I18nManager && window.I18nManager.getLang() === 'en';
+  const initialCode = (currentExerciseState && currentExerciseState.pythonCode) || pyLab.initialCode || '# Escribe tu código Python aquí\n';
+  const btnRunText = (window.I18nManager && window.I18nManager.t('pyodide_btn_run')) || (isEn ? '▶ Run Code' : '▶ Ejecutar Código');
+  const btnResetText = (window.I18nManager && window.I18nManager.t('pyodide_btn_reset')) || (isEn ? '↺ Reset Template' : '↺ Restaurar Plantilla');
+  const consoleTitle = (window.I18nManager && window.I18nManager.t('pyodide_console_title')) || (isEn ? 'Python Output Terminal (sys.stdout)' : 'Terminal de Salida Python (sys.stdout)');
+
+  container.innerHTML = `
+    <div class="python-lab-container">
+      <div class="python-lab-header">
+        <div style="font-size:13px;font-weight:700;color:var(--text-main);">${pyLab.title || 'Python Scikit-Learn Lab'}</div>
+        <span class="python-status-badge ${PyodideManager.ready ? 'ready' : ''}" id="py-status-pill">
+          ${PyodideManager.ready ? (isEn ? '● Python (WASM) Ready' : '● Python (WASM) Listo') : (isEn ? '⏳ Python Standby' : '⏳ Python Standby')}
+        </span>
+      </div>
+
+      <div class="python-editor-wrapper">
+        <textarea class="python-code-textarea" id="py-editor" spellcheck="false">${initialCode}</textarea>
+      </div>
+
+      <div class="python-lab-toolbar">
+        <button type="button" class="python-action-btn run" id="py-run-btn">
+          <span>${btnRunText}</span>
+        </button>
+        <button type="button" class="python-action-btn reset" id="py-reset-btn">
+          <span>${btnResetText}</span>
+        </button>
+      </div>
+
+      <div style="margin-top:4px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px;">${consoleTitle}</div>
+        <div class="python-console-box" id="py-console-output"><em>${isEn ? `Click '${btnRunText}' to compile and run the Python script in your browser...` : `Presiona '${btnRunText}' para compilar y ejecutar el script en tu navegador...`}</em></div>
+      </div>
+    </div>
+  `;
+
+  const editor = container.querySelector('#py-editor');
+  const runBtn = container.querySelector('#py-run-btn');
+  const resetBtn = container.querySelector('#py-reset-btn');
+  const consoleOut = container.querySelector('#py-console-output');
+  const statusPill = container.querySelector('#py-status-pill');
+
+  editor.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = editor.selectionStart;
+      const end = editor.selectionEnd;
+      editor.value = editor.value.substring(0, start) + "    " + editor.value.substring(end);
+      editor.selectionStart = editor.selectionEnd = start + 4;
+    }
+  });
+
+  editor.addEventListener('input', () => {
+    currentExerciseState.pythonCode = editor.value;
+  });
+
+  resetBtn.addEventListener('click', () => {
+    editor.value = pyLab.initialCode;
+    currentExerciseState.pythonCode = pyLab.initialCode;
+    consoleOut.innerHTML = `<em>${isEn ? 'Template reset.' : 'Plantilla restaurada.'}</em>`;
+  });
+
+  runBtn.addEventListener('click', async () => {
+    const code = editor.value;
+    runBtn.disabled = true;
+    runBtn.style.opacity = '0.6';
+    statusPill.textContent = isEn ? "⏳ Executing..." : "⏳ Ejecutando...";
+    consoleOut.innerHTML = `<span style="color:var(--accent-amber);">[PYTHON] ${isEn ? 'Executing script with WebAssembly...' : 'Ejecutando script con WebAssembly...'}</span>\n`;
+
+    try {
+      const res = await PyodideManager.runCode(code, (line) => {
+        const div = document.createElement('div');
+        div.textContent = line;
+        consoleOut.appendChild(div);
+        consoleOut.scrollTop = consoleOut.scrollHeight;
+        writeTerminal(`[STDOUT] ${line}`, 'log');
+      });
+
+      currentExerciseState.pythonExecuted = true;
+      currentExerciseState.vars = res.vars;
+      currentExerciseState.error = res.error;
+      currentExerciseState.stdout = res.stdout;
+
+      if (res.success) {
+        statusPill.textContent = isEn ? "● Execution Succeeded" : "● Ejecución Exitosa";
+        statusPill.className = "python-status-badge ready";
+        writeTerminal(`[PYTHON SUCCESS] ${isEn ? 'Code executed without errors.' : 'Código ejecutado sin errores.'}`, 'success');
+
+        const evalFn = pyLab.evaluator || lesson.exercise.evaluator;
+        if (evalFn) {
+          const evalRes = evalFn(currentExerciseState);
+          currentExerciseState.pythonResult = evalRes;
+          if (evalRes.pass) {
+            writeTerminal(`[EVALUATOR PASS] ${evalRes.msg}`, 'success');
+          } else {
+            writeTerminal(`[EVALUATOR NOTE] ${evalRes.msg}`, 'warning');
+          }
+        }
+      } else {
+        statusPill.textContent = isEn ? "✗ Execution Error" : "✗ Error de Ejecución";
+        statusPill.className = "python-status-badge error";
+        const errDiv = document.createElement('div');
+        errDiv.style.color = "var(--accent-red)";
+        errDiv.textContent = `[Traceback]: ${res.error}`;
+        consoleOut.appendChild(errDiv);
+        writeTerminal(`[PYTHON ERROR] ${res.error}`, 'error');
+      }
+    } catch(e) {
+      statusPill.textContent = isEn ? "✗ Engine Failure" : "✗ Fallo de Motor";
+      statusPill.className = "python-status-badge error";
+      consoleOut.innerHTML += `<div style="color:var(--accent-red);">${e.message}</div>`;
+      writeTerminal(`[PYODIDE ERROR] ${e.message}`, 'error');
+    } finally {
+      runBtn.disabled = false;
+      runBtn.style.opacity = '1';
+    }
+  });
+}
+
+// ===============================================================
 // 18 RENDERIZADORES DE LABORATORIOS INTERACTIVOS
 // ===============================================================
 function renderLab(lesson) {
@@ -2880,6 +3367,11 @@ function renderLab(lesson) {
   arena.innerHTML = '';
   const ex = lesson.exercise;
   currentExerciseState = StorageManager.getExerciseState(lesson.n) || {};
+
+  if (ex.pythonLab) {
+    renderHybridPythonLab(arena, lesson);
+    return;
+  }
 
   switch(ex.type) {
     case "classification_bins": renderBinsLab(arena, ex); break;

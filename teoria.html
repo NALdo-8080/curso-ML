@@ -1419,6 +1419,159 @@ html, body {
   .fixed-pager-bar { padding: 4px 6px; }
   .pager-count-badge { font-size: 11px; padding: 4px 8px; }
 }
+
+/* External Real-World Practice Box */
+.external-practice-wrap {
+  margin: 28px 0 16px 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.45));
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="light"] .external-practice-wrap {
+  background: linear-gradient(145deg, #f8fafc, #edf2f7);
+  border-color: rgba(2, 132, 199, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+.ep-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.ep-provider-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.ep-badge-pill {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--accent-indigo);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.ep-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ep-desc {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.ep-tasks-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+[data-theme="light"] .ep-tasks-box {
+  background: rgba(255, 255, 255, 0.8);
+}
+.ep-tasks-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ep-task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ep-task-item {
+  font-size: 13px;
+  color: var(--text-main);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
+}
+.ep-task-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.ep-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 14px;
+}
+.ep-metric-badge {
+  font-size: 12.5px;
+  color: var(--accent-emerald);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+.ep-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 3px 12px rgba(2, 132, 199, 0.35);
+}
+.ep-action-btn:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
+  filter: brightness(1.1);
+}
 </style>
 </head>
 <body>
@@ -1588,6 +1741,9 @@ html, body {
           <span data-i18n="theory_btn_enter_lab">Entrar al Laboratorio (+100 XP) ➔</span>
         </a>
       </div>
+
+      <!-- External Real-World Practice Box (Kaggle, Hugging Face, Streamlit, Gymnasium, RAI) -->
+      <div class="external-practice-wrap" id="external-practice-box"></div>
 
       <!-- External Reference Link -->
       <div class="external-ref-wrap">
@@ -1759,6 +1915,9 @@ function loadLesson(idx) {
   // GitHub Reference Link
   document.getElementById('external-github-link').href = `${REPO_BASE}${unit.path}/${lesson.folder}/README.md`;
 
+  // Render Real-World External Practice Card
+  renderExternalPractice(unit);
+
   // Pager buttons
   const nextLessonNum = (currentIdx < FLAT.length - 1) ? FLAT[currentIdx + 1].lesson.n : null;
   const isNextUnlocked = nextLessonNum && StorageManager.canAccessLessonNumber(nextLessonNum);
@@ -1788,6 +1947,58 @@ function loadLesson(idx) {
 
   // Scroll to top of reading area
   document.querySelector('.reading-container').scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderExternalPractice(unit) {
+  const box = document.getElementById('external-practice-box');
+  if (!box) return;
+  const ep = unit.externalPractice;
+  if (!ep) {
+    box.innerHTML = '';
+    box.style.display = 'none';
+    return;
+  }
+  box.style.display = 'block';
+  const isEn = (typeof I18nManager !== 'undefined' && I18nManager.getLang() === 'en');
+  const sectionTitle = (window.I18nManager && window.I18nManager.t('external_practice_title')) || (isEn ? 'Real-World Practice' : 'Práctica en el Mundo Real');
+  const tasksTitle = (window.I18nManager && window.I18nManager.t('external_practice_tasks_title')) || (isEn ? 'Recommended Tasks:' : 'Tareas Recomendadas:');
+  const metricTitle = (window.I18nManager && window.I18nManager.t('external_practice_metric_title')) || (isEn ? 'Target Metric:' : 'Métrica de Éxito:');
+  const btnText = (window.I18nManager && window.I18nManager.t('external_practice_btn', { provider: ep.provider })) || (isEn ? `Open Challenge on ${ep.provider} ↗` : `Abrir Reto en ${ep.provider} ↗`);
+
+  box.innerHTML = `
+    <div class="ep-top-header">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="ep-provider-badge">🌐 ${ep.provider}</span>
+        <span class="ep-badge-pill">${ep.badge}</span>
+      </div>
+      <span style="font-size:12px;color:var(--text-dim);font-weight:600;">${sectionTitle}</span>
+    </div>
+    <div class="ep-title">${ep.title}</div>
+    <p class="ep-desc">${ep.description}</p>
+    <div class="ep-tasks-box">
+      <div class="ep-tasks-title">
+        <span>⚡</span>
+        <span>${tasksTitle}</span>
+      </div>
+      <ul class="ep-task-list">
+        ${(ep.tasks || []).map((task, i) => `
+          <li class="ep-task-item">
+            <span class="ep-task-num">${i + 1}</span>
+            <span>${task}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+    <div class="ep-footer-row">
+      <div class="ep-metric-badge">
+        <span>🎯</span>
+        <span><strong>${metricTitle}</strong> ${ep.recommendedMetric}</span>
+      </div>
+      <a href="${ep.url}" target="_blank" rel="noopener noreferrer" class="ep-action-btn">
+        <span>${btnText}</span>
+      </a>
+    </div>
+  `;
 }
 
 function updatePracticeButtons(lessonNum) {

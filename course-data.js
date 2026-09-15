@@ -8,6 +8,19 @@ const UNITS = [
   {
     title: "Unidad 1: Introducción al ML",
     path: "1-Introduction",
+    externalPractice: {
+      provider: "Google Teachable Machine",
+      badge: "Visión & Audio (No-Code)",
+      title: "Entrena tu Primer Modelo Sin Código con Teachable Machine",
+      url: "https://teachablemachine.withgoogle.com/",
+      description: "Experimenta la diferencia real entre programar reglas y entrenar modelos. Usa tu cámara web o sube archivos para crear 2 o más clases (ej. posturas, objetos o gestos). El modelo se entrena en segundos usando Transfer Learning directamente en tu navegador.",
+      tasks: [
+        "Crea un proyecto de imagen estándar con al menos 2 clases distintas.",
+        "Captura al menos 20 imágenes de muestra por clase con distintas iluminaciones y ángulos.",
+        "Entrena el modelo y pon a prueba la barra de confianza probabilística en tiempo real."
+      ],
+      recommendedMetric: "Confianza de clasificación > 90% en muestras de prueba"
+    },
     lessons: [
       {
         n: 1,
@@ -205,6 +218,19 @@ const UNITS = [
   {
     title: "Unidad 2: Regresión",
     path: "2-Regression",
+    externalPractice: {
+      provider: "Kaggle Competitions",
+      badge: "Regresión Tabular Real",
+      title: "Kaggle: House Prices — Advanced Regression Techniques",
+      url: "https://www.kaggle.com/c/house-prices-advanced-regression-techniques",
+      description: "El benchmark canónico de regresión en ciencia de datos. Predice el precio final de viviendas residenciales con 79 variables explicativas. Aprende a lidiar con asimetría (skewness), valores atípicos (outliers) y multicolinealidad.",
+      tasks: [
+        "Aplica transformación logarítmica sobre la variable objetivo (SalePrice) para estabilizar la varianza.",
+        "Imputa valores nulos en variables clave (LotFrontage, GarageYrBlt) y codifica variables categóricas.",
+        "Entrena una regresión lineal regularizada (Ridge/Lasso) y evalúa el error RMSE en validación cruzada."
+      ],
+      recommendedMetric: "RMSE en log(SalePrice) < 0.14"
+    },
     lessons: [
       {
         n: 5,
@@ -335,7 +361,47 @@ const UNITS = [
         exercise: {
           type: "canvas_poly_regression",
           title: "Laboratorio de Regresión Polinómica en Vivo",
+          pythonLab: {
+            title: "Ajusta tu Propia Recta con Scikit-Learn (Python Real)",
+            initialCode: `# Regresión Lineal con Scikit-Learn (Estilo Kaggle House Prices)
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Dataset de Viviendas: Superficie en m² (X) vs Precio en miles $ (y)
+X = np.array([[50], [70], [80], [100], [120], [150], [200]])
+y = np.array([120, 165, 180, 230, 275, 340, 450])
+
+# 1. Instanciar el modelo LinearRegression
+model = LinearRegression()
+
+# 2. Entrenar el modelo con X e y (.fit)
+model.fit(X, y)
+
+# 3. Predecir y calcular el error MSE
+y_pred = model.predict(X)
+mse = float(mean_squared_error(y, y_pred))
+
+print(f"Pendiente (coef): {model.coef_[0]:.2f}")
+print(f"Intercepto: {model.intercept_:.2f}")
+print(f"Error Cuadrático Medio (MSE): {mse:.2f}")
+`,
+            expectedVars: ["mse", "model"]
+          },
           evaluator: (state) => {
+            if (state && state.mode === 'python' && !state.pythonExecuted) {
+              return { pass: false, msg: "Haz clic en '▶ Ejecutar Código' para correr tu script de Python antes de validar." };
+            }
+            if (state && state.pythonExecuted) {
+              if (state.error) return { pass: false, msg: `Error en Python: ${state.error}` };
+              if (!state.vars || typeof state.vars.mse !== 'number') {
+                return { pass: false, msg: "Calcula y almacena el Error Cuadrático Medio en la variable 'mse'." };
+              }
+              if (state.vars.mse > 50) {
+                return { pass: false, msg: `El MSE (${state.vars.mse.toFixed(2)}) es demasiado alto. Revisa el ajuste del modelo.` };
+              }
+              return { pass: true, msg: `¡Ajuste impecable con Scikit-Learn! MSE alcanzado: ${state.vars.mse.toFixed(2)} (óptimo).` };
+            }
             const deg = state.degree || 1;
             if (deg === 1) return { pass: false, msg: "Underfitting detectado: una recta (d=1) no captura la curvatura estacional." };
             if (deg === 2 || deg === 3) return { pass: true, msg: `¡Punto dulce alcanzado (d=${deg})! Curvatura óptima con MSE balanceado y sin oscilaciones de Runge.` };
@@ -390,6 +456,19 @@ const UNITS = [
   {
     title: "Unidad 3: Aplicación Web",
     path: "3-Web-App",
+    externalPractice: {
+      provider: "Streamlit Open Source",
+      badge: "Despliegue & MLOps",
+      title: "Despliega tu Modelo como Web App Interactiva con Streamlit",
+      url: "https://docs.streamlit.io/get-started",
+      description: "Transforma tus scripts de Python y modelos entrenados en dashboards web interactivos en menos de 20 líneas de código, sin requerir HTML, CSS ni JavaScript. Ideal para prototipar y presentar modelos a clientes o stakeholders.",
+      tasks: [
+        "Crea un archivo app.py e importa streamlit y tu modelo serializado.",
+        "Agrega controles interactivos (st.slider, st.selectbox) para capturar los inputs del usuario.",
+        "Conecta los inputs con model.predict() y muestra el resultado con st.metric y gráficos interactivos."
+      ],
+      recommendedMetric: "App web funcional corriendo localmente con 'streamlit run app.py'"
+    },
     lessons: [
       {
         n: 9,
@@ -448,6 +527,19 @@ const UNITS = [
   {
     title: "Unidad 4: Clasificación",
     path: "4-Classification",
+    externalPractice: {
+      provider: "Kaggle Competitions",
+      badge: "Clasificación Binaria",
+      title: "Kaggle: Titanic — Machine Learning from Disaster",
+      url: "https://www.kaggle.com/c/titanic",
+      description: "El reto de clasificación binaria más emblemático del mundo. Construye un modelo predictivo que determine qué pasajeros tenían mayor probabilidad de sobrevivir al naufragio basándose en clase de boleto, edad, sexo y acompañantes.",
+      tasks: [
+        "Realiza ingeniería de características (extrae títulos como 'Mr.', 'Mrs.', 'Master' a partir del nombre).",
+        "Entrena un árbol de decisión o clasificador Random Forest con scikit-learn.",
+        "Genera la matriz de confusión y calcula el trade-off de Precisión vs Recall en el set de validación."
+      ],
+      recommendedMetric: "Exactitud (Accuracy) en set de prueba > 78%"
+    },
     lessons: [
       {
         n: 10,
@@ -628,6 +720,19 @@ const UNITS = [
   {
     title: "Unidad 5: Clustering",
     path: "5-Clustering",
+    externalPractice: {
+      provider: "Kaggle Datasets",
+      badge: "Clustering No Supervisado",
+      title: "Kaggle: Mall Customer Segmentation con K-Means",
+      url: "https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python",
+      description: "Aprende a segmentar clientes de un centro comercial según sus ingresos anuales y puntuación de gasto. Sin etiquetas previas, el algoritmo K-Means identifica grupos de alto valor, compradores conservadores y clientes impulsivos.",
+      tasks: [
+        "Estandariza las variables de ingreso anual y puntaje de gasto (StandardScaler).",
+        "Calcula la suma de cuadrados intra-cluster (WCSS / Inercia) para K de 1 a 10 y grafica la curva del codo.",
+        "Identifica el codo óptimo (K=5) y describe el perfil comercial de cada cluster identificado."
+      ],
+      recommendedMetric: "Silhouette Score > 0.55 con K=5 clusters"
+    },
     lessons: [
       {
         n: 14, title: "Aprendizaje No Supervisado y Geometría", folder: "1-Visualize",
@@ -722,6 +827,19 @@ const UNITS = [
   {
     title: "Unidad 6: NLP (Lenguaje Natural)",
     path: "6-NLP",
+    externalPractice: {
+      provider: "Hugging Face & Kaggle",
+      badge: "Procesamiento de Lenguaje Natural",
+      title: "Hugging Face NLP Course & Kaggle IMDB 50K Sentiment Analysis",
+      url: "https://huggingface.co/learn/nlp-course",
+      description: "Profundiza en la evolución del NLP: desde la vectorización léxica TF-IDF sobre 50,000 reseñas de cine en IMDB hasta el uso de tokenizadores sub-palabra y pipelines de Hugging Face Transformers pre-entrenados.",
+      tasks: [
+        "Entrena un TfidfVectorizer(ngram_range=(1,2), max_features=10000) sobre el dataset IMDB.",
+        "Ajusta una regresión logística binaria y analiza qué palabras tienen los coeficientes positivos y negativos más altos.",
+        "Compara el resultado contra el pipeline zero-shot de Hugging Face: pipeline('sentiment-analysis')."
+      ],
+      recommendedMetric: "F1-score > 0.88 en polaridad de sentimiento"
+    },
     lessons: [
       {
         n: 16, title: "Introducción al NLP y Chatbots Simples", folder: "1-Introduction-to-NLP",
@@ -937,6 +1055,19 @@ const UNITS = [
   {
     title: "Unidad 7: Series de Tiempo",
     path: "7-TimeSeries",
+    externalPractice: {
+      provider: "Kaggle Competitions",
+      badge: "Pronóstico Temporal Multivariado",
+      title: "Kaggle: Store Sales — Time Series Forecasting",
+      url: "https://www.kaggle.com/competitions/store-sales-time-series-forecasting",
+      description: "Pronostica la demanda y ventas de miles de productos en las tiendas de víveres de Corporación Favorita (Ecuador). Aprende a modelar estacionalidad cíclica (días festivos, quincenas), tendencias y eventos externos como el precio del petróleo.",
+      tasks: [
+        "Descompón la serie temporal en Tendencia, Estacionalidad y Residuo con Seasonal-Decompose.",
+        "Crea variables rezagadas (lag features) y promedios móviles (rolling window) de 7 y 30 días.",
+        "Ajusta un modelo SARIMAX o modelo de regresión con rezagos y evalúa con RMSLE."
+      ],
+      recommendedMetric: "RMSLE en validación temporal < 0.42"
+    },
     lessons: [
       {
         n: 21, title: "Fundamentos de Pronóstico y Estacionariedad", folder: "1-Introduction",
@@ -1070,6 +1201,19 @@ const UNITS = [
   {
     title: "Unidad 8: Aprendizaje por Refuerzo",
     path: "8-Reinforcement",
+    externalPractice: {
+      provider: "Farama Gymnasium & Hugging Face Deep RL",
+      badge: "Q-Learning & MDPs",
+      title: "Gymnasium: FrozenLake & Hugging Face Deep RL Course",
+      url: "https://gymnasium.farama.org/",
+      description: "El estándar de oro para crear agentes de Aprendizaje por Refuerzo. Implementa el bucle env.reset() y env.step(action), actualiza la tabla Q con la ecuación de Bellman y resuelve entornos discretos como FrozenLake-v1 y CliffWalking.",
+      tasks: [
+        "Inicializa el entorno FrozenLake-v1 en Gymnasium con is_slippery=True.",
+        "Programa la regla de actualización de Q-Learning con tasa de aprendizaje alfa=0.8 y descuento gamma=0.95.",
+        "Aplica decaimiento exponencial de exploración (epsilon-greedy) hasta converger a la política óptima."
+      ],
+      recommendedMetric: "Tasa de éxito del agente > 0.74 en 100 episodios evaluados"
+    },
     lessons: [
       {
         n: 24, title: "Fundamentos de RL y la Ecuación de Bellman", folder: "1-QLearning",
@@ -1151,6 +1295,19 @@ const UNITS = [
   {
     title: "Unidad 9: ML en el Mundo Real",
     path: "9-Real-World",
+    externalPractice: {
+      provider: "Microsoft Responsible AI Toolbox",
+      badge: "Gobernanza & Auditoría Ética",
+      title: "Microsoft Responsible AI Dashboard: Equidad, Interpretabilidad y Error Analysis",
+      url: "https://github.com/microsoft/responsible-ai-toolbox",
+      description: "La suite abierta de Microsoft para auditar sistemas de ML en producción. Combina Fairlearn (evaluación de paridad demográfica y disparidad de tasas de error), InterpretML (valores SHAP para explicabilidad) y Error Analysis (árboles de fallas por cohortes de datos).",
+      tasks: [
+        "Audita la disparidad de falsos positivos en subgrupos sensibles (ej. género, edad o código postal).",
+        "Genera explicaciones locales con SHAP para entender los principales inductores de una decisión denegada.",
+        "Genera explicaciones contrafácticas (DiCE) para ofrecer al usuario una vía de acción correctiva viable."
+      ],
+      recommendedMetric: "Disparate Impact Ratio > 0.80 (cumplimiento de la regla de los cuatro quintos)"
+    },
     lessons: [
       {
         n: 26, title: "Industrialización, Data Drift y MLOps", folder: "1-Applications",
@@ -1294,9 +1451,11 @@ function getLocalizedUnit(unit, lang) {
   const l = lang || (typeof I18nManager !== 'undefined' ? I18nManager.getLang() : 'es');
   if (l !== 'en' || typeof COURSE_TRANSLATIONS_EN === 'undefined') return unit;
   const transTitle = COURSE_TRANSLATIONS_EN.units?.[unit.title];
+  const transPractice = COURSE_TRANSLATIONS_EN.externalPractice?.[unit.title];
   return {
     ...unit,
-    title: transTitle || unit.title
+    title: transTitle || unit.title,
+    externalPractice: transPractice || unit.externalPractice
   };
 }
 

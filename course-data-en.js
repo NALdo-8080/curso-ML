@@ -15,6 +15,125 @@ const COURSE_TRANSLATIONS_EN = {
     "Unidad 8: Aprendizaje por Refuerzo": "Unit 8: Reinforcement Learning",
     "Unidad 9: ML en el Mundo Real": "Unit 9: Real-World ML"
   },
+  "externalPractice": {
+    "Unidad 1: Introducción al ML": {
+      "provider": "Google Teachable Machine",
+      "badge": "Vision & Audio (No-Code)",
+      "title": "Train Your First No-Code Model with Teachable Machine",
+      "url": "https://teachablemachine.withgoogle.com/",
+      "description": "Experience firsthand the difference between coding explicit rules and training models. Use your webcam or upload images to create 2+ classes (e.g. postures, objects, gestures). The model trains in seconds using browser-side Transfer Learning.",
+      "tasks": [
+        "Create a standard image project with at least 2 distinct classes.",
+        "Capture at least 20 sample images per class under varied lighting and angles.",
+        "Train the model and inspect the live real-time confidence probability bars."
+      ],
+      "recommendedMetric": "Classification confidence > 90% on unseen test samples"
+    },
+    "Unidad 2: Regresión": {
+      "provider": "Kaggle Competitions",
+      "badge": "Real Tabular Regression",
+      "title": "Kaggle: House Prices — Advanced Regression Techniques",
+      "url": "https://www.kaggle.com/c/house-prices-advanced-regression-techniques",
+      "description": "The canonical data science regression benchmark. Predict final residential sale prices across 79 explanatory features. Master skewness handling, outlier detection, and multicollinearity.",
+      "tasks": [
+        "Apply log transformation on the target variable (SalePrice) to normalize variance.",
+        "Impute missing values on critical features (LotFrontage, GarageYrBlt) and one-hot encode categoricals.",
+        "Train a regularized linear model (Ridge/Lasso) and evaluate cross-validated RMSE."
+      ],
+      "recommendedMetric": "Log(SalePrice) RMSE < 0.14"
+    },
+    "Unidad 3: Aplicación Web": {
+      "provider": "Streamlit Open Source",
+      "badge": "Deployment & MLOps",
+      "title": "Deploy Your ML Model as an Interactive Web App with Streamlit",
+      "url": "https://docs.streamlit.io/get-started",
+      "description": "Transform Python scripts and trained machine learning models into interactive web apps in under 20 lines of code—without writing HTML, CSS, or JS. Perfect for rapid prototyping.",
+      "tasks": [
+        "Create an app.py script importing streamlit and your serialized model.",
+        "Add interactive input widgets (st.slider, st.selectbox) to capture user features.",
+        "Feed inputs into model.predict() and render output using st.metric and reactive charts."
+      ],
+      "recommendedMetric": "Functional web app running locally via 'streamlit run app.py'"
+    },
+    "Unidad 4: Clasificación": {
+      "provider": "Kaggle Competitions",
+      "badge": "Binary Classification",
+      "title": "Kaggle: Titanic — Machine Learning from Disaster",
+      "url": "https://www.kaggle.com/c/titanic",
+      "description": "The world's most renowned binary classification challenge. Build a predictive model answering: 'what sorts of people were more likely to survive?' using passenger class, gender, age, and fare.",
+      "tasks": [
+        "Engineer title features ('Mr.', 'Mrs.', 'Master') parsed directly from passenger names.",
+        "Train a Decision Tree or Random Forest classifier with scikit-learn.",
+        "Generate a confusion matrix and analyze the Precision-Recall tradeoff on validation splits."
+      ],
+      "recommendedMetric": "Test set Accuracy > 78%"
+    },
+    "Unidad 5: Clustering": {
+      "provider": "Kaggle Datasets",
+      "badge": "Unsupervised Clustering",
+      "title": "Kaggle: Mall Customer Segmentation with K-Means",
+      "url": "https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python",
+      "description": "Learn to segment mall customers based on Annual Income and Spending Score. Without ground-truth labels, K-Means discovers high-value cohorts, conservative shoppers, and impulsive spenders.",
+      "tasks": [
+        "Standardize features (Annual Income and Spending Score) using StandardScaler.",
+        "Compute WCSS inertia across K=1..10 and plot the Elbow curve to isolate the optimal inflection point.",
+        "Isolate the optimal cluster count (K=5) and profile the commercial personas of each cluster."
+      ],
+      "recommendedMetric": "Silhouette Score > 0.55 at K=5 clusters"
+    },
+    "Unidad 6: NLP (Lenguaje Natural)": {
+      "provider": "Hugging Face & Kaggle",
+      "badge": "Natural Language Processing",
+      "title": "Hugging Face NLP Course & Kaggle IMDB 50K Sentiment Analysis",
+      "url": "https://huggingface.co/learn/nlp-course",
+      "description": "Master modern NLP progression: from TF-IDF n-gram vectorization on 50,000 IMDB movie reviews to subword tokenizers and state-of-the-art Hugging Face Transformer pipelines.",
+      "tasks": [
+        "Fit a TfidfVectorizer(ngram_range=(1,2), max_features=10000) on the IMDB dataset.",
+        "Train a Logistic Regression classifier and inspect top positive and negative vocabulary coefficients.",
+        "Compare accuracy and nuance against the Hugging Face pretrained pipeline('sentiment-analysis')."
+      ],
+      "recommendedMetric": "F1-score > 0.88 on binary sentiment polarity"
+    },
+    "Unidad 7: Series de Tiempo": {
+      "provider": "Kaggle Competitions",
+      "badge": "Multivariate Time Series",
+      "title": "Kaggle: Store Sales — Time Series Forecasting",
+      "url": "https://www.kaggle.com/competitions/store-sales-time-series-forecasting",
+      "description": "Forecast demand and grocery sales across thousands of items for Ecuadorian supermarket chain Corporación Favorita. Model cyclical seasonality (paydays, holidays), trends, and external shocks (oil price).",
+      "tasks": [
+        "Decompose sales time series into Trend, Seasonal, and Residual components.",
+        "Engineer 7-day and 30-day lag features and rolling window statistical aggregations.",
+        "Train a SARIMAX or lag-feature gradient boosting model evaluated with RMSLE."
+      ],
+      "recommendedMetric": "Time-split RMSLE < 0.42"
+    },
+    "Unidad 8: Aprendizaje por Refuerzo": {
+      "provider": "Farama Gymnasium & Hugging Face Deep RL",
+      "badge": "Q-Learning & MDPs",
+      "title": "Gymnasium: FrozenLake & Hugging Face Deep RL Course",
+      "url": "https://gymnasium.farama.org/",
+      "description": "The gold standard library for reinforcement learning agents. Run the classic env.reset() and env.step(action) loop, update Q-tables using Bellman optimality, and solve FrozenLake-v1 and CliffWalking.",
+      "tasks": [
+        "Initialize Gymnasium FrozenLake-v1 environment with is_slippery=True.",
+        "Code the Q-Learning update rule with learning rate alpha=0.8 and discount gamma=0.95.",
+        "Implement exponential epsilon-greedy decay to guarantee convergence to the optimal policy."
+      ],
+      "recommendedMetric": "Agent win rate > 0.74 across 100 evaluation episodes"
+    },
+    "Unidad 9: ML en el Mundo Real": {
+      "provider": "Microsoft Responsible AI Toolbox",
+      "badge": "Governance & Ethical Auditing",
+      "title": "Microsoft Responsible AI Dashboard: Fairness, Interpretability & Error Analysis",
+      "url": "https://github.com/microsoft/responsible-ai-toolbox",
+      "description": "Microsoft's open source suite for production ML model debugging and governance. Combines Fairlearn (demographic parity and disparate impact), InterpretML (SHAP explanations), and Error Analysis cohort trees.",
+      "tasks": [
+        "Audit false positive rate disparity across protected demographic cohorts (gender, age, location).",
+        "Generate local SHAP summary attributions for adverse outcome decisions.",
+        "Synthesize counterfactual explanations (DiCE) providing actionable recourse to affected users."
+      ],
+      "recommendedMetric": "Disparate Impact Ratio > 0.80 (Four-Fifths Rule compliance)"
+    }
+  },
   "lessons": {
     "1": {
       "title": "What is Machine Learning",

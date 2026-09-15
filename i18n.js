@@ -247,7 +247,29 @@ const I18N_DICTIONARY = {
     sim_rai_status_fair: "✓ Cumplida (>0.80)",
     sim_rai_status_unfair: "✗ Disparidad (<0.80)",
     sim_rai_btn_disable: "Desactivar Re-ponderación",
-    sim_rai_btn_enable: "Aplicar Re-ponderación de Muestras (Reweighting)"
+    sim_rai_btn_enable: "Aplicar Re-ponderación de Muestras (Reweighting)",
+
+    // Práctica en el Mundo Real
+    external_practice_title: "Práctica en el Mundo Real",
+    external_practice_badge: "Reto Práctico",
+    external_practice_desc_prefix: "Aplica lo aprendido en esta unidad con un dataset o entorno estándar de la industria:",
+    external_practice_tasks_title: "Tareas Recomendadas:",
+    external_practice_metric_title: "Métrica de Éxito:",
+    external_practice_btn: "Abrir Reto en {provider} ↗",
+    external_practice_theory_callout: "Pon a prueba tus habilidades más allá del curso con este proyecto real:",
+    
+    // Pyodide Python Runner
+    pyodide_mode_interactive: "Simulador Gráfico",
+    pyodide_mode_python: "🐍 Código Python (Scikit-Learn)",
+    pyodide_loading: "Cargando motor de Python (Pyodide) en el navegador...",
+    pyodide_loading_packages: "Descargando scikit-learn y numpy...",
+    pyodide_ready: "Entorno Python listo para ejecutar.",
+    pyodide_btn_run: "▶ Ejecutar Código",
+    pyodide_btn_reset: "↺ Restaurar Plantilla",
+    pyodide_status_running: "Ejecutando script...",
+    pyodide_status_success: "Ejecución completada con éxito.",
+    pyodide_status_error: "Error de ejecución en Python",
+    pyodide_console_title: "Terminal de Salida Python (sys.stdout)"
   },
   en: {
     // Navigation & General
@@ -493,7 +515,29 @@ const I18N_DICTIONARY = {
     sim_rai_status_fair: "✓ Compliant (>0.80)",
     sim_rai_status_unfair: "✗ Disparity (<0.80)",
     sim_rai_btn_disable: "Disable Sample Reweighting",
-    sim_rai_btn_enable: "Apply Sample Reweighting"
+    sim_rai_btn_enable: "Apply Sample Reweighting",
+
+    // Real-World Practice
+    external_practice_title: "Real-World Practice",
+    external_practice_badge: "Hands-on Challenge",
+    external_practice_desc_prefix: "Apply what you've learned in this unit using an industry-standard dataset or environment:",
+    external_practice_tasks_title: "Recommended Tasks:",
+    external_practice_metric_title: "Target Metric:",
+    external_practice_btn: "Open Challenge on {provider} ↗",
+    external_practice_theory_callout: "Test your skills beyond the curriculum with this hands-on project:",
+    
+    // Pyodide Python Runner
+    pyodide_mode_interactive: "Visual Simulator",
+    pyodide_mode_python: "🐍 Python Code (Scikit-Learn)",
+    pyodide_loading: "Loading browser Python engine (Pyodide)...",
+    pyodide_loading_packages: "Downloading scikit-learn and numpy...",
+    pyodide_ready: "Python runtime ready to execute.",
+    pyodide_btn_run: "▶ Run Code",
+    pyodide_btn_reset: "↺ Reset Template",
+    pyodide_status_running: "Executing script...",
+    pyodide_status_success: "Execution finished successfully.",
+    pyodide_status_error: "Python Execution Error",
+    pyodide_console_title: "Python Output Terminal (sys.stdout)"
   }
 };
 
