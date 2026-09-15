@@ -23,9 +23,9 @@
 .back-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+}
+.back-btn span {
+  display: inline !important;
 }
 
-.back-btn span:first-child {
-  display: none;
-}

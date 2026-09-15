@@ -95,17 +95,20 @@ html, body {
 .back-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: var(--text-main);
+  justify-content: center;
+  color: #ffffff;
   text-decoration: none;
   font-size: 13px;
   font-weight: 700;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: var(--radius-sm);
   background: var(--accent-indigo);
   border: 1px solid var(--accent-indigo);
   box-shadow: 0 3px 10px rgba(99, 102, 241, 0.3);
   transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  touch-action: manipulation;
 }
 .back-btn:hover {
   color: #ffffff;
@@ -118,8 +121,9 @@ html, body {
   outline: 3px solid rgba(56, 189, 248, 0.7);
   outline-offset: 2px;
 }
-.back-btn span:first-child {
-  display: inline;
+.back-btn span {
+  display: inline !important;
+  color: #ffffff !important;
 }
 
 .nav-title {
@@ -508,28 +512,55 @@ html, body {
   border-radius: var(--radius-sm);
   transition: all 0.15s;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+  touch-action: manipulation;
 }
 .btn-practice-top:hover {
   background: var(--accent-indigo-hover);
   transform: translateY(-1px);
 }
+.btn-lab-text-short {
+  display: none;
+}
 
 .sidebar-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  padding: 0;
   background: var(--bg-surface-2);
   border: 1px solid var(--border);
   color: var(--text-main);
-  padding: 6px 12px;
   border-radius: var(--radius-sm);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
   -webkit-user-select: none;
   user-select: none;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+
+/* Mobile Sidebar Backdrop */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 92;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
 }
 .sidebar-toggle-btn:hover {
   background: var(--bg-surface-hover);
@@ -538,8 +569,11 @@ html, body {
   transform: translateY(-1px);
 }
 .sidebar-toggle-icon {
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* LAYOUT CONTAINER (Sidebar + Main Reading) */
@@ -1243,7 +1277,7 @@ html, body {
   white-space: nowrap;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE & MOBILE ERGONOMICS */
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
   .layout.sidebar-collapsed { grid-template-columns: 1fr; }
@@ -1262,25 +1296,128 @@ html, body {
   .settings-dropdown { right: -6px; width: 270px; }
 }
 
-@media (max-width: 600px) {
-  .navbar { padding: 0 12px; height: 56px; }
+@media (max-width: 640px) {
+  .navbar { padding: 0 10px; height: 56px; }
+  .nav-left { gap: 6px; }
+  .nav-right { gap: 6px; }
   .nav-title { display: none; }
-  .xp-badge { font-size: 11px; padding: 4px 8px; white-space: nowrap; flex-shrink: 0; }
-  .btn-practice-top { padding: 5px 10px; font-size: 12px; }
-  .fixed-pager-bar { padding: 6px 10px; }
-  .pager-btn { padding: 6px 10px; font-size: 12px; }
+
+  /* Back Button: Clean, text-only button without arrow */
+  .back-btn {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 38px !important;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-sm);
+    white-space: nowrap !important;
+    flex-shrink: 0;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .back-btn span {
+    display: inline !important;
+    color: #ffffff !important;
+  }
+
+  /* Practice / Lab Button: Clean pill with short text */
+  .btn-practice-top {
+    height: 38px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: var(--radius-sm);
+  }
+  .btn-lab-text-full {
+    display: none;
+  }
+  .btn-lab-text-short {
+    display: inline;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .sidebar-toggle-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .xp-badge {
+    font-size: 11px;
+    padding: 4px 7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .settings-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+
+  /* Fixed Pager Bar: Ergonomic thumb targets */
+  .fixed-pager-bar {
+    padding: 6px 10px;
+  }
+  .fixed-pager-inner {
+    gap: 8px;
+  }
+  .pager-btn-text {
+    display: none;
+  }
+  .pager-btn {
+    min-width: 44px;
+    height: 38px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    touch-action: manipulation;
+  }
+  .pager-arrow {
+    font-size: 16px;
+  }
+  .pager-count-badge {
+    font-size: 11.5px;
+    padding: 5px 10px;
+  }
+
+  .sidebar {
+    top: 56px;
+    height: calc(100vh - 56px);
+  }
+
+  .reading-container {
+    padding: 16px 12px 60px;
+  }
+  .lesson-h1 {
+    font-size: 22px;
+    line-height: 1.3;
+  }
+  .cta-practice-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding: 18px 14px;
+  }
+  .btn-cta-go {
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+  }
 }
 
-@media (max-width: 480px) {
-  .pager-btn-text { display: none; }
+@media (max-width: 400px) {
+  .navbar { padding: 0 6px; }
+  .settings-dropdown { right: -6px; width: 280px; max-width: calc(100vw - 16px); }
+  .fixed-pager-bar { padding: 4px 6px; }
   .pager-count-badge { font-size: 11px; padding: 4px 8px; }
-}
-
-@media (max-width: 420px) {
-  .navbar { padding: 0 8px; }
-  .back-btn { gap: 6px; padding: 7px 10px; font-size: 12px; }
-  .xp-badge { font-size: 10px; padding: 3px 5px; }
-  .btn-practice-top span { font-size: 11px; }
 }
 </style>
 </head>
@@ -1289,12 +1426,10 @@ html, body {
 <!-- TOP NAVBAR -->
 <header class="navbar">
   <div class="nav-left">
-    <button class="sidebar-toggle-btn" id="toggle-sidebar-btn" title="Mostrar/Ocultar Temario" aria-label="Mostrar u ocultar temario">
+    <button class="sidebar-toggle-btn" id="toggle-sidebar-btn" data-i18n-title="theory_toggle_syllabus" data-i18n-aria="theory_toggle_syllabus" title="Temario" aria-label="Temario">
       <span class="sidebar-toggle-icon">☰</span>
-      <span class="sidebar-toggle-text" data-i18n="theory_toggle_syllabus">Temario</span>
     </button>
-    <a href="index.html" class="back-btn">
-      <span aria-hidden="true">←</span>
+    <a href="index.html" class="back-btn" title="Volver al inicio" aria-label="Volver al inicio">
       <span data-i18n="nav_back_dashboard">Volver al inicio</span>
     </a>
     <div class="nav-title">
@@ -1347,11 +1482,16 @@ html, body {
       </div>
     </div>
 
-    <a href="practica.html" class="btn-practice-top" id="top-practice-btn">
-      <span data-i18n="theory_top_lab_btn">⚡ Laboratorio</span>
+    <a href="practica.html" class="btn-practice-top" id="top-practice-btn" title="Laboratorio interactivo" aria-label="Laboratorio interactivo">
+      <span class="btn-lab-icon">⚡</span>
+      <span class="btn-lab-text-full" data-i18n="theory_top_lab_btn">Laboratorio</span>
+      <span class="btn-lab-text-short">Lab</span>
     </a>
   </div>
 </header>
+
+<!-- Mobile Sidebar Backdrop (tap to close) -->
+<div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
 <!-- MAIN WORKBENCH LAYOUT -->
 <div class="layout">
@@ -1503,11 +1643,11 @@ function renderSidebar() {
   const container = document.getElementById('sidebar-units-container');
   container.innerHTML = '';
   const isEn = (typeof I18nManager !== 'undefined' && I18nManager.getLang() === 'en');
-  const activeUnitId = (FLAT[currentIdx] && FLAT[currentIdx].unit) ? FLAT[currentIdx].unit.id : null;
+  const activeUnitIdx = (FLAT[currentIdx] && typeof FLAT[currentIdx].ui === 'number') ? FLAT[currentIdx].ui : -1;
 
   UNITS.forEach((u, uIdx) => {
     const locUnit = (typeof getLocalizedUnit === 'function') ? getLocalizedUnit(u, isEn ? 'en' : 'es') : u;
-    const isUnitActive = (u.id === activeUnitId);
+    const isUnitActive = (uIdx === activeUnitIdx);
     const isOpen = openUnits.hasOwnProperty(uIdx) ? openUnits[uIdx] : isUnitActive;
 
     const unitDiv = document.createElement('div');
@@ -1550,7 +1690,7 @@ function renderSidebar() {
       item.href = isUnlocked ? `?lesson=${l.n}` : '#';
       item.style.opacity = isUnlocked ? '1' : '0.5';
       item.style.pointerEvents = isUnlocked ? 'auto' : 'none';
-      item.title = isUnlocked ? '' : (isEn ? 'Complete the previous laboratory to unlock this lesson' : 'Completa el laboratorio de la lección anterior para desbloquear esta lección');
+      item.title = isUnlocked ? '' : ((window.I18nManager && window.I18nManager.t('theory_sidebar_lock_tooltip')) || (isEn ? 'Complete the previous laboratory to unlock this lesson' : 'Completa el laboratorio de la lección anterior para desbloquear esta lección'));
       item.innerHTML = `
         <span class="lesson-check-icon ${isDone ? 'done' : ''}">${isDone ? '✓' : ''}</span>
         <span style="flex:1;min-width:0;word-break:break-word;line-height:1.35;">${locLesson.n}. ${locLesson.title}</span>
@@ -1568,6 +1708,8 @@ function renderSidebar() {
         // En móviles, cerrar sidebar
         if (window.innerWidth <= 900) {
           document.getElementById('sidebar').classList.remove('open');
+          const bd = document.getElementById('sidebar-backdrop');
+          if (bd) bd.classList.remove('active');
         }
       });
 
@@ -1625,7 +1767,7 @@ function loadLesson(idx) {
   document.getElementById('prev-lesson-btn').disabled = (currentIdx === 0);
   nextBtn.disabled = (currentIdx === FLAT.length - 1 || !isNextUnlocked);
   if (!isNextUnlocked && currentIdx < FLAT.length - 1) {
-    nextBtn.title = isEn ? 'Complete the laboratory of this lesson to unlock the next one' : 'Completa el laboratorio de esta lección para desbloquear la siguiente';
+    nextBtn.title = (window.I18nManager && window.I18nManager.t('lab_alert_curr_lab')) || (isEn ? 'Complete the current laboratory to unlock the next lesson' : 'Debes completar el laboratorio actual para desbloquear la siguiente lección');
     nextBtn.style.opacity = '0.5';
     nextBtn.style.cursor = 'not-allowed';
   } else {
@@ -1635,7 +1777,7 @@ function loadLesson(idx) {
   }
 
   // Ensure the active unit is open in accordion
-  const activeUnitIdx = (FLAT[currentIdx] && FLAT[currentIdx].unit) ? UNITS.findIndex(u => u.id === FLAT[currentIdx].unit.id) : -1;
+  const activeUnitIdx = (FLAT[currentIdx] && typeof FLAT[currentIdx].ui === 'number') ? FLAT[currentIdx].ui : -1;
   if (activeUnitIdx >= 0) {
     openUnits[activeUnitIdx] = true;
   }
@@ -1656,7 +1798,9 @@ function updatePracticeButtons(lessonNum) {
   const isEn = (typeof I18nManager !== 'undefined' && I18nManager.getLang() === 'en');
 
   if (isUnlocked) {
-    topBtn.innerHTML = `<span>${I18nManager.t('theory_top_lab_btn')}</span>`;
+    const fullText = I18nManager.t('theory_top_lab_btn').replace('⚡ ', '');
+    const shortText = I18nManager.t('theory_top_lab_btn_short').replace('⚡ ', '');
+    topBtn.innerHTML = `<span class="btn-lab-icon">⚡</span> <span class="btn-lab-text-full">${fullText}</span><span class="btn-lab-text-short">${shortText}</span>`;
     topBtn.href = `practica.html?lesson=${lessonNum}`;
     topBtn.style.opacity = '1';
     topBtn.title = isEn ? "Interactive lab unlocked" : "Laboratorio interactivo desbloqueado";
@@ -1675,7 +1819,9 @@ function updatePracticeButtons(lessonNum) {
       ctaLink.onclick = null;
     }
   } else {
-    topBtn.innerHTML = `<span>${I18nManager.t('theory_top_lab_locked_btn')}</span>`;
+    const fullLocked = I18nManager.t('theory_top_lab_locked_btn').replace('🔒 ', '');
+    const shortLocked = I18nManager.t('theory_top_lab_locked_btn_short').replace('🔒 ', '');
+    topBtn.innerHTML = `<span class="btn-lab-icon">🔒</span> <span class="btn-lab-text-full">${fullLocked}</span><span class="btn-lab-text-short">${shortLocked}</span>`;
     topBtn.href = `#quiz-box`;
     topBtn.style.opacity = '0.7';
     topBtn.title = isEn ? "Complete conceptual check to unlock lab" : "Completa la comprobación conceptual para desbloquear el laboratorio";
@@ -1782,7 +1928,7 @@ document.getElementById('next-lesson-btn').addEventListener('click', () => {
     const nextLessonNum = FLAT[currentIdx + 1].lesson.n;
     if (!StorageManager.canAccessLessonNumber(nextLessonNum)) {
       const isEn = (typeof I18nManager !== 'undefined' && I18nManager.getLang() === 'en');
-      alert(isEn ? 'Complete the laboratory of this lesson to unlock the next one.' : 'Debes completar el laboratorio de esta lección para desbloquear la siguiente.');
+      alert((window.I18nManager && window.I18nManager.t('lab_alert_curr_lab')) || (isEn ? 'Complete the current laboratory to unlock the next lesson.' : 'Debes completar el laboratorio actual para desbloquear la siguiente lección.'));
       return;
     }
     loadLesson(currentIdx + 1);
@@ -1794,10 +1940,13 @@ document.getElementById('next-lesson-btn').addEventListener('click', () => {
 const sidebarEl = document.getElementById('sidebar');
 const layoutEl = document.querySelector('.layout');
 const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+const sidebarBackdrop = document.getElementById('sidebar-backdrop');
 
 function toggleSidebar() {
   if (window.innerWidth <= 900) {
-    sidebarEl.classList.toggle('open');
+    const willOpen = !sidebarEl.classList.contains('open');
+    sidebarEl.classList.toggle('open', willOpen);
+    if (sidebarBackdrop) sidebarBackdrop.classList.toggle('active', willOpen);
   } else {
     sidebarEl.classList.toggle('collapsed');
     if (layoutEl) layoutEl.classList.toggle('sidebar-collapsed');
@@ -1806,6 +1955,12 @@ function toggleSidebar() {
 
 if (toggleSidebarBtn) {
   toggleSidebarBtn.addEventListener('click', toggleSidebar);
+}
+if (sidebarBackdrop) {
+  sidebarBackdrop.addEventListener('click', () => {
+    sidebarEl.classList.remove('open');
+    sidebarBackdrop.classList.remove('active');
+  });
 }
 
 // Popstate (Browser Back/Forward)

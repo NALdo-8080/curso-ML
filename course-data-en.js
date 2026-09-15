@@ -282,11 +282,11 @@ const COURSE_TRANSLATIONS_EN = {
         "The decision threshold (default 0.5) can be calibrated based on the operational cost of False Positives vs False Negatives."
       ],
       "instructions": [
-        "Calibrate weight (w) and bias (b) sliders to model the probability transition.",
-        "Set w >= 0.8 to create a decisive transition, and calibrate bias to align the threshold near the center.",
-        "Click 'Validate & Submit' to verify the calibrated sigmoid."
+        "Adjust the Weight (w) slider to a value greater than 1.2 to steepen the sigmoid curve.",
+        "Adjust the Bias (b) slider to a value between -2.0 and -5.0 to center the 50% threshold on the decision boundary.",
+        "Click 'Validate & Submit' to evaluate the decision boundary."
       ],
-      "hint": "Try weight w = 1.0 to 1.5 and bias b = -1.0 to -2.0 to center the inflection point.",
+      "hint": "Increasing 'weight' steepens the curve; shifting 'bias' moves the position of the 50% cutoff point.",
       "quiz": {
         "q": "Why can't we use standard Linear Regression directly to predict probability of loan default?",
         "opts": [
@@ -300,8 +300,8 @@ const COURSE_TRANSLATIONS_EN = {
       },
       "exercise": {
         "title": "Sigmoid Calibration: Probability Boundary",
-        "passMsg": "Sigmoid properly calibrated! The curve models a realistic probabilistic transition boundary.",
-        "failMsg": "The sigmoid parameters are uncalibrated. Adjust weight and bias to ensure a smooth transition across the threshold."
+        "passMsg": "Sigmoid properly calibrated! The curve discriminates both classes with high confidence.",
+        "failMsg": "Bias uncalibrated: adjust 'w' greater than 1.2 and 'b' between -2.0 and -5.0 to center the sigmoid."
       }
     },
     "9": {

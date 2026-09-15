@@ -1,9 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ML for Beginners — DataCamp Interactive Experience</title>
+<script>
+  (function() {
+    try {
+      var t = localStorage.getItem('ml_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+  })();
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
@@ -31,6 +39,29 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 6px;
+}
+
+[data-theme="light"] {
+  --dc-navy: #f8fafc;
+  --dc-navy-dark: #ffffff;
+  --dc-surface: #ffffff;
+  --dc-surface-2: #f1f5f9;
+  --dc-surface-hover: #e2e8f0;
+  --dc-border: #cbd5e1;
+  --dc-border-light: rgba(0, 0, 0, 0.08);
+  --dc-green: #059669;
+  --dc-green-hover: #047857;
+  --dc-green-soft: rgba(5, 150, 105, 0.12);
+  --dc-green-text: #059669;
+  --dc-cyan: #0891b2;
+  --dc-cyan-soft: rgba(8, 145, 178, 0.12);
+  --dc-yellow: #d97706;
+  --dc-yellow-soft: rgba(217, 119, 6, 0.12);
+  --dc-red: #dc2626;
+  --dc-red-soft: rgba(220, 38, 38, 0.12);
+  --dc-text: #0f172a;
+  --dc-text-dim: #475569;
+  --dc-text-muted: #64748b;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -125,7 +156,7 @@ code, pre { font-family: var(--font-mono); }
 
 /* Theory & Explanation Card */
 .theory-block {
-  font-size: 14.5px; line-height: 1.7; color: #cfd8dc; display: flex; flex-direction: column; gap: 14px;
+  font-size: 14.5px; line-height: 1.7; color: var(--dc-text-dim); display: flex; flex-direction: column; gap: 14px;
 }
 .theory-block strong { color: var(--dc-text); font-weight: 600; }
 .key-takeaways-card {
@@ -1042,6 +1073,57 @@ input[type="range"]::-moz-range-thumb {
   .left-pane.mobile-active, .right-pane.mobile-active { display: flex; }
   .progress-bar-bg { width: 80px; }
 }
+@media (max-width: 768px) {
+  .nav-center { display: none; }
+  .nav-left { gap: 8px; }
+  .nav-right { gap: 6px; }
+  #n8n-btn { display: none; }
+}
+@media (max-width: 600px) {
+  .navbar { padding: 0 10px; height: 56px; }
+  .dc-logo span { display: none; }
+  .nav-course-selector { padding: 5px 10px; font-size: 12px; white-space: nowrap; }
+  .xp-badge { font-size: 11px; padding: 4px 7px; white-space: nowrap; }
+  .nav-action-btn { width: 36px; height: 36px; min-width: 36px; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .mobile-tab-btn { font-size: 12px; padding: 10px 6px; }
+  .workspace-footer { flex-direction: column; gap: 8px; height: auto; padding: 12px; }
+  .workspace-footer-right { width: 100%; flex-direction: column; }
+  .workspace-footer-right .dc-btn { width: 100%; justify-content: center; height: 44px; }
+  .workspace-footer-left { width: 100%; }
+  .workspace-footer-left .dc-btn { width: 100%; justify-content: center; height: 38px; }
+}
+@media (max-width: 380px) {
+  .navbar { padding: 0 6px; }
+  .nav-course-selector span:first-child { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+/* Light Mode Theme Overrides */
+[data-theme="light"] .theory-block { color: var(--dc-text-dim); }
+[data-theme="light"] .theory-block strong { color: var(--dc-text); }
+[data-theme="light"] .quiz-option { background: var(--dc-surface); border-color: var(--dc-border); color: var(--dc-text); }
+[data-theme="light"] .quiz-option:hover { background: var(--dc-surface-hover); border-color: var(--dc-border); }
+[data-theme="light"] .quiz-option.correct { background: rgba(5, 150, 105, 0.12); border-color: #059669; color: #065f46; }
+[data-theme="light"] .quiz-option.wrong { background: rgba(220, 38, 38, 0.12); border-color: #dc2626; color: #991b1b; }
+[data-theme="light"] .lab-feedback-card.correct { background: rgba(5, 150, 105, 0.12); border-color: #059669; color: #065f46; }
+[data-theme="light"] .lab-feedback-card.wrong { background: rgba(220, 38, 38, 0.12); border-color: #dc2626; color: #991b1b; }
+[data-theme="light"] .interactive-chip { background: var(--dc-surface); border-color: var(--dc-border); color: var(--dc-text); }
+[data-theme="light"] .interactive-chip:hover { background: var(--dc-surface-hover); }
+[data-theme="light"] .category-col { background: var(--dc-surface-2); border-color: var(--dc-border); }
+[data-theme="light"] .category-col-title { color: var(--dc-text); }
+[data-theme="light"] .sort-slot { background: var(--dc-surface); border-color: var(--dc-border); color: var(--dc-text); }
+[data-theme="light"] .sort-slot:hover { background: var(--dc-surface-hover); }
+[data-theme="light"] .drawer-card, [data-theme="light"] .chapter-modal-content, [data-theme="light"] .n8n-modal-content { background: var(--dc-surface); border-color: var(--dc-border); color: var(--dc-text); }
+[data-theme="light"] .chapter-lesson-item { background: var(--dc-surface); color: var(--dc-text); border-color: var(--dc-border); }
+[data-theme="light"] .chapter-lesson-item:hover { background: var(--dc-surface-hover); }
+[data-theme="light"] .chapter-unit-head { color: var(--dc-text); }
+[data-theme="light"] .n8n-input, [data-theme="light"] .storage-json-area { background: var(--dc-surface-2); color: var(--dc-text); border-color: var(--dc-border); }
+[data-theme="light"] .instructions-card { background: var(--dc-surface); border-color: var(--dc-border); }
+[data-theme="light"] .instruction-item { color: var(--dc-text); }
+[data-theme="light"] .terminal-card { background: #0b1523; border-color: var(--dc-border); }
+[data-theme="light"] .terminal-header { background: #101e30; border-color: var(--dc-border); color: #94a3b8; }
+[data-theme="light"] .terminal-body { color: #cbd5e1; }
+[data-theme="light"] .dc-btn-secondary { background: var(--dc-surface-2); border-color: var(--dc-border); color: var(--dc-cyan); }
+[data-theme="light"] .toast-title { color: var(--dc-text); }
+[data-theme="light"] .success-modal { background: var(--dc-surface); border-color: var(--dc-green); }
 </style>
 </head>
 <body>
@@ -1073,6 +1155,7 @@ input[type="range"]::-moz-range-thumb {
       <span>⚡</span>
       <span id="nav-xp-counter">0 XP</span>
     </div>
+    <button class="nav-action-btn" id="theme-toggle-btn" title="Cambiar tema (Claro / Oscuro)">🌓</button>
     <button class="nav-action-btn" id="n8n-btn" title="Configurar webhook n8n">Webhook n8n</button>
   </div>
 </header>
@@ -1241,12 +1324,46 @@ const StorageManager = {
       console.warn("Storage no disponible, usando memoria.", e);
     }
     if (!this.cache) {
-      this.cache = { xp: 0, done: {}, quizzes: {}, exercises: {}, unlockedHints: {}, n8nWebhook: '' };
+      this.cache = { xp: 0, done: {}, quizzes: {}, exercises: {}, unlockedHints: {}, n8nWebhook: '', theme: 'dark' };
     }
     if (!this.cache.unlockedHints) this.cache.unlockedHints = {};
+    if (!this.cache.theme) {
+      try {
+        const savedTheme = (typeof localStorage !== 'undefined') ? localStorage.getItem('ml_theme') : null;
+        this.cache.theme = savedTheme || 'dark';
+      } catch(e) {
+        this.cache.theme = 'dark';
+      }
+    }
+    this.applyTheme();
   },
   save() {
     try { localStorage.setItem(this.KEY, JSON.stringify(this.cache)); } catch(e){}
+  },
+  getTheme() {
+    if (!this.cache) this.init();
+    return this.cache.theme || 'dark';
+  },
+  setTheme(t) {
+    if (!this.cache) this.init();
+    this.cache.theme = t;
+    this.save();
+    this.applyTheme();
+    try {
+      if (typeof localStorage !== 'undefined') localStorage.setItem('ml_theme', t);
+    } catch(e) {}
+  },
+  toggleTheme() {
+    const current = this.getTheme();
+    const next = current === 'light' ? 'dark' : 'light';
+    this.setTheme(next);
+    return next;
+  },
+  applyTheme() {
+    const theme = (this.cache && this.cache.theme) ? this.cache.theme : 'dark';
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
   },
   getXP() { return this.cache ? (this.cache.xp || 0) : 0; },
   addXP(amount) {
@@ -1284,15 +1401,26 @@ const StorageManager = {
       if (el) el.textContent = `${(this.cache.xp || 0).toLocaleString()} XP`;
     }
   },
-  isDone(n) { return !!(this.cache.done && this.cache.done[n]); },
+  isDone(n) {
+    if (!this.cache) this.init();
+    return !!(this.cache && this.cache.done && (this.cache.done[n] || this.cache.done[String(n)]));
+  },
   setDone(n, val) {
+    if (!this.cache) this.init();
     if (!this.cache.done) this.cache.done = {};
     if (val) this.cache.done[n] = { timestamp: Date.now() };
-    else delete this.cache.done[n];
+    else {
+      delete this.cache.done[n];
+      delete this.cache.done[String(n)];
+    }
     this.save();
   },
-  isQuizPassed(n) { return !!(this.cache.quizzes && this.cache.quizzes[n]); },
+  isQuizPassed(n) {
+    if (!this.cache) this.init();
+    return !!(this.cache && this.cache.quizzes && (this.cache.quizzes[n] || this.cache.quizzes[String(n)]));
+  },
   setQuizPassed(n) {
+    if (!this.cache) this.init();
     if (!this.cache.quizzes) this.cache.quizzes = {};
     if (!this.cache.quizzes[n]) {
       this.cache.quizzes[n] = true;
@@ -1304,8 +1432,10 @@ const StorageManager = {
     if (!this.cache) this.init();
     let maxLesson = 1;
     for (let i = 1; i <= 27; i++) {
-      if (this.isExercisePassed(i) || (this.cache.done && this.cache.done[i])) {
+      if (this.isExercisePassed(i) || (this.cache.done && (this.cache.done[i] || this.cache.done[String(i)]))) {
         maxLesson = Math.max(maxLesson, i + 1);
+      } else {
+        break;
       }
     }
     return Math.min(27, maxLesson);
@@ -1320,9 +1450,16 @@ const StorageManager = {
   canAccessPractice(n) {
     return this.canAccessLessonNumber(n);
   },
+  getExerciseState(n) {
+    if (!this.cache || !this.cache.exercises) return null;
+    const ex = this.cache.exercises[n] ?? this.cache.exercises[String(n)];
+    if (!ex) return null;
+    if (typeof ex === 'object' && ex.state !== undefined) return ex.state;
+    return ex;
+  },
   isExercisePassed(n) {
     if (!this.cache || !this.cache.exercises) return false;
-    const ex = this.cache.exercises[n];
+    const ex = this.cache.exercises[n] ?? this.cache.exercises[String(n)];
     if (!ex) return false;
     if (ex === true) return true;
     if (typeof ex === 'object') {
@@ -4516,6 +4653,8 @@ function showExerciseValidation(lesson, res) {
     }
   } else if (ex.type === 'sequence_sort' && ex.correctOrder) {
     const currentOrder = currentExerciseState.order || [];
+    let wrongCount = 0;
+    const wrongItems = [];
     currentOrder.forEach((id, idx) => {
       const slot = arena.querySelector(`.sort-slot[data-id="${id}"]`);
       if (!slot) return;
@@ -4524,12 +4663,52 @@ function showExerciseValidation(lesson, res) {
       if (oldBadge) oldBadge.remove();
 
       const isCorrect = (ex.correctOrder[idx] === id);
+      if (!isCorrect) {
+        wrongCount++;
+        const itemObj = (ex.items && Array.isArray(ex.items)) ? ex.items.find(x => x.id === id) : null;
+        wrongItems.push({
+          pos: idx + 1,
+          text: itemObj ? itemObj.text : id
+        });
+      }
       const b = document.createElement('span');
       b.className = `chip-status-badge ${isCorrect ? 'correct' : 'wrong'}`;
       b.textContent = isCorrect ? '✓' : '✗';
       slot.appendChild(b);
       slot.classList.add(isCorrect ? 'correct' : 'wrong');
     });
+
+    let fb = arena.querySelector('#lab-eval-feedback');
+    if (!fb) {
+      fb = document.createElement('div');
+      fb.id = 'lab-eval-feedback';
+      arena.appendChild(fb);
+    }
+
+    if (res.pass) {
+      fb.className = 'lab-feedback-card correct';
+      fb.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;">
+          <span style="font-size:16px;">✓</span>
+          <span>¡Secuencia ordenada correctamente! Pasos en orden perfecto.</span>
+        </div>
+      `;
+    } else {
+      fb.className = 'lab-feedback-card wrong';
+      const failTitle = `${wrongCount} paso(s) en posición incorrecta:`;
+      const failHint = 'Reordena los pasos marcados con ✗ hasta que todas las tarjetas se iluminen en verde.';
+      const wrongList = wrongItems.map(w => `• Posición #${w.pos}: "${w.text}"`).join('<br>');
+      fb.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:8px;">
+          <span style="font-size:16px;line-height:1;margin-top:2px;">✗</span>
+          <div>
+            <div style="font-weight:700;">${failTitle}</div>
+            <div style="font-size:12px;margin:6px 0;line-height:1.5;">${wrongList}</div>
+            <div style="font-size:11.5px;opacity:0.85;">${failHint}</div>
+          </div>
+        </div>
+      `;
+    }
   } else if (ex.type === 'interactive_filter') {
     const selected = currentExerciseState.selected || [];
     let errorDetails = [];
@@ -4584,6 +4763,45 @@ function showExerciseValidation(lesson, res) {
         </div>
       `;
     }
+  } else if (ex.type === 'sigmoid_threshold') {
+    let fb = arena.querySelector('#lab-eval-feedback');
+    if (!fb) {
+      fb = document.createElement('div');
+      fb.id = 'lab-eval-feedback';
+      arena.appendChild(fb);
+    }
+    const w = currentExerciseState.weight !== undefined ? currentExerciseState.weight : 0.8;
+    const b = currentExerciseState.bias !== undefined ? currentExerciseState.bias : -1.0;
+    const isCalibrated = (w >= 1.15 && b <= -1.95 && b >= -5.05);
+
+    if (res.pass || isCalibrated) {
+      fb.className = 'lab-feedback-card correct';
+      fb.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;font-weight:700;">
+          <span style="font-size:16px;">✓</span>
+          <span>¡Frontera logística calibrada! w=${w.toFixed(1)}, b=${b.toFixed(1)}. La sigmoide discrimina ambas clases con alta certeza.</span>
+        </div>
+      `;
+    } else {
+      fb.className = 'lab-feedback-card wrong';
+      const failTitle = w <= 0
+        ? "Pendiente nula o invertida: ajusta el Peso (w) mayor a 1.2."
+        : "Sesgo descalibrado: ajusta 'w' mayor a 1.2 y 'b' entre -2.0 y -5.0 para centrar la sigmoide.";
+      const failHint = "Ajusta Peso (w) > 1.2 y Sesgo (b) entre -2.0 y -5.0 usando el control o los botones [ − ] y [ + ].";
+      fb.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:8px;">
+          <span style="font-size:16px;line-height:1;margin-top:2px;">✗</span>
+          <div>
+            <div style="font-weight:700;">${failTitle}</div>
+            <div style="font-size:12px;margin:6px 0;line-height:1.5;">
+              • Peso (w): <strong>${w.toFixed(1)}</strong> ${w >= 1.15 ? '✓' : '✗ (Requiere w > 1.2)'}<br>
+              • Sesgo (b): <strong>${b.toFixed(1)}</strong> ${b <= -1.95 && b >= -5.05 ? '✓' : '✗ (Requiere b entre -2.0 y -5.0)'}
+            </div>
+            <div style="font-size:11.5px;opacity:0.85;">${failHint}</div>
+          </div>
+        </div>
+      `;
+    }
   }
 }
 
@@ -4591,6 +4809,14 @@ function showExerciseValidation(lesson, res) {
 // ACCIONES DEL WORKBENCH (RUN, SUBMIT, RESET)
 // ===============================================================
 function setupWorkbenchActions() {
+  // Theme toggle
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      StorageManager.toggleTheme();
+    });
+  }
+
   // Toggle Hint (Desbloqueo directo con deducción de XP, sin modal emergente)
   const hintToggleBtn = document.getElementById('hint-toggle-btn');
   if (hintToggleBtn) {

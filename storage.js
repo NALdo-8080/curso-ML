@@ -86,17 +86,21 @@ const StorageManager = {
     }
   },
   isDone(n) {
-    return !!(this.cache && this.cache.done && this.cache.done[n]);
+    if (!this.cache) this.init();
+    return !!(this.cache && this.cache.done && (this.cache.done[n] || this.cache.done[String(n)]));
   },
   setDone(n, val) {
     if (!this.cache) this.init();
     if (!this.cache.done) this.cache.done = {};
     if (val) this.cache.done[n] = { timestamp: Date.now() };
-    else delete this.cache.done[n];
+    else {
+      delete this.cache.done[n];
+      delete this.cache.done[String(n)];
+    }
     this.save();
   },
   isQuizPassed(n) {
-    return !!(this.cache && this.cache.quizzes && this.cache.quizzes[n]);
+    return !!(this.cache && this.cache.quizzes && (this.cache.quizzes[n] || this.cache.quizzes[String(n)]));
   },
   isTheoryCompleted(n) {
     return this.isQuizPassed(n);
@@ -105,8 +109,10 @@ const StorageManager = {
     if (!this.cache) this.init();
     let maxLesson = 1;
     for (let i = 1; i <= 27; i++) {
-      if (this.isExercisePassed(i) || (this.cache.done && this.cache.done[i])) {
+      if (this.isExercisePassed(i) || (this.cache.done && (this.cache.done[i] || this.cache.done[String(i)]))) {
         maxLesson = Math.max(maxLesson, i + 1);
+      } else {
+        break;
       }
     }
     return Math.min(27, maxLesson);
@@ -141,14 +147,14 @@ const StorageManager = {
   },
   getExerciseState(n) {
     if (!this.cache || !this.cache.exercises) return null;
-    const ex = this.cache.exercises[n];
+    const ex = this.cache.exercises[n] ?? this.cache.exercises[String(n)];
     if (!ex) return null;
     if (typeof ex === 'object' && ex.state !== undefined) return ex.state;
     return ex;
   },
   isExercisePassed(n) {
     if (!this.cache || !this.cache.exercises) return false;
-    const ex = this.cache.exercises[n];
+    const ex = this.cache.exercises[n] ?? this.cache.exercises[String(n)];
     if (!ex) return false;
     if (ex === true) return true;
     if (typeof ex === 'object') {

@@ -8,13 +8,13 @@ const I18N_DICTIONARY = {
     // Navigation & General
     nav_brand: "Machine Learning Track",
     nav_syllabus: "Temario (27 Lecciones)",
-    nav_theory: "📖 Teoría",
+    nav_theory: "Teoría",
     nav_practice: "⚡ Laboratorios",
     nav_home: "🏠 Inicio",
     nav_back_dashboard: "Volver al inicio",
     nav_theory_title: "Teoría & Fundamentos",
     nav_practice_title: "ML Studio // Lab",
-    nav_view_theory: "📖 Ver Teoría",
+    nav_view_theory: "Ver Teoría",
     nav_lesson_prefix: "Lección",
 
     // Settings
@@ -84,8 +84,13 @@ const I18N_DICTIONARY = {
     theory_btn_lab_unlocked: "⚡ Laboratorio (Desbloqueado)",
     theory_top_lab_btn: "⚡ Laboratorio",
     theory_top_lab_locked_btn: "🔒 Laboratorio",
+    theory_top_lab_btn_short: "⚡ Lab",
+    theory_top_lab_locked_btn_short: "🔒 Lab",
 
     // Practice Page (practica.html)
+    practice_tab_instructions: "📋 Instrucciones",
+    practice_tab_lab: "⚡ Laboratorio",
+    practice_btn_go_to_lab: "⚡ Ir al Laboratorio ➔",
     practice_spec_title: "Laboratorio Práctico (+100 XP)",
     practice_objective_title: "Objetivo del Modelo",
     practice_instructions_title: "Instrucciones de Calibración",
@@ -109,6 +114,9 @@ const I18N_DICTIONARY = {
     lab_status_passed: "✓ Aprobado",
     lab_status_unlocked: "⚡ Desbloqueado",
     lab_status_locked: "🔒 Requiere Teoría",
+    lab_status_lesson_locked: "🔒 Bloqueado",
+    lab_alert_prev_lab: "Debes completar el laboratorio de la lección anterior para desbloquear esta lección.",
+    lab_alert_curr_lab: "Debes completar el laboratorio actual para desbloquear la siguiente lección.",
 
     // Technical Hint XP Unlock
     hint_cost_pill: "-{cost} XP",
@@ -121,6 +129,7 @@ const I18N_DICTIONARY = {
     hint_cancel_btn: "Cancelar",
     hint_unlock_btn: "🔓 Desbloquear Pista (-{cost} XP)",
     hint_insufficient_xp: "XP insuficiente. Necesitas {cost} XP para desbloquear esta pista. Puedes aprobar la comprobación conceptual (+50 XP) para conseguir más XP.",
+    hint_insufficient_alert: "Necesitas {cost} XP para desbloquear esta pista técnica.",
     hint_insufficient_btn: "Entendido",
 
     // Modals
@@ -159,7 +168,7 @@ const I18N_DICTIONARY = {
     theory_cta_title: "Pon a prueba estos conceptos en el laboratorio",
     theory_cta_desc: "Interactúa con el simulador en vivo, calibra los parámetros y gana +100 XP adicionales.",
     theory_external_github: "Ver material de referencia en GitHub ↗",
-    theory_sidebar_lock_tooltip: "Completa la lección anterior para desbloquear esta lección",
+    theory_sidebar_lock_tooltip: "Completa el laboratorio de la lección anterior para desbloquear esta lección",
     theory_pager_text: "Lección {n} de {total}",
 
     // Practice UI & Shortcuts
@@ -175,6 +184,9 @@ const I18N_DICTIONARY = {
     sim_sort_grip_hint: "Arrastra para reordenar",
     sim_sort_handle_text: "Arrastrar",
     sim_reorder_log: "[REORDEN] Elemento movido de posición #{src} a #{dst}",
+    sim_sort_eval_pass: "¡Secuencia ordenada correctamente! Pasos en orden perfecto.",
+    sim_sort_eval_fail_title: "{count} paso(s) en posición incorrecta:",
+    sim_sort_eval_fail_hint: "Reordena los pasos marcados con ✗ hasta que todas las tarjetas se iluminen en verde.",
     sim_fairness_group_a: "Grupo A (Población Base): Umbral = 0.50 | FNR = 12%",
     sim_fairness_group_b: "Grupo B (Subgrupo Protegido): Umbral = {th} | FNR = {fnr}%",
     sim_fairness_disparity: "Disparidad FNR: {disp}%",
@@ -189,6 +201,10 @@ const I18N_DICTIONARY = {
     sim_poly_degree_label: "Grado Polinomio (d)",
     sim_sig_weight: "Peso (w)",
     sim_sig_bias: "Sesgo (b)",
+    sim_sig_eval_pass: "¡Frontera logística calibrada! w={w}, b={b}. La sigmoide discrimina ambas clases con alta certeza.",
+    sim_sig_eval_fail_w: "Pendiente nula o invertida: ajusta el Peso (w) mayor a 1.2.",
+    sim_sig_eval_fail_b: "Sesgo descalibrado: ajusta 'w' mayor a 1.2 y 'b' entre -2.0 y -5.0 para centrar la sigmoide.",
+    sim_sig_eval_fail_hint: "Ajusta Peso (w) > 1.2 y Sesgo (b) entre -2.0 y -5.0 usando el control o los botones [ − ] y [ + ].",
     sim_knn_label: "Hiperparámetro k",
     sim_cm_real_pred: "Real / Pred",
     sim_cm_pred_pos: "Pred. (+)",
@@ -237,13 +253,13 @@ const I18N_DICTIONARY = {
     // Navigation & General
     nav_brand: "Machine Learning Track",
     nav_syllabus: "Curriculum (27 Lessons)",
-    nav_theory: "📖 Theory",
+    nav_theory: "Theory",
     nav_practice: "⚡ Labs",
     nav_home: "🏠 Home",
     nav_back_dashboard: "Back to home",
     nav_theory_title: "Theory & Fundamentals",
     nav_practice_title: "ML Studio // Lab",
-    nav_view_theory: "📖 View Theory",
+    nav_view_theory: "View Theory",
     nav_lesson_prefix: "Lesson",
 
     // Settings
@@ -313,8 +329,13 @@ const I18N_DICTIONARY = {
     theory_btn_lab_unlocked: "⚡ Lab (Unlocked)",
     theory_top_lab_btn: "⚡ Lab",
     theory_top_lab_locked_btn: "🔒 Lab",
+    theory_top_lab_btn_short: "⚡ Lab",
+    theory_top_lab_locked_btn_short: "🔒 Lab",
 
     // Practice Page (practica.html)
+    practice_tab_instructions: "📋 Instructions",
+    practice_tab_lab: "⚡ Laboratory",
+    practice_btn_go_to_lab: "⚡ Go to Laboratory ➔",
     practice_spec_title: "Hands-on Lab (+100 XP)",
     practice_objective_title: "Model Objective",
     practice_instructions_title: "Calibration Instructions",
@@ -338,6 +359,9 @@ const I18N_DICTIONARY = {
     lab_status_passed: "✓ Passed",
     lab_status_unlocked: "⚡ Unlocked",
     lab_status_locked: "🔒 Requires Theory",
+    lab_status_lesson_locked: "🔒 Locked",
+    lab_alert_prev_lab: "Complete the laboratory of the previous lesson to unlock this lesson.",
+    lab_alert_curr_lab: "Complete the current laboratory to unlock the next lesson.",
 
     // Technical Hint XP Unlock
     hint_cost_pill: "-{cost} XP",
@@ -350,6 +374,7 @@ const I18N_DICTIONARY = {
     hint_cancel_btn: "Cancel",
     hint_unlock_btn: "🔓 Unlock Hint (-{cost} XP)",
     hint_insufficient_xp: "Insufficient XP. You need {cost} XP to unlock this hint. You can pass the conceptual check (+50 XP) to earn more XP.",
+    hint_insufficient_alert: "You need {cost} XP to unlock this technical hint.",
     hint_insufficient_btn: "Got it",
 
     // Modals
@@ -388,7 +413,7 @@ const I18N_DICTIONARY = {
     theory_cta_title: "Put these concepts to the test in the lab",
     theory_cta_desc: "Interact with the live simulator, tune parameters, and earn an extra +100 XP.",
     theory_external_github: "View reference material on GitHub ↗",
-    theory_sidebar_lock_tooltip: "Complete the previous lesson to unlock this lesson",
+    theory_sidebar_lock_tooltip: "Complete the previous laboratory to unlock this lesson",
     theory_pager_text: "Lesson {n} of {total}",
 
     // Practice UI & Shortcuts
@@ -405,6 +430,9 @@ const I18N_DICTIONARY = {
     sim_sort_grip_hint: "Drag to reorder",
     sim_sort_handle_text: "Drag",
     sim_reorder_log: "[REORDER] Item moved from position #{src} to #{dst}",
+    sim_sort_eval_pass: "Sequence sorted correctly! Perfect order.",
+    sim_sort_eval_fail_title: "{count} step(s) out of order:",
+    sim_sort_eval_fail_hint: "Reorder the steps marked with ✗ until all cards turn green.",
     sim_fairness_group_a: "Group A (Base Population): Threshold = 0.50 | FNR = 12%",
     sim_fairness_group_b: "Group B (Protected Subgroup): Threshold = {th} | FNR = {fnr}%",
     sim_fairness_disparity: "FNR Disparity: {disp}%",
@@ -419,6 +447,10 @@ const I18N_DICTIONARY = {
     sim_poly_degree_label: "Polynomial Degree (d)",
     sim_sig_weight: "Weight (w)",
     sim_sig_bias: "Bias (b)",
+    sim_sig_eval_pass: "Logistic boundary calibrated! w={w}, b={b}. The sigmoid discriminates both classes with high confidence.",
+    sim_sig_eval_fail_w: "Zero or inverted slope: adjust Weight (w) greater than 1.2.",
+    sim_sig_eval_fail_b: "Bias uncalibrated: adjust 'w' greater than 1.2 and 'b' between -2.0 and -5.0 to center the sigmoid.",
+    sim_sig_eval_fail_hint: "Set Weight (w) > 1.2 and Bias (b) between -2.0 and -5.0 using the slider or [ − ] and [ + ] buttons.",
     sim_knn_label: "Hyperparameter k",
     sim_cm_real_pred: "Actual / Pred",
     sim_cm_pred_pos: "Pred. (+)",
